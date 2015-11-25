@@ -29,6 +29,6 @@ Bo		= 5e-5
 RLs		= larmor(Bo, Ek)
 data_out	= array([SLABs, kperp, kzz, MFPs_perp, MFPs_parall])
 dir_out		= '../../post'
-fname_out	= '%s/diff.pars_Nm%03d_Ek.%1.1e_sig.%1.1e_Lc2d.%1.1e_LcSlab.%1.1e.dat' % (dir_out, Nm, Ek, sig, Lc_2d, Lc_slab)
+fname_out	= '%s/diff.pars_Nm%03d_Ek.%1.1e_sig.%1.1e_Lc2d.%1.1e_LcSlab.%1.1e__.dat' % (dir_out, Nm, Ek, sig, Lc_2d, Lc_slab)
 savetxt(fname_out, data_out.T, fmt='%5.5e')
 print ccl.Rn + " ------> hemos creado: " + fname_out + ccl.W
