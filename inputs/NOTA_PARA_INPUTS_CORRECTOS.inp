@@ -1,0 +1,6 @@
+- tener en cuenta q el cociente:
+nmax_gyroperiods / npoints,
+NO DEBE SER MUY CHICO (>=1 mas o menos), xq sino ocurren varios ciclos en 
+el while() del Output<Stepper>::out(). Esto hace q ocurra count++ varias veces, y 
+se deriva al Output<Stepper>::save_dense() repetidas veces.
+Esto no tiene nada de malo, pero por alguna razon, si hace "muchos" count++, hace q salte un error de memoria despues de guardar el archivo [¿?].

@@ -1,0 +1,22 @@
+ REPORTE DE OBJETO PARAMS_TURB:----------------------------------
+ n_modos:		128
+ lambda_max [AU]:	1
+ lambda_min [AU]:	5e-05
+ Lc_slab [AU]:		0.01
+ Lc_2d   [AU]:		0.01
+ Bo [nT]: 		5
+ sigma_Bo_ratio [1]:	1
+ percent_slab [%]:	20
+ percent_2d [%]: 	80
+ ----------------------------------------------------------------
+ REPORTE DE OBJETO PARAMS_TURB:----------------------------------
+ n_modos:		128
+ lambda_max [AU]:	1
+ lambda_min [AU]:	5e-05
+ Lc_slab [AU]:		0.01
+ Lc_2d   [AU]:		0.01
+ Bo [nT]: 		5
+ sigma_Bo_ratio [1]:	1
+ percent_slab [%]:	20
+ percent_2d [%]: 	80
+ ----------------------------------------------------------------

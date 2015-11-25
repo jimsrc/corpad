@@ -1,0 +1,48 @@
+make w_mpi
+make[1]: Entering directory `/home/masiasmj/code/pure'
+mpic++ ./src/master/main_mpi.cc -o ./CRs.diff.x  
+./src/master/defs_turb.cc: In member function ‘void MODEL_TURB::fix_B_realization(int)’:
+./src/master/defs_turb.cc:222: warning: converting to ‘long int’ from ‘float’
+./src/master/defs_turb.cc:223: warning: converting to ‘long int’ from ‘float’
+./src/master/defs_turb.cc:224: warning: converting to ‘long int’ from ‘float’
+./src/master/defs_turb.cc:225: warning: converting to ‘long int’ from ‘float’
+./src/master/defs_turb.cc:226: warning: converting to ‘long int’ from ‘float’
+./src/master/funcs.cc: In member function ‘void Output<Stepper>::set_savetimes(Doub)’:
+./src/master/funcs.cc:67: error: call of overloaded ‘pow(int, int&)’ is ambiguous
+/usr/include/bits/mathcalls.h:154: note: candidates are: double pow(double, double)
+/usr/lib/gcc/x86_64-redhat-linux/4.1.2/../../../../include/c++/4.1.2/cmath:361: note:                 long double std::pow(long double, int)
+/usr/lib/gcc/x86_64-redhat-linux/4.1.2/../../../../include/c++/4.1.2/cmath:357: note:                 float std::pow(float, int)
+/usr/lib/gcc/x86_64-redhat-linux/4.1.2/../../../../include/c++/4.1.2/cmath:353: note:                 double std::pow(double, int)
+/usr/lib/gcc/x86_64-redhat-linux/4.1.2/../../../../include/c++/4.1.2/cmath:349: note:                 long double std::pow(long double, long double)
+/usr/lib/gcc/x86_64-redhat-linux/4.1.2/../../../../include/c++/4.1.2/cmath:345: note:                 float std::pow(float, float)
+./src/master/funcs.cc:67: error: call of overloaded ‘pow(int, int&)’ is ambiguous
+/usr/include/bits/mathcalls.h:154: note: candidates are: double pow(double, double)
+/usr/lib/gcc/x86_64-redhat-linux/4.1.2/../../../../include/c++/4.1.2/cmath:361: note:                 long double std::pow(long double, int)
+/usr/lib/gcc/x86_64-redhat-linux/4.1.2/../../../../include/c++/4.1.2/cmath:357: note:                 float std::pow(float, int)
+/usr/lib/gcc/x86_64-redhat-linux/4.1.2/../../../../include/c++/4.1.2/cmath:353: note:                 double std::pow(double, int)
+/usr/lib/gcc/x86_64-redhat-linux/4.1.2/../../../../include/c++/4.1.2/cmath:349: note:                 long double std::pow(long double, long double)
+/usr/lib/gcc/x86_64-redhat-linux/4.1.2/../../../../include/c++/4.1.2/cmath:345: note:                 float std::pow(float, float)
+./src/master/funcs.cc:70: error: call of overloaded ‘pow(int, int&)’ is ambiguous
+/usr/include/bits/mathcalls.h:154: note: candidates are: double pow(double, double)
+/usr/lib/gcc/x86_64-redhat-linux/4.1.2/../../../../include/c++/4.1.2/cmath:361: note:                 long double std::pow(long double, int)
+/usr/lib/gcc/x86_64-redhat-linux/4.1.2/../../../../include/c++/4.1.2/cmath:357: note:                 float std::pow(float, int)
+/usr/lib/gcc/x86_64-redhat-linux/4.1.2/../../../../include/c++/4.1.2/cmath:353: note:                 double std::pow(double, int)
+/usr/lib/gcc/x86_64-redhat-linux/4.1.2/../../../../include/c++/4.1.2/cmath:349: note:                 long double std::pow(long double, long double)
+/usr/lib/gcc/x86_64-redhat-linux/4.1.2/../../../../include/c++/4.1.2/cmath:345: note:                 float std::pow(float, float)
+./src/master/funcs.cc:75: error: call of overloaded ‘pow(int, int&)’ is ambiguous
+/usr/include/bits/mathcalls.h:154: note: candidates are: double pow(double, double)
+/usr/lib/gcc/x86_64-redhat-linux/4.1.2/../../../../include/c++/4.1.2/cmath:361: note:                 long double std::pow(long double, int)
+/usr/lib/gcc/x86_64-redhat-linux/4.1.2/../../../../include/c++/4.1.2/cmath:357: note:                 float std::pow(float, int)
+/usr/lib/gcc/x86_64-redhat-linux/4.1.2/../../../../include/c++/4.1.2/cmath:353: note:                 double std::pow(double, int)
+/usr/lib/gcc/x86_64-redhat-linux/4.1.2/../../../../include/c++/4.1.2/cmath:349: note:                 long double std::pow(long double, long double)
+/usr/lib/gcc/x86_64-redhat-linux/4.1.2/../../../../include/c++/4.1.2/cmath:345: note:                 float std::pow(float, float)
+./src/master/funcs.cc:78: error: call of overloaded ‘pow(int, int&)’ is ambiguous
+/usr/include/bits/mathcalls.h:154: note: candidates are: double pow(double, double)
+/usr/lib/gcc/x86_64-redhat-linux/4.1.2/../../../../include/c++/4.1.2/cmath:361: note:                 long double std::pow(long double, int)
+/usr/lib/gcc/x86_64-redhat-linux/4.1.2/../../../../include/c++/4.1.2/cmath:357: note:                 float std::pow(float, int)
+/usr/lib/gcc/x86_64-redhat-linux/4.1.2/../../../../include/c++/4.1.2/cmath:353: note:                 double std::pow(double, int)
+/usr/lib/gcc/x86_64-redhat-linux/4.1.2/../../../../include/c++/4.1.2/cmath:349: note:                 long double std::pow(long double, long double)
+/usr/lib/gcc/x86_64-redhat-linux/4.1.2/../../../../include/c++/4.1.2/cmath:345: note:                 float std::pow(float, float)
+make[1]: *** [w_mpi] Error 1
+make[1]: Leaving directory `/home/masiasmj/code/pure'
+make: *** [default] Error 2

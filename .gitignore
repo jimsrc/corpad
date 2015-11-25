@@ -1,0 +1,24 @@
+*.x
+*.o
+*.so
+*.pyc
+
+# no puedo acumular tantos archivos, sino se me 
+# dificulta controlar mi codigo
+*.dat
+*.log
+*.owned
+*.out
+*.h5
+*prof*.txt
+*zz
+*zz1
+*zz2
+*.swp
+
+*bckp*
+*BCKP*
+*test.png
+output/
+plots/
+*png

@@ -1,0 +1,1 @@
+script python para construir las direcciones iniciales de las plas.

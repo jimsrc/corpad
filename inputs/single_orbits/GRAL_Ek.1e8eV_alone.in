@@ -1,0 +1,10 @@
+4.44583E+08	rigidity
+5e-2	frac_gyroperiod
+5e2	nmax_gyroperiods
+10000	npoints
+1e-5	absolute_tolerance_atol
+-1	relative_tolerance_rtol
+5	nro_Bfield_realizations
+linear	timescale_outpout
+150.0	tmaxHistTau
+150	nHistTau

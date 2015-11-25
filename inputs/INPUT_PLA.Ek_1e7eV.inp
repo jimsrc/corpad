@@ -1,0 +1,7 @@
+1.37352e8	rigidity
+5e-2	frac_gyroperiod
+1e4	nmax_gyroperiods
+2000	npoints
+1e-5	absolute_tolerance_atol
+-1	relative_tolerance_rtol
+30	nro_Bfield_realizations

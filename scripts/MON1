@@ -1,0 +1,283 @@
+ -------------------->>>>
+ scl.beta: 0.0461321
+ rigid: 4.33306e+07
+ frac_gy: 0.05
+ npoints: 20
+ -------------------->>>>
+ scl.beta: 0.0461321
+ rigid: 4.33306e+07
+ frac_gy: 0.05
+ npoints: 20
+ ATOL: 1e-05
+ RTOL: -1
+ ...construyendo PARAMS_TURB *sin* input.
+
+ ATOL: 1e-05
+ RTOL: -1
+ ...construyendo PARAMS_TURB *sin* input.
+
+ ...construyendo MODEL_TURB: ../inputs/TURB_sig1.0.in
+
+ ...construyendo MODEL_TURB: ../inputs/TURB_sig1.0.in
+
+ ...construyendo FASES.
+ ABSOLUTE TOLERANCE = 1e-05
+ RELATIVE TOLERANCE = 1e-05
+ ...construyendo FASES.
+ ABSOLUTE TOLERANCE = 1e-05
+ RELATIVE TOLERANCE = 1e-05
+ Nplas_rank (plas para c/proc): 121
+ Nplas_rank (plas para c/proc): 121
+
+ [rank:0] **************** NEXT Bfield realization j:0 ****************
+ [rank:1] **************** NEXT Bfield realization j:0 ****************
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla000_traj.dat
+ [rank:0] i:0
+ --------> generando: ../output/output_Ek.1e6eV/B00_pla000
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla000_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla001_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla002_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla003_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla004_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla005_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla006_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla007_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla008_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla009_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla010_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla011_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla012_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla013_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla014_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla015_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla016_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla017_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla018_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla019_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla020_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla021_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla022_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla023_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla024_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla025_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla026_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla027_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla028_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla029_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla030_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla031_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla032_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla033_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla034_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla035_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla036_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla037_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla038_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla039_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla040_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla041_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla042_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla043_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla044_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla045_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla046_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla047_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla048_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla049_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla050_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla051_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla052_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla053_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla054_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla055_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla056_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla057_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla058_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla059_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla060_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla061_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla062_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla063_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla064_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla065_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla066_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla067_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla068_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla069_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla070_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla071_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla072_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla073_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla074_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla075_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla076_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla077_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla078_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla079_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla080_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla081_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla082_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla083_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla084_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla085_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla086_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla087_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla088_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla089_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla090_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla091_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla092_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla093_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla094_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla095_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla096_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla097_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla098_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla099_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla100_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla101_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla102_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla103_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla104_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla105_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla106_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla107_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla108_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla109_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla110_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla111_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla112_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla113_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla114_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla115_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla116_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla117_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla118_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla119_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla120_traj.dat
+
+ AUN NO EXISTE: ../output/output_Ek.1e6eV/B00_pla121_traj.dat
+ [rank:1] i:121
+ --------> generando: ../output/output_Ek.1e6eV/B00_pla121
+Ctrl-C caught... cleaning up processes
