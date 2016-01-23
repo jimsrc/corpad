@@ -1,10 +1,11 @@
 # el directorio oficial esta en "master"
-DIR_SRC=./src/master
+DIR_SRC=./src
 DIR_BETA=./src/beta
 EXE_WMPI=./CRs.diff.x 
 EXE_WOMPI=./CRs.diff_woMPI.x 
 EXE_WPROF=./CRs.diff_wgprof.x 	# profiling / debugging
 MPICXX=/usr/local/bin/mpic++
+OPTIM=-O3 #-O3
 
 default:
 	make w_mpi
@@ -14,7 +15,8 @@ beta:
 
 
 w_mpi:
-	${MPICXX} ${DIR_SRC}/main_mpi.cc -o ${EXE_WMPI}
+	#${MPICXX} ${DIR_SRC}/main_mpi.cc -O2 -o ${EXE_WMPI}
+	${MPICXX} ${DIR_SRC}/main_mpi.cc ${OPTIM} -o ${EXE_WMPI}
 
 
 mpi-w-gprof:

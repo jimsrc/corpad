@@ -18,6 +18,7 @@
 
 #include "nr3.h"
 #include <cstdlib>
+#include "control.h"
 
 //--------------------------------------CTES UNIVERSALES
 #define clight          (3.0*1e10)              // [cm/s]
