@@ -24,7 +24,7 @@ class Output {
 		VecDoub xsave;
 		MatDoub ysave;
 		//void build(string, Int, Doub, Int, char*); 
-		void build(string, Int, Doub, Int, int, int, char*);
+		void build(const string, Int, Doub, Int, int, int, char*);
 		Output(void);
 		Output(string, const Int, char*);
 		void init(const Int, const Doub, const Doub);
@@ -61,7 +61,7 @@ class Output {
 		double bx, by, bz, vx, vy, vz;
 		VecDoub XSaveGen;	// tiempos de la salida
 		int n_tscales, cc, ndec, inid, nd, base, maxd;	
-		const string str_tscale; //tipo de escala temporal para la salida
+		string str_tscale; //tipo de escala temporal para la salida
 		double decade, dt;
 		void set_savetimes(Doub);
 		//----- histo del 'Tau'
