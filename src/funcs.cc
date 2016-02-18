@@ -7,7 +7,7 @@ using namespace std;
 //---------------------------------------------------------------------------
 //void Output<Stepper>::build(string str_tscalee, Int nsavee, Doub tmaxHistTau, Int nHist, char* fname_out){ 
 template <class Stepper>
-void Output<Stepper>::build(string str_tscalee, Int nsavee, Doub tmaxHistTau, Int nHist, int i, int j, char *dir_out){
+void Output<Stepper>::build(const string str_tscalee, Int nsavee, Doub tmaxHistTau, Int nHist, int i, int j, char *dir_out){
 	kmax	= 500;
 	nsave	= nsavee;
 	count	= 0;

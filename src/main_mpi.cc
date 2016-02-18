@@ -81,7 +81,6 @@ int main(int argc, char* argv[]){
 	Nplas_rank      = n_ori / w_size;
 	printf(" Nplas_rank (plas para c/proc): %d/%d", Nplas_rank, n_ori);
 
-	//for(int j=0; j<n_Brealiz; j++){
     bool helper=false; // no ayudo por defecto
     int i, j; i = j = 0;
     while(j<n_Brealiz){
@@ -91,8 +90,6 @@ int main(int argc, char* argv[]){
         i = 0;  // reinicio el conteo de plas
 		//for(int i=0; i<n_ori; i++){
         while(i<n_ori){
-			//sprintf(fname_out, "%s/B%02d_pla%03d", dir_out, j, i);
-			//outbs.build(str_timescale, NPOINTS, tmaxHistTau, nHistTau, fname_out);	// reseteo objeto "Output" para c/pla 
 			outbs.build(str_timescale, NPOINTS, tmaxHistTau, nHistTau, i, j, dir_out);	// reseteo objeto "Output" para c/pla
 
 			exist_file	= outbs.file_exist();		// le pregunto con "outbs" xq el es quien maneja los nombres finales de los archivos de salida

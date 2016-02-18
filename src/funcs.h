@@ -61,7 +61,7 @@ class Output {
 		double bx, by, bz, vx, vy, vz;
 		VecDoub XSaveGen;	// tiempos de la salida
 		int n_tscales, cc, ndec, inid, nd, base, maxd;	
-		string str_tscale;	// tipo de escala temporal para la salida
+		const string str_tscale; //tipo de escala temporal para la salida
 		double decade, dt;
 		void set_savetimes(Doub);
 		//----- histo del 'Tau'

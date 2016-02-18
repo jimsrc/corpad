@@ -2,8 +2,9 @@ let SessionLoad = 1
 if &cp | set nocp | endif
 let s:cpo_save=&cpo
 set cpo&vim
-imap <S-Tab> <Plug>snipMateBack
 inoremap <silent> <SNR>65_yrrecord =YRRecord3()
+imap <S-Tab> <Plug>snipMateBack
+inoremap <silent> <SNR>67_yrrecord =YRRecord3()
 inoremap <silent> <Plug>snipMateShow =snipMate#ShowAvailableSnips()
 inoremap <silent> <Plug>snipMateBack =snipMate#BackwardsSnippet()
 inoremap <silent> <Plug>snipMateTrigger =snipMate#TriggerSnippet(1)
@@ -80,6 +81,8 @@ nnoremap <silent> P :YRPaste 'P'
 xmap S <Plug>VSurround
 vmap [% [%m'gv``
 nmap [c <Plug>(signify-prev-hunk)
+nnoremap <silent> \* :execute ':Search \<' . expand('<cword>') . '\>'
+vnoremap <silent> \* y:call MultipleSearch#MultipleSearch(0,'\V'.substitute(escape(@@,"\\/\"'"),"\n",'\\n','ge'))
 nmap \tc <Plug>Colorizer
 map \t <Plug>TaskList
 nnoremap \gb :GitBlame
@@ -130,6 +133,9 @@ xmap gS <Plug>VgSurround
 xnoremap <silent> p :YRPaste 'p', 'v'
 nnoremap <silent> p :YRPaste 'p'
 map pa :set paste
+map rh :resize
+map rw :vertical resize
+map ss :Search 
 nnoremap <silent> tl :TMToggle
 nnoremap <silent> tf :TMFocus
 map te :tabedit %
@@ -145,9 +151,10 @@ nmap ySs <Plug>YSsurround
 nmap yss <Plug>Yssurround
 nmap yS <Plug>YSurround
 nmap ys <Plug>Ysurround
+nnoremap <silent> <SNR>65_yrrecord :call YRRecord3()
 smap <S-Tab> <Plug>snipMateBack
 nnoremap <silent> <Plug>NetrwBrowseX :call netrw#NetrwBrowseX(expand("<cWORD>"),0)
-nnoremap <silent> <SNR>65_yrrecord :call YRRecord3()
+nnoremap <silent> <SNR>67_yrrecord :call YRRecord3()
 nnoremap <silent> <Plug>Colorizer :ColorToggle
 nnoremap <silent> <Plug>(choosewin) :call choosewin#start(range(1, winnr('$')))
 xnoremap <silent> <Plug>(signify-motion-outer-visual) :call sy#util#hunk_text_object(1)
@@ -280,7 +287,7 @@ set wildmode=list:longest
 let s:so_save = &so | let s:siso_save = &siso | set so=0 siso=0
 let v:this_session=expand("<sfile>:p")
 silent only
-cd ~/simulacion/pla_stochastic/composite_turbulence/massive_orbits/src/beta
+cd ~/simulacion/pla_stochastic/composite_turbulence/massive_orbits/src
 if expand('%') == '' && !&modified && line('$') <= 1 && getline(1) == ''
   let s:wipebuf = bufnr('%')
 endif
@@ -290,11 +297,12 @@ badd +1 funcs.h
 badd +1 funcs.cc
 badd +1 defs_turb.cc
 badd +1 defs_turb.h
-badd +23 general.h
+badd +1 general.h
 badd +1 nr3.h
 badd +1 COMENTARIOS.txt
 badd +1 ~/simulacion/pla_stochastic/composite_turbulence/massive_orbits/makefile
 badd +1 odeintt.h
+badd +4 control.h
 args main_mpi.cc
 edit main_mpi.cc
 set splitbelow splitright
@@ -304,8 +312,8 @@ vsplit
 wincmd w
 wincmd t
 set winheight=1 winwidth=1
-exe 'vert 1resize ' . ((&columns * 75 + 99) / 198)
-exe 'vert 2resize ' . ((&columns * 122 + 99) / 198)
+exe 'vert 1resize ' . ((&columns * 69 + 76) / 152)
+exe 'vert 2resize ' . ((&columns * 82 + 76) / 152)
 argglobal
 xnoremap <buffer> <silent> \a} `>a}`<i{
 xnoremap <buffer> <silent> \a{ `>a}`<i{
@@ -419,12 +427,12 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 82 - ((0 * winheight(0) + 23) / 46)
+let s:l = 95 - ((19 * winheight(0) + 26) / 53)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-82
-normal! 065l
+95
+normal! 03l
 wincmd w
 argglobal
 edit main_mpi.cc
@@ -540,15 +548,15 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 91 - ((4 * winheight(0) + 23) / 46)
+let s:l = 91 - ((0 * winheight(0) + 26) / 53)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
 91
 normal! 044l
 wincmd w
-exe 'vert 1resize ' . ((&columns * 75 + 99) / 198)
-exe 'vert 2resize ' . ((&columns * 122 + 99) / 198)
+exe 'vert 1resize ' . ((&columns * 69 + 76) / 152)
+exe 'vert 2resize ' . ((&columns * 82 + 76) / 152)
 tabedit defs_turb.cc
 set splitbelow splitright
 wincmd _ | wincmd |
@@ -557,10 +565,8 @@ vsplit
 wincmd w
 wincmd t
 set winheight=1 winwidth=1
-exe '1resize ' . ((&lines * 38 + 24) / 48)
-exe 'vert 1resize ' . ((&columns * 111 + 99) / 198)
-exe '2resize ' . ((&lines * 38 + 24) / 48)
-exe 'vert 2resize ' . ((&columns * 86 + 99) / 198)
+exe 'vert 1resize ' . ((&columns * 79 + 76) / 152)
+exe 'vert 2resize ' . ((&columns * 72 + 76) / 152)
 argglobal
 xnoremap <buffer> <silent> \a} `>a}`<i{
 xnoremap <buffer> <silent> \a{ `>a}`<i{
@@ -674,12 +680,12 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 1 - ((0 * winheight(0) + 19) / 38)
+let s:l = 296 - ((47 * winheight(0) + 26) / 53)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-1
-normal! 0
+296
+normal! 01l
 wincmd w
 argglobal
 edit defs_turb.h
@@ -795,17 +801,15 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 1 - ((0 * winheight(0) + 19) / 38)
+let s:l = 38 - ((37 * winheight(0) + 26) / 53)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-1
-normal! 0
+38
+normal! 02l
 wincmd w
-exe '1resize ' . ((&lines * 38 + 24) / 48)
-exe 'vert 1resize ' . ((&columns * 111 + 99) / 198)
-exe '2resize ' . ((&lines * 38 + 24) / 48)
-exe 'vert 2resize ' . ((&columns * 86 + 99) / 198)
+exe 'vert 1resize ' . ((&columns * 79 + 76) / 152)
+exe 'vert 2resize ' . ((&columns * 72 + 76) / 152)
 tabedit general.h
 set splitbelow splitright
 wincmd _ | wincmd |
@@ -814,10 +818,8 @@ vsplit
 wincmd w
 wincmd t
 set winheight=1 winwidth=1
-exe '1resize ' . ((&lines * 38 + 24) / 48)
-exe 'vert 1resize ' . ((&columns * 111 + 99) / 198)
-exe '2resize ' . ((&lines * 38 + 24) / 48)
-exe 'vert 2resize ' . ((&columns * 86 + 99) / 198)
+exe 'vert 1resize ' . ((&columns * 79 + 76) / 152)
+exe 'vert 2resize ' . ((&columns * 72 + 76) / 152)
 argglobal
 xnoremap <buffer> <silent> \a} `>a}`<i{
 xnoremap <buffer> <silent> \a{ `>a}`<i{
@@ -931,12 +933,12 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 23 - ((18 * winheight(0) + 19) / 38)
+let s:l = 40 - ((39 * winheight(0) + 26) / 53)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-23
-normal! 0
+40
+normal! 012l
 wincmd w
 argglobal
 edit nr3.h
@@ -1052,17 +1054,16 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 12 - ((3 * winheight(0) + 19) / 38)
+let s:l = 10 - ((9 * winheight(0) + 26) / 53)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-12
+10
 normal! 0
 wincmd w
-exe '1resize ' . ((&lines * 38 + 24) / 48)
-exe 'vert 1resize ' . ((&columns * 111 + 99) / 198)
-exe '2resize ' . ((&lines * 38 + 24) / 48)
-exe 'vert 2resize ' . ((&columns * 86 + 99) / 198)
+2wincmd w
+exe 'vert 1resize ' . ((&columns * 79 + 76) / 152)
+exe 'vert 2resize ' . ((&columns * 72 + 76) / 152)
 tabedit funcs.h
 set splitbelow splitright
 wincmd _ | wincmd |
@@ -1071,10 +1072,10 @@ vsplit
 wincmd w
 wincmd t
 set winheight=1 winwidth=1
-exe '1resize ' . ((&lines * 38 + 24) / 48)
-exe 'vert 1resize ' . ((&columns * 111 + 99) / 198)
-exe '2resize ' . ((&lines * 38 + 24) / 48)
-exe 'vert 2resize ' . ((&columns * 86 + 99) / 198)
+exe '1resize ' . ((&lines * 44 + 28) / 56)
+exe 'vert 1resize ' . ((&columns * 79 + 76) / 152)
+exe '2resize ' . ((&lines * 44 + 28) / 56)
+exe 'vert 2resize ' . ((&columns * 62 + 76) / 152)
 argglobal
 xnoremap <buffer> <silent> \a} `>a}`<i{
 xnoremap <buffer> <silent> \a{ `>a}`<i{
@@ -1188,12 +1189,12 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 1 - ((0 * winheight(0) + 19) / 38)
+let s:l = 41 - ((40 * winheight(0) + 22) / 44)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-1
-normal! 0
+41
+normal! 02l
 wincmd w
 argglobal
 edit funcs.cc
@@ -1309,17 +1310,18 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 78 - ((18 * winheight(0) + 19) / 38)
+let s:l = 252 - ((5 * winheight(0) + 22) / 44)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-78
-normal! 026l
+252
+normal! 023l
 wincmd w
-exe '1resize ' . ((&lines * 38 + 24) / 48)
-exe 'vert 1resize ' . ((&columns * 111 + 99) / 198)
-exe '2resize ' . ((&lines * 38 + 24) / 48)
-exe 'vert 2resize ' . ((&columns * 86 + 99) / 198)
+2wincmd w
+exe '1resize ' . ((&lines * 44 + 28) / 56)
+exe 'vert 1resize ' . ((&columns * 79 + 76) / 152)
+exe '2resize ' . ((&lines * 44 + 28) / 56)
+exe 'vert 2resize ' . ((&columns * 62 + 76) / 152)
 tabedit odeintt.h
 set splitbelow splitright
 wincmd _ | wincmd |
@@ -1328,8 +1330,8 @@ vsplit
 wincmd w
 wincmd t
 set winheight=1 winwidth=1
-exe 'vert 1resize ' . ((&columns * 99 + 99) / 198)
-exe 'vert 2resize ' . ((&columns * 98 + 99) / 198)
+exe 'vert 1resize ' . ((&columns * 71 + 76) / 152)
+exe 'vert 2resize ' . ((&columns * 70 + 76) / 152)
 argglobal
 xnoremap <buffer> <silent> \a} `>a}`<i{
 xnoremap <buffer> <silent> \a{ `>a}`<i{
@@ -1443,12 +1445,12 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 6 - ((5 * winheight(0) + 22) / 45)
+let s:l = 38 - ((18 * winheight(0) + 26) / 53)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-6
-normal! 035l
+38
+normal! 072l
 wincmd w
 argglobal
 edit odeintt.h
@@ -1564,15 +1566,16 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 61 - ((0 * winheight(0) + 22) / 45)
+let s:l = 61 - ((0 * winheight(0) + 26) / 53)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
 61
 normal! 012l
 wincmd w
-exe 'vert 1resize ' . ((&columns * 99 + 99) / 198)
-exe 'vert 2resize ' . ((&columns * 98 + 99) / 198)
+2wincmd w
+exe 'vert 1resize ' . ((&columns * 71 + 76) / 152)
+exe 'vert 2resize ' . ((&columns * 70 + 76) / 152)
 tabedit COMENTARIOS.txt
 set splitbelow splitright
 wincmd t
@@ -1690,12 +1693,13 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 48 - ((31 * winheight(0) + 22) / 45)
+let s:l = 48 - ((37 * winheight(0) + 26) / 53)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
 48
 normal! 026l
+2wincmd w
 tabedit ~/simulacion/pla_stochastic/composite_turbulence/massive_orbits/makefile
 set splitbelow splitright
 wincmd t
@@ -1813,13 +1817,14 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 15 - ((14 * winheight(0) + 22) / 45)
+let s:l = 15 - ((14 * winheight(0) + 26) / 53)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
 15
 normal! 0
-tabnext 5
+2wincmd w
+tabnext 3
 if exists('s:wipebuf')
   silent exe 'bwipe ' . s:wipebuf
 endif
