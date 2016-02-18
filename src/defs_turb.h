@@ -14,14 +14,14 @@ class PARAMS_SEM{
 /*-------------------------- fases random -------------------------------*/
 class FASES{
 	private:
-		int n_modos;
+		Int n_modos;
 
 	public:
 		FASES(void) {};
 		//~FASES(void);
 		void build(int, PARAMS_SEM *);
-		double *phi_s, *a_s, *b_s;
-		double *phi_2d, *b_2d;
+		Doub *phi_s, *a_s, *b_s;
+		Doub *phi_2d, *b_2d;
 		void construir_fases_random(PARAMS_SEM);
 };
 
@@ -42,22 +42,22 @@ class PARAMS_TURB{
 		string FNAME_INPUT;
 
 		int n_modos;
-		double lambda_min;
-	       	double lambda_max;
-		double Lc_slab, Lc_2d;	// longitudes de correlacion
-		double sigma_Bo_ratio;
-		double percent_slab;
-		double percent_2d;
+		Doub lambda_min;
+	       	Doub lambda_max;
+		Doub Lc_slab, Lc_2d;	// longitudes de correlacion
+		Doub sigma_Bo_ratio;
+		Doub percent_slab;
+		Doub percent_2d;
 
-		double gS;		// potencia espectral slab
-		double g2D;		// potencia espectral 2D
-		double Bo;
-		double sigma_S;
-		double sigma_2D;
-		double *dk;
-		double *k;
-		double *Bk_SLAB;
-		double *Bk_2D;
+		Doub gS;		// potencia espectral slab
+		Doub g2D;		// potencia espectral 2D
+		Doub Bo;
+		Doub sigma_S;
+		Doub sigma_2D;
+		Doub *dk;
+		Doub *k;
+		Doub *Bk_SLAB;
+		Doub *Bk_2D;
 
 		PARAMS_SEM sem;
 		FASES fases;
@@ -76,20 +76,20 @@ class MODEL_TURB{
 		//~MODEL_TURB(void);			// destructor
 
 		void build(string);
-		void calc_dB_SLAB(double *);
-		void calc_dB_2D(double *);
-		void calc_dB(double *);
-		void calc_B(double *);
+		void calc_dB_SLAB(const Doub *);
+		void calc_dB_2D(const Doub *);
+		void calc_dB(const Doub *);
+		void calc_B(const Doub *);
 
 		PARAMS_TURB params_turb(void);
 
-		double *B;		// [G]
-		double *dB;		// [G]
-		double *dB_SLAB;	// [G]
-		double *dB_2D;		// [G]
+		Doub *B;		// [G]
+		Doub *dB;		// [G]
+		Doub *dB_SLAB;	// [G]
+		Doub *dB_2D;		// [G]
 		PARAMS_TURB p_turb;
 		void next_B_realization(void);
-        void fix_B_realization(int); // fija la realizacion en funcion del argumento
+        void fix_B_realization(const int); // fija la realizacion en funcion del argumento
 };
 
 #endif //DEFS_TURB_H

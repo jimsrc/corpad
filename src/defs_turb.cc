@@ -215,8 +215,8 @@ PARAMS_TURB MODEL_TURB::params_turb(){			// para accesar a la variables privadas
 	return p_turb;
 }
 
-void MODEL_TURB::fix_B_realization(int nBrz){
-	long seed = 100*nBrz;
+void MODEL_TURB::fix_B_realization(const int nBrz){
+	long seed = 100*nBrz;   // semilla queda en funcion del nro de realizacion
     rann0(seed);rann0(seed);//para "aleatorizar" a 'seed'
 
 	p_turb.sem.slab[0]	= rann0(seed);
@@ -241,7 +241,7 @@ void MODEL_TURB::next_B_realization(){
 	p_turb.fases.construir_fases_random(p_turb.sem);
 }
 
-void MODEL_TURB::calc_dB_SLAB(double *pos){
+void MODEL_TURB::calc_dB_SLAB(const Doub *pos){
 	double COSCOS, SINSIN, FACTOR_X, FACTOR_Y, k;
 	double b, a, phi;				// fases random Slab
 	dB_SLAB[0] = 0.; dB_SLAB[1]=0.;			// reseteo el vector en ceros
@@ -261,7 +261,7 @@ void MODEL_TURB::calc_dB_SLAB(double *pos){
 	}
 }
 
-void MODEL_TURB::calc_dB_2D(double *pos){
+void MODEL_TURB::calc_dB_2D(const Doub *pos){
 	double FACTOR, k;
 	double phi, b;					// fases random 2D
 	dB_2D[0]=0.; dB_2D[1]=0.;			// reseteo el vector en ceros
@@ -277,7 +277,7 @@ void MODEL_TURB::calc_dB_2D(double *pos){
 }
 
 // NOTA: 'pos' es el vector posicion (x,y,z) en [cm]
-void MODEL_TURB::calc_dB(double *pos){
+void MODEL_TURB::calc_dB(const Doub *pos){
 	if(p_turb.percent_slab > 0.0)		// solo calculo si vale la pena
 		calc_dB_SLAB(pos);
 	if(p_turb.percent_2d > 0.0)		// solo calculo si vale la pena
@@ -290,7 +290,7 @@ void MODEL_TURB::calc_dB(double *pos){
 	}
 }
 
-void MODEL_TURB::calc_B(double *pos){
+void MODEL_TURB::calc_B(const Doub *pos){
 	calc_dB(pos);		// 
 	B[0] = dB[0];			// [G] Bx
 	B[1] = dB[1];			// [G] By

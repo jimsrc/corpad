@@ -3,6 +3,9 @@
 *.so
 *.pyc
 
+# me gustan los comentarios!
+!*COMENTARIOS.txt
+
 # no puedo acumular tantos archivos, sino se me 
 # dificulta controlar mi codigo
 *.dat
@@ -20,7 +23,6 @@
 *BCKP*
 *test.png
 output/
-plots/
 *png
 
 src/tags

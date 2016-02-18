@@ -5,16 +5,19 @@
 using namespace std;
 
 //---------------------------------------------------------------------------
+//void Output<Stepper>::build(string str_tscalee, Int nsavee, Doub tmaxHistTau, Int nHist, char* fname_out){ 
 template <class Stepper>
-void Output<Stepper>::build(string str_tscalee, Int nsavee, Doub tmaxHistTau, Int nHist, char* fname_out){
+void Output<Stepper>::build(const string str_tscalee, Int nsavee, Doub tmaxHistTau, Int nHist, int i, int j, char *dir_out){
 	kmax	= 500;
 	nsave	= nsavee;
 	count	= 0;
 	xsave.resize(kmax);
 	dense 	= nsave > 0 ? true : false;
-	//-------------------- archivos de salida
+	//-------------------- archivos de salida 
+    sprintf(fname_out, "%s/B%02d_pla%03d", dir_out, j, i);
 	sprintf(fname_trj,  "%s_traj.dat",  fname_out);
 	sprintf(fname_misc, "%s_misc.dat", fname_out);
+	sprintf(fname_owned, "%s.owned", fname_out);
 	//-------- cosas de scatterings:
 	nfilTau = 500;
 	nreb	= 0;		// nro inic de rebotes
@@ -61,18 +64,18 @@ void Output<Stepper>::set_savetimes(Doub xhi){
 
 		nd = inid;
 		for(nd=inid; nd<maxd; nd++){
-			dt = (pow(10, nd+1) - pow(10, nd))/nsave;
+			dt = (pow(10, (1.0*(nd+1))) - pow(10, (1.0*nd)))/nsave;
 			for(int i=0; i<nsave; i++){
 				cc = i+(nd-inid)*nsave;
-				XSaveGen[cc] = pow(10, nd) + (i+1)*dt;
+				XSaveGen[cc] = pow(10, 1.0*(nd)) + (i+1)*dt;
 				//printf(" XMix(%d) [wc-1]: %g\n", cc, XSaveGen[cc]);
 			}
 		}
 
-		dt = (xhi - pow(10, maxd))/nsave;
+		dt = (xhi - pow(10, 1.0*(maxd) ))/nsave;
 		for(int i=0; i<nsave; i++){
 			cc = i+(maxd-inid)*nsave;
-			XSaveGen[cc] = pow(10, maxd) + (i+1)*dt;
+			XSaveGen[cc] = pow(10, 1.0*(maxd) ) + (i+1)*dt;
 			//printf(" XMix(%d) [wc-1]: %g\n", cc, XSaveGen[cc]);
 		}
 		// reseteo indice:
@@ -182,6 +185,7 @@ void Output<Stepper>::out(const Int nstp,const Doub x,VecDoub_I &y,Stepper &s,co
 	}
 }
 
+
 //esto lo agrego para guardar cosas de la historia de 
 //las trayectorias:
 template <class Stepper>
@@ -189,16 +193,29 @@ void Output<Stepper>::set_Bmodel(PARAMS pmm){
 	pm = &pmm;
 }
 
+
+// escribimos archivo dummy "owned" para flagear de q YO 
+// estoy trabajando con esta pla
+template <class Stepper>
+void Output<Stepper>::claim_own(){
+    ofile_own.open(fname_owned);
+    ofile_own << "dummy" << endl;
+    ofile_own.close();
+}
+
+
 // chekea si existe (aunq su tamanio sea 0 bytes) o no un archivo.
 template <class Stepper>
 bool Output<Stepper>::file_exist(){
-   	if(ifstream(fname_trj)){
-		printf("\n YA EXISTE: %s\n", fname_trj);
+   	//if(ifstream(fname_trj)){
+   	if(ifstream(fname_owned)){
+		printf("\n YA EXISTE: %s\n", fname_owned);
 		return true;
 	}
-	printf("\n AUN NO EXISTE: %s\n", fname_trj);
+	printf("\n AUN NO EXISTE: %s\n", fname_owned);
 	return false;
 }
+
 
 //----------------------------------
 // recibe una velocidad adimensionalizada

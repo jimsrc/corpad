@@ -23,7 +23,7 @@ int main(int argc, char* argv[]){
 	double RIGIDITY, FRAC_GYROPERIOD, NMAX_GYROPERIODS, ATOL, RTOL, tmaxHistTau;
 	double **array_ori;
 	char *fname_turb, *fname_orientations, *fname_gral, *dir_out;
-	char fname_out[100];
+	//char fname_out[100];
 	Doub atol, rtol;		// absolute and relative tolerance
 	VecDoub ystart(nvar);		// allocate initial x, y[0, 1] values
 	bool quest_all, quest_last, cond, exist_file;
@@ -74,38 +74,37 @@ int main(int argc, char* argv[]){
 	cout << " RELATIVE TOLERANCE = " << rtol << endl;
 
 	// -------------------------------------- iniciamos Open MPI
-        MPI_Init(NULL, NULL);
-        MPI_Comm_rank(MPI_COMM_WORLD, &w_rank);
-        MPI_Comm_size(MPI_COMM_WORLD, &w_size);
+    MPI_Init(NULL, NULL);
+    MPI_Comm_rank(MPI_COMM_WORLD, &w_rank);
+    MPI_Comm_size(MPI_COMM_WORLD, &w_size);
 
 	Nplas_rank      = n_ori / w_size;
-	cout << " Nplas_rank (plas para c/proc): " << Nplas_rank << endl;
+	printf(" Nplas_rank (plas para c/proc): %d/%d", Nplas_rank, n_ori);
 
-	for(int j=0; j<n_Brealiz; j++){
+    bool helper=false; // no ayudo por defecto
+    int i, j; i = j = 0;
+    while(j<n_Brealiz){
 		// nueva realizacion de Bfield
-		//par.next_B_realization();
 		par.fix_B_realization(j);
-		printf("\n [rank:%d] **************** NEXT Bfield realization j:%d ****************", w_rank, j);
-
-		for(int i=0; i<n_ori; i++){
-			//cout << " WTF NIGAA..."<<endl; getchar();
-
-			sprintf(fname_out, "%s/B%02d_pla%03d", dir_out, j, i);
-			outbs.build(str_timescale, NPOINTS, tmaxHistTau, nHistTau, fname_out);	// reseteo objeto "Output" para c/pla
+		printf("\n [rank:%d] **************** NEXT Bfield realization j:%d/%d ****************", w_rank, j, n_Brealiz);
+        i = 0;  // reinicio el conteo de plas
+		//for(int i=0; i<n_ori; i++){
+        while(i<n_ori){
+			outbs.build(str_timescale, NPOINTS, tmaxHistTau, nHistTau, i, j, dir_out);	// reseteo objeto "Output" para c/pla
 
 			exist_file	= outbs.file_exist();		// le pregunto con "outbs" xq el es quien maneja los nombres finales de los archivos de salida
 			imin		= w_rank*Nplas_rank;		// i-minimo para c/procesador
 			imax		= (w_rank+1)*Nplas_rank;	// i-maximo para c/procesador
 			quest_all	= i>=imin && i<imax;
-			quest_last	= i == w_rank + w_size*Nplas_rank;
-			cond		= (quest_all || quest_last) && (!exist_file);
+			quest_last	= i == (w_rank + w_size*Nplas_rank);
+			cond		= (quest_all || quest_last || helper) && (!exist_file);
 			if(cond){
+                outbs.claim_own();  // aviso q YO estyo trabajando con esta pla
 				//----------------------------------------- Bulirsch-Stoer
 				printf(" [rank:%d] i:%d\n", w_rank, i);
 				// nueva pla
-				printf(" [rank:%d] corriendo: %s\n", w_rank, fname_out);
-				//cout << " --------> generando: "<< fname_out << endl;
-				init_orientation(i, array_ori, ystart);							// values for initial y-values
+				printf(" [rank:%d] corriendo: %s\n", w_rank, outbs.fname_out);
+				init_orientation(i, array_ori, ystart);		// values for initial y-values
 
 				Odeint<StepperBS<rhs> > bsode(ystart,x1,x2,atol,rtol,h1,hmin,outbs,d,par,w_rank);	// inicializo el integrador para c/pla
 				outbs.tic();				// medimos el tiempo de simulac de c/pla
@@ -113,13 +112,21 @@ int main(int argc, char* argv[]){
 				outbs.toc();
 
 				// output --> file
-				printf(" [rank:%d] ----> escribiendo: %s\n", w_rank, fname_out);
+				printf(" [rank:%d] ----> escribiendo: %s\n", w_rank, outbs.fname_out);
 				outbs.save2file();								// guardo en archivo
 				printf(" [rank:%d] nok/nbad: %d / %d\n", w_rank, bsode.nok, bsode.nbad);
-				//cout << " --- OKI DOKI"<<endl; getchar();
 			}
-			//cout << " SALIENDO DEL IF..." <<endl; getchar();
+    
+            // solo entra si no soy ayudador (helper=false)
+            if((i==imax-1) & (j==n_Brealiz-1) & (!helper)){ // si fue mi ultimo trabajo asignado
+                helper = true;  // me convierto en un ayudador
+                i = -1;      // reseteo conteo de simulaciones
+                j = 0;
+                par.fix_B_realization(j);
+            }
+            i++;
 		}
+        j++;
 	}
 	//------------------------------------------------
 	printf(" [rank:%d] scl.rl [AU]: %g\n", w_rank, scl.rl/AU_in_cm);
@@ -128,5 +135,17 @@ int main(int argc, char* argv[]){
 	MPI_Barrier(MPI_COMM_WORLD);
 	MPI_Finalize();
 
-	//return 0;
+	return EXIT_SUCCESS;
 }
+
+/*
+ * TODO:
+ * - for() ---> while()
+ * - generar files "owned.B13.pla003_r.007_h.0"
+ * - flag "helper=0,1"
+ * - Ahora, file_exist() debe chekear el archivo "owned.."
+ *
+ * +++++ despues de esta version oficial-temporal +++++
+ * - eliminar los srand(), rand()
+ *
+ */

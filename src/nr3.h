@@ -8,12 +8,13 @@
 
 /* JIMMY--
 // all the system #include's we'll ever need
+*/ 
 #include <fstream>
 #include <cmath>
 #include <complex>
 #include <iostream>
 #include <iomanip>
-#include <vector>
+//#include <vector>
 #include <limits>
 #include <stdlib.h>
 #include <stdio.h>
@@ -23,7 +24,6 @@
 #include <ctype.h>
 
 using namespace std;
-*/
 
 // macro-like inline functions
 

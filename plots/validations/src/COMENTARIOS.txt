@@ -1,0 +1,8 @@
+~/simulacion/pla_stochastic/composite_turbulence/massive_orbits/code_processing/Lc2D.3.0e-03_LcSlab.3.0e-02/calc_kperp.py
+esto lee '%s/diff.pars_Nm%03d_Ek.%1.1e_sig.%1.1e_Lc2d.%1.1e_LcSlab.%1.1e__.dat'
+
+pero a ese lo creo este:
+~/simulacion/pla_stochastic/composite_turbulence/massive_orbits/code_processing/Lc2D.3.0e-03_LcSlab.3.0e-02/massive.k.vs.t.py
+|--> ~/simulacion/pla_stochastic/composite_turbulence/massive_orbits/code_processing/Lc2D.3.0e-03_LcSlab.3.0e-02/calc_k_vs_t.py
+
+dentro de este ultimo hay q crear funciones q me calcule los coeffs de diff en forma diferente!

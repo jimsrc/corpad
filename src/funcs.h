@@ -23,7 +23,8 @@ class Output {
 		Doub x1,x2,xout,dxout;
 		VecDoub xsave;
 		MatDoub ysave;
-		void build(string, Int, Doub, Int, char*);
+		//void build(string, Int, Doub, Int, char*); 
+		void build(string, Int, Doub, Int, int, int, char*);
 		Output(void);
 		Output(string, const Int, char*);
 		void init(const Int, const Doub, const Doub);
@@ -32,7 +33,10 @@ class Output {
 		void save(const Doub, VecDoub_I &);
 		void out(const Int,const Doub,VecDoub_I &,Stepper &,const Doub);
 		void save2file(void);
-		ofstream ofile_trj, ofile_misc;
+		ofstream ofile_trj;
+        ofstream ofile_misc;
+        ofstream ofile_own; 
+        void claim_own(void);
 		bool file_exist(void);
 		void resizeTau(void);
 		//esto lo agrego para guardar cosas de la historia de 
@@ -44,16 +48,20 @@ class Output {
 		void set_Bmodel(PARAMS);	// para apuntar al modelo q uso en main()
 		void tic(void), toc(void);	// cronometro para c/pla
 		Doub trun;			// tiempo de simulacion de c/pla
-		Int nsteps;			// nro total de pasos de c/pla
+		Int nsteps;			// nro total de pasos de c/pla 
+        // nombres de archivos de salida 
+        char fname_out[200];
+		char fname_trj[200];
+        char fname_misc[200];
+        char fname_owned[200];
 	private:
-		char fname_trj[200], fname_misc[200];	// nombres de archivos de salida
 		PARAMS *pm;
 		double pos[3], vmod, bmod;
 		void save_pitch(void);
 		double bx, by, bz, vx, vy, vz;
 		VecDoub XSaveGen;	// tiempos de la salida
 		int n_tscales, cc, ndec, inid, nd, base, maxd;	
-		string str_tscale;	// tipo de escala temporal para la salida
+		const string str_tscale; //tipo de escala temporal para la salida
 		double decade, dt;
 		void set_savetimes(Doub);
 		//----- histo del 'Tau'

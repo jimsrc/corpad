@@ -3,7 +3,7 @@
 //---
 template<class Stepper>
 struct Odeint {
-	static const Int MAXSTP=27*50000;
+	static const Int MAXSTP=(150*50000); //MAXSTP=27*50000;
 	Doub EPS;
 	Int nok;
 	Int nbad;
