@@ -29,11 +29,14 @@ dir_src  += '/' + name_Nm + '/' + name_slab + '/' + name_sig + '/' + name_Lc
 fname_inp_base = '%s__%s__%s__%s__%s.h5' % (name_Ek, name_Nm, name_slab, name_sig, name_Lc)
 fname_inp = '%s/%s' % (dir_src, fname_inp_base)
 
+#"""
+dir_src = '../../output/Ek.1e6eV_rtol.1e-6'
+dir_dst = dir_src
+fname_inp = '%s/Ek.1e6eV_rtol.1e-6.h5' % dir_src
+#"""
+
 f = f5(fname_inp, 'r')
 
 iB, ipla = 0, 0
 t, mu, err = read_pla(iB, ipla)
-
-
-
-
+#EOF
