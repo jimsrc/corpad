@@ -1,4 +1,4 @@
-from calc_k_vs_t import *
+from calc_k_vs_t import k_vs_t
 import os
 
 Ek		= 6e5	# [eV]
@@ -12,6 +12,6 @@ Bo  = 5e-5
 dir_data	= '../../../output/Ek.%1.1eeV/Nm%03d/slab%1.2f/sig.%1.1e/Lc2D.%1.1e_LcSlab.%1.1e' % (Ek, Nm, perc_slab, sig, Lc_2d, Lc_slab)
 
 kt = k_vs_t(Ek, dir_data)
-kt.calc_k_versus_t(Bo, './test')
+kt.calc_k_versus_t(Bo, dir_out='./test')
 
 #generate_k_vs_t(Ek, dir_data)

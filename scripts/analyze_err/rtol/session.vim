@@ -300,8 +300,9 @@ badd +138 calc_k.py
 badd +9 massive.py
 badd +0 build_massive_k.profiles.py
 badd +16 _calc_k_vs_t.py
-badd +309 calc_k_vs_t.py
+badd +7 calc_k_vs_t.py
 badd +0 massive.k.vs.t.py
+badd +11 _massive.k.vs.t.py
 args gg.py
 edit massive_kperp.py
 set splitbelow splitright
@@ -1179,12 +1180,12 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 11 - ((10 * winheight(0) + 17) / 35)
+let s:l = 15 - ((14 * winheight(0) + 17) / 35)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-11
-normal! 09l
+15
+normal! 030l
 tabedit calc_k_vs_t.py
 set splitbelow splitright
 wincmd _ | wincmd |
@@ -1309,12 +1310,12 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 226 - ((26 * winheight(0) + 17) / 35)
+let s:l = 165 - ((5 * winheight(0) + 17) / 35)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-226
-normal! 033l
+165
+normal! 08l
 wincmd w
 argglobal
 edit calc_k_vs_t.py
@@ -1431,16 +1432,16 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 255 - ((27 * winheight(0) + 17) / 35)
+let s:l = 298 - ((20 * winheight(0) + 17) / 35)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-255
-normal! 020l
+298
+normal! 017l
 wincmd w
 exe 'vert 1resize ' . ((&columns * 75 + 81) / 162)
 exe 'vert 2resize ' . ((&columns * 86 + 81) / 162)
-tabnext 6
+tabnext 5
 if exists('s:wipebuf')
   silent exe 'bwipe ' . s:wipebuf
 endif

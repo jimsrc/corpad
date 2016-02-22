@@ -2,10 +2,9 @@
 # -*- coding: utf-8 -*-
 from funcs import *
 from numpy import (
-    nan, 
-    ones, zeros, empty, 
-    mean, median,
-    nanmean, nanmedian
+    nan, ones, zeros, empty, 
+    mean, median, nanmean, nanmedian, 
+    array, savetxt
 )
 import os
 
@@ -164,11 +163,6 @@ class k_vs_t:
         """
 
     def calc_k_versus_t(s, Bo, dir_out):
-        #(dir_data, Ek, Sig, NPLAS, NBs, nfil, ncol, Bo,
-        #        Lc_2d, Lc_slab, Nm, perc_slab):
-
-        #dir_plots = '../../plots'
-        #dir_out   = '../../post'
         fname_out = '%s/k_vs_t_Ek.%1.1eeV' % (dir_out, s.Ek) +\
         '_Nm%03d' % s.par['Nm'] +\
         '_slab%1.2f' % s.par['perc_slab'] +\
@@ -200,7 +194,7 @@ class k_vs_t:
         t_dim, x2, y2, z2 = sqr_deviations(DATA, time, every)
 
         AUinkm  = 1.5e8
-        AUincm  = AUinkm*1e5        # [cm]
+        AUincm  = AUinkm*1e5    # [cm]
         r2  = x2 + y2
         r2  = r2*AUincm**2      # [cm^2]
         x2  = x2*AUincm**2      # [cm^2]
