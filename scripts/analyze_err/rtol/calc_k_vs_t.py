@@ -222,6 +222,74 @@ class k_vs_t:
         savetxt(fname_out, data_out, fmt='%12.2f')
 
 
+    def calc_k_versus_t_ii(s, Bo, dir_out):
+        fname_out = '%s/k_vs_t_Ek.%1.1eeV' % (dir_out, s.Ek) +\
+        '_Nm%03d' % s.par['Nm'] +\
+        '_slab%1.2f' % s.par['perc_slab'] +\
+        '_sig.%1.1e' % s.par['sig'] +\
+        '_Lc2d.%1.1e' % s.par['Lc_2d'] +\
+        '_LcSlab.%1.1e.dat' % s.par['Lc_slab']
+
+        # orden del nro max de giroperiodos
+        order_tmax = int(log10(value(s.fname_plas, 'nmax_gyroperiods')))
+        # nro de filas x archivo (nro de puntos q le pedi a la simulacion)
+        nfil    = int(order_tmax*value(s.fname_plas, 'npoints') + 1)
+        ncol    = 6 # nro de columnas x archivo: (t, x, y, z, mu, err-gamma)
+
+        #---------------------
+        # nok   : nro de files q existe Y tienen data
+        # nbad  : nro de files q solicite y no existen
+        # time  : grilla temporal
+        #DATA, time, nok, nbad 
+        tj = load_trajectories_from_h5(
+            s.par['nB'], s.par['nplas'], s.dir_data
+        )
+        DATA = tj['DATA']
+        time = tj['time']
+        nok, nbad = tj['nwdata'], tj['n_noexist']
+        s.data = tj['data']
+        #s.DATA = DATA
+
+        #s.o = [DATA, time, nok, nbad]
+        print " nro de plas: ", s.par['nplas']
+        print " nro de B-realizations: ", s.par['nB']
+        print " nro de ptos por trayectoria: %d\n" % nfil
+        print " nro de archivos q existe c/data: %d/%d " % (nok, nok+nbad)
+        print " nro de archivos q pedi y NO existen: %d/%d " % (nbad, nok+nbad)
+        #---------------------
+        every   = 1         # no en c/tiempo, sino cada 'every'
+        t_dim, x2, y2, z2 = sqr_deviations(DATA, time, every)
+
+        AUinkm  = 1.5e8
+        AUincm  = AUinkm*1e5    # [cm]
+        r2  = x2 + y2
+        r2  = r2*AUincm**2      # [cm^2]
+        x2  = x2*AUincm**2      # [cm^2]
+        y2  = y2*AUincm**2      # [cm^2]
+        z2  = z2*AUincm**2      # [cm^2]
+        wc  = calc_omega(Bo, s.Ek) #4.781066E-01 #4.325188E-01 #Ek=1e8eV  #4.735689E-01 # Ek=1e7eV #4.781066E-01 # Ek=1e6eV
+        print " wc[s-1]: ", wc
+        t_adim  = t_dim*wc             # [1]
+        #-------------------
+        kxx = x2/(2.*t_dim)     # [cm2/s]
+        kyy = y2/(2.*t_dim)     # [cm2/s]
+        kzz = z2/(2.*t_dim)     # [cm2/s]
+
+        s.profile = {
+        't_dim': t_dim,
+        't_adim': t_adim, 
+        'x2': x2, 'y2': y2, 'z2': z2,
+        'kxx': kxx, 'kyy': kyy, 'kzz': kzz
+        }
+
+        #-- guarda data kxx(t)
+        data_out    = array([t_adim, t_dim, kxx, kyy, kzz]).T
+        data_out    = data_out[1:]  # el 1er tiempo no lo guardo xq es division por zero 1/2t
+        print " ---> guardando: %s\n" % fname_out
+        savetxt(fname_out, data_out, fmt='%12.2f')
+
+
+
 def generate_k_vs_t(Ek, dir_data):
     dir_info    = '%s/info' % dir_data
     fname_orient    = '%s/orientations.in' % dir_info

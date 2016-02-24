@@ -2,6 +2,11 @@
 from pylab import *
 from numpy import *
 from lmfit import minimize, Parameters, Parameter, report_errors
+from h5py import File as f5
+from numpy import (
+    zeros, empty, ones, nan, 
+    savetxt, loadtxt, mean, median,
+    nanmean, nanmedian)
 #
 def value(fname, value_name):
     cc = read_contents(fname)
@@ -168,6 +173,63 @@ def residuals_kxx(params, x, y_data):
     return diff
 
 
+def nans(n):
+    return nan*ones(n)
+
+
+def load_trajectories_from_h5(NBs, NPLAS, dir_data):
+    data        = []
+    nexist      = 0
+    nwdata      = 0
+    n_noexist   = 0
+
+    fname_inp = '%s/out.h5' % dir_data
+    f = f5(fname_inp, 'r')
+
+    for j in range(NBs):
+        for i in range(NPLAS):
+            path = 'B%02d/pla%03d' % (j, i)
+            try:
+                xyz = f[path+'/xyz'][...].T
+                t   = f[path+'/t'][...]
+                data_aux = nans((t.size, 4))
+                data_aux[:, 1:] = xyz
+                data_aux[:, 0]  = t
+                nexist     += 1
+                if len(data_aux)>0:
+                    nwdata += 1
+                    data    += [data_aux]
+                    print " ---> SI EXISTE: %s" % path
+
+            except KeyboardInterrupt:
+                print " ----> KEYBOARD.... Exiting..."
+                raise SystemExit
+
+            except KeyError:
+                print " ---> NO EXISTE: %s" % path
+                n_noexist += 1
+
+    nt   = t.size
+    DATA = zeros((nwdata*nt, 4))
+    j    = 0
+    for i in range(nwdata):
+        j           = i*nt
+        DATA[j:j+nt, :]   = data[i] # eje x de 'DATA' es tiempo
+
+    time    = data[0][:,0]        # [seg] con tomar una muestra es suficiente!
+
+    # realz == realizaciones
+    # nwdata    : nro de realz q existe Y tienen data
+    # n_noexist : nro de realz q solicite y NO existen
+    #return DATA, time, nwdata, n_noexist
+    return {'DATA': DATA, 
+            'time': time, 
+            'nwdata': nwdata, 
+            'n_noexist': n_noexist,
+            'data': data
+            }
+
+
 def load_trajectories(NBs, NPLAS, nfil, ncol, dir_data):
     data        = []
     nexist      = 0
@@ -200,7 +262,7 @@ def load_trajectories(NBs, NPLAS, nfil, ncol, dir_data):
         j           = i*nfil
         DATA[j:j+nfil][:]   = data[i].T # eje x de 'DATA' es tiempo
 
-    time    = data[0][0]        # [seg] con tomar una muestra es suficiente!
+    time    = data[0][0,:]        # [seg] con tomar una muestra es suficiente!
 
     # nwdata    : nro de files q existe Y tienen data
     # n_noexist : nro de files q solicite y NO existen

@@ -35,9 +35,11 @@ class kdiff:
         fname_inp   += '_Lc2d.%1.1e_LcSlab.%1.1e.dat' % (par['Lc_2d'], par['Lc_slab'])
         self.fname_inp = fname_inp
 
-        t, kxx, kyy, kzz = loadtxt(fname_inp, unpack=True)
+        #t, kxx, kyy, kzz = loadtxt(fname_inp, unpack=True)
+        t_dim, t_adim, kxx, kyy, kzz = loadtxt(fname_inp, unpack=True)
         self.inp = {
-            't'     : t,
+            't_dim' : t_dim,
+            't_adim': t_adim,
             'kxx'   : kxx,
             'kyy'   : kyy,
             'kzz'   : kzz
@@ -47,7 +49,7 @@ class kdiff:
         self.k = {}
 
     def fit_kperp(self, t_decr):
-        t = self.inp['t']
+        t = self.inp['t_dim']
         kxx = self.inp['kxx']
         kyy = self.inp['kyy']
         wc  = self.wc
@@ -78,10 +80,9 @@ class kdiff:
         assert hasattr(self, 't_decr_kperp'), \
             "\n ----> antes de plotear, hay q fitear kperp!!\n"
 
-        t    = self.inp['t']
+        t    = self.inp['t_dim']
         cc   = t>self.t_decr_kperp
 
-        t    = self.inp['t']
         kxx  = self.inp['kxx']
         kyy  = self.inp['kyy']
         k    = self.k
@@ -134,7 +135,7 @@ class kdiff:
 
 
     def fit_kparall(self, t_decr):
-        t   = self.inp['t']
+        t   = self.inp['t_dim']
         kzz = self.inp['kzz']
         wc  = self.wc
         #----------------------------------- fit k_parall
@@ -159,10 +160,9 @@ class kdiff:
         assert hasattr(self, 't_decr_kparall'), \
             "\n ----> antes de plotear, hay q fitear kparall!!\n"
 
-        t    = self.inp['t']
+        t    = self.inp['t_dim']
         cc   = t>self.t_decr_kparall
 
-        t    = self.inp['t']
         kzz  = self.inp['kzz']
         k    = self.k
         wc   = self.wc
