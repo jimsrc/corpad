@@ -6,6 +6,7 @@ EXE_WOMPI=./CRs.diff_woMPI.x
 EXE_WPROF=./CRs.diff_wgprof.x 	# profiling / debugging
 MPICXX=/usr/local/bin/mpic++
 OPTIM=-O3 #-O3
+OPT_GP=-O0 #-O3 #-O0 	# for use w/ gprof
 
 default:
 	make w_mpi
@@ -20,7 +21,7 @@ w_mpi:
 
 
 mpi-w-gprof:
-	${MPICXX} -pg ${DIR_SRC}/main_mpi.cc -o ${EXE_WPROF}
+	${MPICXX} -pg ${OPT_GP} ${DIR_SRC}/main_mpi.cc -o ${EXE_WPROF}
 
 
 wo_mpi:

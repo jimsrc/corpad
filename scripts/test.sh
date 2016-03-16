@@ -1,5 +1,5 @@
 #-----------------------------------------------
-EXEC=../CRs.diff.x 
+EXEC=../CRs.diff.x #../CRs.diff_wgprof.x  #../CRs.diff.x 
 MPIRUN=/usr/local/bin/mpirun
 #EXEC=../beta.x
 INPUTS="../inputs/INPUT_TURB.ALONE.inp ../inputs/orientations_isotropic_Nth16_Nph8.in ../inputs/INPUT_GRAL.xx1.inp"

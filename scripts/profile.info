@@ -1,0 +1,887 @@
+Flat profile:
+
+Each sample counts as 0.01 seconds.
+  %   cumulative   self              self     total           
+ time   seconds   seconds    calls  ms/call  ms/call  name    
+ 45.52      4.11     4.11  1094143     0.00     0.00  MODEL_TURB::calc_dB_SLAB(double const*)
+ 41.42      7.85     3.74  1094143     0.00     0.00  MODEL_TURB::calc_dB_2D(double const*)
+  2.22      8.05     0.20    69856     0.00     0.01  StepperBS<rhs>::prepare_dense(double, NRvector<double> const&, NRvector<double> const&, NRvector<double> const&, int, double&)
+  2.05      8.24     0.19 61930201     0.00     0.00  NRvector<double>::operator[](int)
+  1.99      8.42     0.18   176496     0.00     0.04  StepperBS<rhs>::dy(NRvector<double> const&, double, int, NRvector<double>&, int&, rhs&)
+  1.88      8.59     0.17 41025790     0.00     0.00  NRmatrix<double>::operator[](int)
+  0.78      8.66     0.07   959757     0.00     0.01  rhs::operator()(PARAMS, double, NRvector<double> const&, NRvector<double>&)
+  0.72      8.72     0.07 16440906     0.00     0.00  NRvector<double>::operator[](int) const
+  0.39      8.76     0.04  1133320     0.00     0.01  PARAMS::calc_Bfield(NRvector<double> const&)
+  0.33      8.79     0.03  1094143     0.00     0.01  MODEL_TURB::calc_dB(double const*)
+  0.33      8.82     0.03    69518     0.00     0.11  StepperBS<rhs>::step(double, rhs&)
+  0.22      8.84     0.02  2542421     0.00     0.00  NRvector<int>::operator[](int)
+  0.22      8.86     0.02   996729     0.00     0.00  MODEL_TURB::~MODEL_TURB()
+  0.22      8.88     0.02   824719     0.00     0.00  NRvector<double>::NRvector(int)
+  0.22      8.90     0.02    69518     0.00     0.01  Odeint<StepperBS<rhs> >::check_scattering()
+  0.22      8.92     0.02    67468     0.00     0.00  StepperBS<rhs>::dense_interp(int, NRvector<double>&, int)
+  0.11      8.93     0.01  1136269     0.00     0.01  MODEL_TURB::calc_B(double const*)
+  0.11      8.94     0.01   996728     0.00     0.00  MODEL_TURB::MODEL_TURB(MODEL_TURB const&)
+  0.11      8.95     0.01   996728     0.00     0.00  PARAMS_TURB::PARAMS_TURB(PARAMS_TURB const&)
+  0.11      8.96     0.01   959883     0.00     0.00  PARAMS::~PARAMS()
+  0.11      8.97     0.01   959882     0.00     0.00  PARAMS::PARAMS(PARAMS const&)
+  0.11      8.98     0.01   816367     0.00     0.00  double const& MAX<double>(double const&, double const&)
+  0.11      8.99     0.01    69549     0.00     0.00  Output<StepperBS<rhs> >::out(int, double, NRvector<double> const&, StepperBS<rhs>&, double)
+  0.11      9.00     0.01    69518     0.00     0.01  Odeint<StepperBS<rhs> >::save_history()
+  0.11      9.01     0.01      424     0.02     0.02  NRmatrix<double>::operator=(NRmatrix<double> const&)
+  0.11      9.02     0.01      124     0.08     0.08  NRmatrix<double>::NRmatrix(int, int)
+  0.11      9.03     0.01       31     0.32   290.50  Odeint<StepperBS<rhs> >::integrate()
+  0.06      9.03     0.01        1     5.00     5.00  PARAMS::PARAMS(std::string)
+  0.00      9.03     0.00  1732970     0.00     0.00  std::abs(double)
+  0.00      9.03     0.00  1463120     0.00     0.00  double SQR<double>(double)
+  0.00      9.03     0.00   996732     0.00     0.00  PARAMS_SEM::~PARAMS_SEM()
+  0.00      9.03     0.00   996729     0.00     0.00  PARAMS_TURB::~PARAMS_TURB()
+  0.00      9.03     0.00   810868     0.00     0.00  NRvector<double>::~NRvector()
+  0.00      9.03     0.00   360400     0.00     0.00  NRmatrix<double>::operator[](int) const
+  0.00      9.03     0.00   345011     0.00     0.00  std::pow(double, int)
+  0.00      9.03     0.00   174173     0.00     0.00  double const& MIN<double>(double const&, double const&)
+  0.00      9.03     0.00   139434     0.00     0.00  NRvector<double>::operator=(NRvector<double> const&)
+  0.00      9.03     0.00   106640     0.00     0.00  StepperBS<rhs>::polyextr(int, NRmatrix<double>&, NRvector<double>&)
+  0.00      9.03     0.00   102541     0.00     0.00  NRvector<double>::size() const
+  0.00      9.03     0.00    32107     0.00     0.00  int const& MIN<int>(int const&, int const&)
+  0.00      9.03     0.00     7099     0.00     0.00  std::setw(int)
+  0.00      9.03     0.00     3999     0.00     0.00  std::setprecision(int)
+  0.00      9.03     0.00     3420     0.00     0.00  StepperBS<rhs>::dense_out(int, double, double)
+  0.00      9.03     0.00     1949     0.00     0.00  rann0(long&)
+  0.00      9.03     0.00     1290     0.00     0.00  __gnu_cxx::__promote_2<int, double, __gnu_cxx::__promote<int, std::__is_integer<int>::__value>::__type, __gnu_cxx::__promote<double, std::__is_integer<double>::__value>::__type>::__type std::pow<int, double>(int, double)
+  0.00      9.03     0.00      651     0.00     0.00  calc_gamma(double)
+  0.00      9.03     0.00      651     0.00     0.00  std::setiosflags(std::_Ios_Fmtflags)
+  0.00      9.03     0.00      651     0.00     0.00  std::operator|(std::_Ios_Fmtflags, std::_Ios_Fmtflags)
+  0.00      9.03     0.00      632     0.00     0.01  Output<StepperBS<rhs> >::save_pitch()
+  0.00      9.03     0.00      589     0.00     0.01  Output<StepperBS<rhs> >::save_dense(StepperBS<rhs>&, double, double)
+  0.00      9.03     0.00      551     0.00     0.00  NRmatrix<double>::~NRmatrix()
+  0.00      9.03     0.00      511     0.00     0.00  int SQR<int>(int)
+  0.00      9.03     0.00      424     0.00     0.00  NRmatrix<double>::NRmatrix(int, int, double const&)
+  0.00      9.03     0.00      212     0.00     0.00  Output<StepperBS<rhs> >::file_exist()
+  0.00      9.03     0.00      212     0.00     0.05  Output<StepperBS<rhs> >::build(std::string, int, double, int, int, int, char*)
+  0.00      9.03     0.00      212     0.00     0.00  NRvector<double>::resize(int)
+  0.00      9.03     0.00       93     0.00     0.00  NRvector<int>::NRvector(int)
+  0.00      9.03     0.00       93     0.00     0.00  NRvector<int>::~NRvector()
+  0.00      9.03     0.00       93     0.00     0.00  std::operator|(std::_Ios_Openmode, std::_Ios_Openmode)
+  0.00      9.03     0.00       62     0.00     0.01  Output<StepperBS<rhs> >::save(double, NRvector<double> const&)
+  0.00      9.03     0.00       62     0.00     0.00  std::numeric_limits<double>::epsilon()
+  0.00      9.03     0.00       60     0.00     0.00  NRvector<double>::NRvector(int, double const&)
+  0.00      9.03     0.00       60     0.00     0.00  bool std::operator==<char, std::char_traits<char>, std::allocator<char> >(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, char const*)
+  0.00      9.03     0.00       31     0.00     0.00  init_orientation(int, double**, NRvector<double>&)
+  0.00      9.03     0.00       31     0.00     0.00  int const& MAX<int>(int const&, int const&)
+  0.00      9.03     0.00       31     0.00     0.00  double SIGN<double>(double const&, double const&)
+  0.00      9.03     0.00       31     0.00     0.00  StepperBase::StepperBase(NRvector<double>&, NRvector<double>&, double&, double, double, bool)
+  0.00      9.03     0.00       31     0.00     0.00  StepperBase::~StepperBase()
+  0.00      9.03     0.00       31     0.00     0.33  Odeint<StepperBS<rhs> >::Odeint(NRvector<double>&, double, double, double, double, double, double, Output<StepperBS<rhs> >&, rhs&, PARAMS, int)
+  0.00      9.03     0.00       31     0.00     0.00  Odeint<StepperBS<rhs> >::~Odeint()
+  0.00      9.03     0.00       31     0.00     0.00  Output<StepperBS<rhs> >::build_HistTau()
+  0.00      9.03     0.00       31     0.00     0.00  Output<StepperBS<rhs> >::set_savetimes(double)
+  0.00      9.03     0.00       31     0.00     0.00  Output<StepperBS<rhs> >::tic()
+  0.00      9.03     0.00       31     0.00     0.00  Output<StepperBS<rhs> >::toc()
+  0.00      9.03     0.00       31     0.00     0.00  Output<StepperBS<rhs> >::init(int, double, double)
+  0.00      9.03     0.00       31     0.00     0.00  Output<StepperBS<rhs> >::claim_own()
+  0.00      9.03     0.00       31     0.00     0.00  Output<StepperBS<rhs> >::save2file()
+  0.00      9.03     0.00       31     0.00     0.00  NRmatrix<double>::resize(int, int)
+  0.00      9.03     0.00       31     0.00     0.33  StepperBS<rhs>::StepperBS(NRvector<double>&, NRvector<double>&, double&, double, double, bool, PARAMS)
+  0.00      9.03     0.00       31     0.00     0.00  StepperBS<rhs>::~StepperBS()
+  0.00      9.03     0.00        3     0.00     0.00  FASES::construir_fases_random(PARAMS_SEM)
+  0.00      9.03     0.00        3     0.00     0.00  NRmatrix<double>::NRmatrix()
+  0.00      9.03     0.00        3     0.00     0.00  NRvector<double>::NRvector()
+  0.00      9.03     0.00        2     0.00     0.00  MODEL_TURB::fix_B_realization(int)
+  0.00      9.03     0.00        2     0.00     0.00  MPI::Is_initialized()
+  0.00      9.03     0.00        2     0.00     0.00  MPI::Comm::~Comm()
+  0.00      9.03     0.00        2     0.00     0.00  MPI::Comm_Null::~Comm_Null()
+  0.00      9.03     0.00        1     0.00     0.00  _GLOBAL__sub_I__ZN7ESCALAS5buildEd
+  0.00      9.03     0.00        1     0.00     0.00  read_params(std::string, double&, double&, double&, int&, double&, double&, int&, std::string&, double&, int&)
+  0.00      9.03     0.00        1     0.00     0.00  read_orientations(std::string, int&)
+  0.00      9.03     0.00        1     0.00     0.00  __static_initialization_and_destruction_0(int, int)
+  0.00      9.03     0.00        1     0.00     0.00  AllocMat(int, int)
+  0.00      9.03     0.00        1     0.00     0.00  MODEL_TURB::build(std::string)
+  0.00      9.03     0.00        1     0.00     0.00  MODEL_TURB::MODEL_TURB(std::string)
+  0.00      9.03     0.00        1     0.00     0.00  PARAMS_SEM::PARAMS_SEM()
+  0.00      9.03     0.00        1     0.00     0.00  PARAMS_TURB::build_Bk_2D()
+  0.00      9.03     0.00        1     0.00     0.00  PARAMS_TURB::read_params(std::string)
+  0.00      9.03     0.00        1     0.00     0.00  PARAMS_TURB::build_sigmas()
+  0.00      9.03     0.00        1     0.00     0.00  PARAMS_TURB::build_Bk_SLAB()
+  0.00      9.03     0.00        1     0.00     0.00  PARAMS_TURB::build_k_and_dk()
+  0.00      9.03     0.00        1     0.00     0.00  PARAMS_TURB::build(std::string)
+  0.00      9.03     0.00        1     0.00     0.00  PARAMS_TURB::report()
+  0.00      9.03     0.00        1     0.00     0.00  PARAMS_TURB::PARAMS_TURB()
+  0.00      9.03     0.00        1     0.00     0.00  FASES::build(int, PARAMS_SEM*)
+  0.00      9.03     0.00        1     0.00     0.00  FASES::FASES()
+  0.00      9.03     0.00        1     0.00     0.00  Output<StepperBS<rhs> >::set_Bmodel(PARAMS)
+  0.00      9.03     0.00        1     0.00     0.00  Output<StepperBS<rhs> >::Output()
+  0.00      9.03     0.00        1     0.00     0.00  Output<StepperBS<rhs> >::~Output()
+  0.00      9.03     0.00        1     0.00     0.00  ESCALAS::build(double)
+  0.00      9.03     0.00        1     0.00     0.00  ESCALAS::ESCALAS()
+  0.00      9.03     0.00        1     0.00     0.00  std::numeric_limits<double>::quiet_NaN()
+
+ %         the percentage of the total running time of the
+time       program used by this function.
+
+cumulative a running sum of the number of seconds accounted
+ seconds   for by this function and those listed above it.
+
+ self      the number of seconds accounted for by this
+seconds    function alone.  This is the major sort for this
+           listing.
+
+calls      the number of times this function was invoked, if
+           this function is profiled, else blank.
+ 
+ self      the average number of milliseconds spent in this
+ms/call    function per call, if this function is profiled,
+	   else blank.
+
+ total     the average number of milliseconds spent in this
+ms/call    function and its descendents per call, if this 
+	   function is profiled, else blank.
+
+name       the name of the function.  This is the minor sort
+           for this listing. The index shows the location of
+	   the function in the gprof listing. If the index is
+	   in parenthesis it shows where it would appear in
+	   the gprof listing if it were to be printed.
+
+		     Call graph (explanation follows)
+
+
+granularity: each sample hit covers 2 byte(s) for 0.11% of 9.03 seconds
+
+index % time    self  children    called     name
+                                                 <spontaneous>
+[1]    100.0    0.00    9.03                 main [1]
+                0.01    9.00      31/31          Odeint<StepperBS<rhs> >::integrate() [2]
+                0.00    0.01      31/31          Odeint<StepperBS<rhs> >::Odeint(NRvector<double>&, double, double, double, double, double, double, Output<StepperBS<rhs> >&, rhs&, PARAMS, int) [26]
+                0.00    0.01     212/212         Output<StepperBS<rhs> >::build(std::string, int, double, int, int, int, char*) [31]
+                0.01    0.00       1/1           PARAMS::PARAMS(std::string) [33]
+                0.00    0.00      31/31          Output<StepperBS<rhs> >::save2file() [39]
+                0.00    0.00      31/31          Odeint<StepperBS<rhs> >::~Odeint() [43]
+                0.00    0.00      33/959883      PARAMS::~PARAMS() [19]
+                0.00    0.00      32/959882      PARAMS::PARAMS(PARAMS const&) [18]
+                0.00    0.00      31/31          init_orientation(int, double**, NRvector<double>&) [46]
+                0.00    0.00       1/824719      NRvector<double>::NRvector(int) [22]
+                0.00    0.00     212/212         Output<StepperBS<rhs> >::file_exist() [71]
+                0.00    0.00      31/31          Output<StepperBS<rhs> >::claim_own() [84]
+                0.00    0.00      31/31          Output<StepperBS<rhs> >::tic() [82]
+                0.00    0.00      31/31          Output<StepperBS<rhs> >::toc() [83]
+                0.00    0.00       2/2           MODEL_TURB::fix_B_realization(int) [89]
+                0.00    0.00       1/1           read_params(std::string, double&, double&, double&, int&, double&, double&, int&, std::string&, double&, int&) [94]
+                0.00    0.00       1/1           ESCALAS::build(double) [114]
+                0.00    0.00       1/1           read_orientations(std::string, int&) [95]
+                0.00    0.00       1/1           Output<StepperBS<rhs> >::Output() [112]
+                0.00    0.00       1/1           Output<StepperBS<rhs> >::set_Bmodel(PARAMS) [111]
+                0.00    0.00       1/1           Output<StepperBS<rhs> >::~Output() [113]
+                0.00    0.00       1/810868      NRvector<double>::~NRvector() [55]
+-----------------------------------------------
+                0.01    9.00      31/31          main [1]
+[2]     99.7    0.01    9.00      31         Odeint<StepperBS<rhs> >::integrate() [2]
+                0.03    7.96   69518/69518       StepperBS<rhs>::step(double, rhs&) [3]
+                0.01    0.49   69518/69518       Odeint<StepperBS<rhs> >::save_history() [11]
+                0.02    0.47   69518/69518       Odeint<StepperBS<rhs> >::check_scattering() [12]
+                0.01    0.00   69549/69549       Output<StepperBS<rhs> >::out(int, double, NRvector<double> const&, StepperBS<rhs>&, double) [25]
+                0.00    0.00      31/959757      rhs::operator()(PARAMS, double, NRvector<double> const&, NRvector<double>&) [7]
+                0.00    0.00      31/62          Output<StepperBS<rhs> >::save(double, NRvector<double> const&) [37]
+                0.00    0.00     403/61930201     NRvector<double>::operator[](int) [14]
+                0.00    0.00      31/959882      PARAMS::PARAMS(PARAMS const&) [18]
+                0.00    0.00      31/959883      PARAMS::~PARAMS() [19]
+                0.00    0.00   69549/1732970     std::abs(double) [51]
+-----------------------------------------------
+                0.03    7.96   69518/69518       Odeint<StepperBS<rhs> >::integrate() [2]
+[3]     88.5    0.03    7.96   69518         StepperBS<rhs>::step(double, rhs&) [3]
+                0.18    6.79  176496/176496      StepperBS<rhs>::dy(NRvector<double> const&, double, int, NRvector<double>&, int&, rhs&) [8]
+                0.01    0.51   69856/959757      rhs::operator()(PARAMS, double, NRvector<double> const&, NRvector<double>&) [7]
+                0.20    0.21   69856/69856       StepperBS<rhs>::prepare_dense(double, NRvector<double> const&, NRvector<double> const&, NRvector<double> const&, int, double&) [13]
+                0.02    0.00 5385942/61930201     NRvector<double>::operator[](int) [14]
+                0.00    0.02  106640/106640      StepperBS<rhs>::polyextr(int, NRmatrix<double>&, NRvector<double>&) [24]
+                0.01    0.00  417108/824719      NRvector<double>::NRvector(int) [22]
+                0.01    0.00  816336/816367      double const& MAX<double>(double const&, double const&) [29]
+                0.01    0.00 1279680/41025790     NRmatrix<double>::operator[](int) [15]
+                0.00    0.00  139374/139434      NRvector<double>::operator=(NRvector<double> const&) [36]
+                0.00    0.00   69856/959882      PARAMS::PARAMS(PARAMS const&) [18]
+                0.00    0.00   69856/959883      PARAMS::~PARAMS() [19]
+                0.00    0.00  233126/2542421     NRvector<int>::operator[](int) [20]
+                0.00    0.00 1663421/1732970     std::abs(double) [51]
+                0.00    0.00  639840/1463120     double SQR<double>(double) [52]
+                0.00    0.00  403194/810868      NRvector<double>::~NRvector() [55]
+                0.00    0.00  174173/174173      double const& MIN<double>(double const&, double const&) [58]
+                0.00    0.00   32076/32107       int const& MIN<int>(int const&, int const&) [60]
+                0.00    0.00     511/511         int SQR<int>(int) [69]
+-----------------------------------------------
+                0.00    0.47   67199/1133320     Odeint<StepperBS<rhs> >::check_scattering() [12]
+                0.00    0.48   69518/1133320     Odeint<StepperBS<rhs> >::save_history() [11]
+                0.03    6.95  996603/1133320     rhs::operator()(PARAMS, double, NRvector<double> const&, NRvector<double>&) [7]
+[4]     87.9    0.04    7.90 1133320         PARAMS::calc_Bfield(NRvector<double> const&) [4]
+                0.01    7.88 1135639/1136269     MODEL_TURB::calc_B(double const*) [5]
+                0.01    0.00 3406917/16440906     NRvector<double>::operator[](int) const [16]
+-----------------------------------------------
+                0.00    0.00     630/1136269     Output<StepperBS<rhs> >::save_pitch() [34]
+                0.01    7.88 1135639/1136269     PARAMS::calc_Bfield(NRvector<double> const&) [4]
+[5]     87.4    0.01    7.88 1136269         MODEL_TURB::calc_B(double const*) [5]
+                0.03    7.85 1094143/1094143     MODEL_TURB::calc_dB(double const*) [6]
+-----------------------------------------------
+                0.03    7.85 1094143/1094143     MODEL_TURB::calc_B(double const*) [5]
+[6]     87.3    0.03    7.85 1094143         MODEL_TURB::calc_dB(double const*) [6]
+                4.11    0.00 1094143/1094143     MODEL_TURB::calc_dB_SLAB(double const*) [9]
+                3.74    0.00 1094143/1094143     MODEL_TURB::calc_dB_2D(double const*) [10]
+-----------------------------------------------
+                0.00    0.00      31/959757      Odeint<StepperBS<rhs> >::integrate() [2]
+                0.01    0.51   69856/959757      StepperBS<rhs>::step(double, rhs&) [3]
+                0.06    6.52  889870/959757      StepperBS<rhs>::dy(NRvector<double> const&, double, int, NRvector<double>&, int&, rhs&) [8]
+[7]     78.6    0.07    7.03  959757         rhs::operator()(PARAMS, double, NRvector<double> const&, NRvector<double>&) [7]
+                0.03    6.95  996603/1133320     PARAMS::calc_Bfield(NRvector<double> const&) [4]
+                0.04    0.00 8969427/16440906     NRvector<double>::operator[](int) const [16]
+                0.02    0.00 5979618/61930201     NRvector<double>::operator[](int) [14]
+-----------------------------------------------
+                0.18    6.79  176496/176496      StepperBS<rhs>::step(double, rhs&) [3]
+[8]     77.2    0.18    6.79  176496         StepperBS<rhs>::dy(NRvector<double> const&, double, int, NRvector<double>&, int&, rhs&) [8]
+                0.06    6.52  889870/959757      rhs::operator()(PARAMS, double, NRvector<double> const&, NRvector<double>&) [7]
+                0.10    0.00 35094366/61930201     NRvector<double>::operator[](int) [14]
+                0.01    0.02  889870/959882      PARAMS::PARAMS(PARAMS const&) [18]
+                0.01    0.02  889870/959883      PARAMS::~PARAMS() [19]
+                0.03    0.00 6358902/41025790     NRmatrix<double>::operator[](int) [15]
+                0.01    0.00  339894/824719      NRvector<double>::NRvector(int) [22]
+                0.01    0.00 2039364/16440906     NRvector<double>::operator[](int) const [16]
+                0.00    0.00  169947/2542421     NRvector<int>::operator[](int) [20]
+                0.00    0.00  339894/810868      NRvector<double>::~NRvector() [55]
+-----------------------------------------------
+                4.11    0.00 1094143/1094143     MODEL_TURB::calc_dB(double const*) [6]
+[9]     45.5    4.11    0.00 1094143         MODEL_TURB::calc_dB_SLAB(double const*) [9]
+-----------------------------------------------
+                3.74    0.00 1094143/1094143     MODEL_TURB::calc_dB(double const*) [6]
+[10]    41.4    3.74    0.00 1094143         MODEL_TURB::calc_dB_2D(double const*) [10]
+-----------------------------------------------
+                0.01    0.49   69518/69518       Odeint<StepperBS<rhs> >::integrate() [2]
+[11]     5.5    0.01    0.49   69518         Odeint<StepperBS<rhs> >::save_history() [11]
+                0.00    0.48   69518/1133320     PARAMS::calc_Bfield(NRvector<double> const&) [4]
+                0.00    0.00  625662/61930201     NRvector<double>::operator[](int) [14]
+-----------------------------------------------
+                0.02    0.47   69518/69518       Odeint<StepperBS<rhs> >::integrate() [2]
+[12]     5.5    0.02    0.47   69518         Odeint<StepperBS<rhs> >::check_scattering() [12]
+                0.00    0.47   67199/1133320     PARAMS::calc_Bfield(NRvector<double> const&) [4]
+                0.00    0.00  607501/61930201     NRvector<double>::operator[](int) [14]
+                0.00    0.00    1626/41025790     NRmatrix<double>::operator[](int) [15]
+-----------------------------------------------
+                0.20    0.21   69856/69856       StepperBS<rhs>::step(double, rhs&) [3]
+[13]     4.5    0.20    0.21   69856         StepperBS<rhs>::prepare_dense(double, NRvector<double> const&, NRvector<double> const&, NRvector<double> const&, int, double&) [13]
+                0.13    0.00 30458364/41025790     NRmatrix<double>::operator[](int) [15]
+                0.02    0.03   67468/67468       StepperBS<rhs>::dense_interp(int, NRvector<double>&, int) [17]
+                0.02    0.00 2115323/2542421     NRvector<int>::operator[](int) [20]
+                0.01    0.00 4761022/61930201     NRvector<double>::operator[](int) [14]
+                0.00    0.00 1214424/16440906     NRvector<double>::operator[](int) const [16]
+                0.00    0.00  819860/1463120     double SQR<double>(double) [52]
+                0.00    0.00  345010/345011      std::pow(double, int) [57]
+-----------------------------------------------
+                0.00    0.00      62/61930201     Output<StepperBS<rhs> >::save(double, NRvector<double> const&) [37]
+                0.00    0.00     186/61930201     init_orientation(int, double**, NRvector<double>&) [46]
+                0.00    0.00     372/61930201     Odeint<StepperBS<rhs> >::Odeint(NRvector<double>&, double, double, double, double, double, double, Output<StepperBS<rhs> >&, rhs&, PARAMS, int) [26]
+                0.00    0.00     403/61930201     Odeint<StepperBS<rhs> >::integrate() [2]
+                0.00    0.00     570/61930201     Output<StepperBS<rhs> >::save_dense(StepperBS<rhs>&, double, double) [35]
+                0.00    0.00     620/61930201     Output<StepperBS<rhs> >::out(int, double, NRvector<double> const&, StepperBS<rhs>&, double) [25]
+                0.00    0.00    1200/61930201     Output<StepperBS<rhs> >::set_savetimes(double) [41]
+                0.00    0.00    1260/61930201     Output<StepperBS<rhs> >::save_pitch() [34]
+                0.00    0.00    1302/61930201     Output<StepperBS<rhs> >::save2file() [39]
+                0.00    0.00   24852/61930201     StepperBS<rhs>::dense_out(int, double, double) [38]
+                0.00    0.00   42687/61930201     StepperBS<rhs>::StepperBS(NRvector<double>&, NRvector<double>&, double&, double, double, bool, PARAMS) [27]
+                0.00    0.00  607501/61930201     Odeint<StepperBS<rhs> >::check_scattering() [12]
+                0.00    0.00  625662/61930201     Odeint<StepperBS<rhs> >::save_history() [11]
+                0.00    0.00 1229748/61930201     StepperBS<rhs>::polyextr(int, NRmatrix<double>&, NRvector<double>&) [24]
+                0.01    0.00 4761022/61930201     StepperBS<rhs>::prepare_dense(double, NRvector<double> const&, NRvector<double> const&, NRvector<double> const&, int, double&) [13]
+                0.02    0.00 5385942/61930201     StepperBS<rhs>::step(double, rhs&) [3]
+                0.02    0.00 5979618/61930201     rhs::operator()(PARAMS, double, NRvector<double> const&, NRvector<double>&) [7]
+                0.02    0.00 8172828/61930201     StepperBS<rhs>::dense_interp(int, NRvector<double>&, int) [17]
+                0.10    0.00 35094366/61930201     StepperBS<rhs>::dy(NRvector<double> const&, double, int, NRvector<double>&, int&, rhs&) [8]
+[14]     2.0    0.19    0.00 61930201         NRvector<double>::operator[](int) [14]
+-----------------------------------------------
+                0.00    0.00     372/41025790     Output<StepperBS<rhs> >::save(double, NRvector<double> const&) [37]
+                0.00    0.00    1626/41025790     Odeint<StepperBS<rhs> >::check_scattering() [12]
+                0.00    0.00    3420/41025790     Output<StepperBS<rhs> >::save_dense(StepperBS<rhs>&, double, double) [35]
+                0.00    0.00    3780/41025790     Output<StepperBS<rhs> >::save_pitch() [34]
+                0.00    0.00    5168/41025790     Output<StepperBS<rhs> >::build_HistTau() [40]
+                0.00    0.00    9300/41025790     StepperBS<rhs>::StepperBS(NRvector<double>&, NRvector<double>&, double&, double, double, bool, PARAMS) [27]
+                0.00    0.00   10106/41025790     Output<StepperBS<rhs> >::save2file() [39]
+                0.01    0.00 1279680/41025790     StepperBS<rhs>::step(double, rhs&) [3]
+                0.01    0.00 2895072/41025790     StepperBS<rhs>::polyextr(int, NRmatrix<double>&, NRvector<double>&) [24]
+                0.03    0.00 6358902/41025790     StepperBS<rhs>::dy(NRvector<double> const&, double, int, NRvector<double>&, int&, rhs&) [8]
+                0.13    0.00 30458364/41025790     StepperBS<rhs>::prepare_dense(double, NRvector<double> const&, NRvector<double> const&, NRvector<double> const&, int, double&) [13]
+[15]     1.9    0.17    0.00 41025790         NRmatrix<double>::operator[](int) [15]
+-----------------------------------------------
+                0.00    0.00     372/16440906     Output<StepperBS<rhs> >::save(double, NRvector<double> const&) [37]
+                0.00    0.00  810402/16440906     NRvector<double>::operator=(NRvector<double> const&) [36]
+                0.00    0.00 1214424/16440906     StepperBS<rhs>::prepare_dense(double, NRvector<double> const&, NRvector<double> const&, NRvector<double> const&, int, double&) [13]
+                0.01    0.00 2039364/16440906     StepperBS<rhs>::dy(NRvector<double> const&, double, int, NRvector<double>&, int&, rhs&) [8]
+                0.01    0.00 3406917/16440906     PARAMS::calc_Bfield(NRvector<double> const&) [4]
+                0.04    0.00 8969427/16440906     rhs::operator()(PARAMS, double, NRvector<double> const&, NRvector<double>&) [7]
+[16]     0.7    0.07    0.00 16440906         NRvector<double>::operator[](int) const [16]
+-----------------------------------------------
+                0.02    0.03   67468/67468       StepperBS<rhs>::prepare_dense(double, NRvector<double> const&, NRvector<double> const&, NRvector<double> const&, int, double&) [13]
+[17]     0.5    0.02    0.03   67468         StepperBS<rhs>::dense_interp(int, NRvector<double>&, int) [17]
+                0.02    0.00 8172828/61930201     NRvector<double>::operator[](int) [14]
+                0.00    0.00   67468/824719      NRvector<double>::NRvector(int) [22]
+                0.00    0.00   67468/810868      NRvector<double>::~NRvector() [55]
+-----------------------------------------------
+                0.00    0.00      31/959882      Odeint<StepperBS<rhs> >::integrate() [2]
+                0.00    0.00      31/959882      StepperBS<rhs>::StepperBS(NRvector<double>&, NRvector<double>&, double&, double, double, bool, PARAMS) [27]
+                0.00    0.00      32/959882      main [1]
+                0.00    0.00      62/959882      Odeint<StepperBS<rhs> >::Odeint(NRvector<double>&, double, double, double, double, double, double, Output<StepperBS<rhs> >&, rhs&, PARAMS, int) [26]
+                0.00    0.00   69856/959882      StepperBS<rhs>::step(double, rhs&) [3]
+                0.01    0.02  889870/959882      StepperBS<rhs>::dy(NRvector<double> const&, double, int, NRvector<double>&, int&, rhs&) [8]
+[18]     0.3    0.01    0.02  959882         PARAMS::PARAMS(PARAMS const&) [18]
+                0.01    0.01  996728/996728      MODEL_TURB::MODEL_TURB(MODEL_TURB const&) [21]
+-----------------------------------------------
+                0.00    0.00      31/959883      StepperBS<rhs>::~StepperBS() [45]
+                0.00    0.00      31/959883      Odeint<StepperBS<rhs> >::~Odeint() [43]
+                0.00    0.00      31/959883      Odeint<StepperBS<rhs> >::Odeint(NRvector<double>&, double, double, double, double, double, double, Output<StepperBS<rhs> >&, rhs&, PARAMS, int) [26]
+                0.00    0.00      31/959883      Odeint<StepperBS<rhs> >::integrate() [2]
+                0.00    0.00      33/959883      main [1]
+                0.00    0.00   69856/959883      StepperBS<rhs>::step(double, rhs&) [3]
+                0.01    0.02  889870/959883      StepperBS<rhs>::dy(NRvector<double> const&, double, int, NRvector<double>&, int&, rhs&) [8]
+[19]     0.3    0.01    0.02  959883         PARAMS::~PARAMS() [19]
+                0.02    0.00  996729/996729      MODEL_TURB::~MODEL_TURB() [23]
+-----------------------------------------------
+                0.00    0.00   24025/2542421     StepperBS<rhs>::StepperBS(NRvector<double>&, NRvector<double>&, double&, double, double, bool, PARAMS) [27]
+                0.00    0.00  169947/2542421     StepperBS<rhs>::dy(NRvector<double> const&, double, int, NRvector<double>&, int&, rhs&) [8]
+                0.00    0.00  233126/2542421     StepperBS<rhs>::step(double, rhs&) [3]
+                0.02    0.00 2115323/2542421     StepperBS<rhs>::prepare_dense(double, NRvector<double> const&, NRvector<double> const&, NRvector<double> const&, int, double&) [13]
+[20]     0.2    0.02    0.00 2542421         NRvector<int>::operator[](int) [20]
+-----------------------------------------------
+                0.01    0.01  996728/996728      PARAMS::PARAMS(PARAMS const&) [18]
+[21]     0.2    0.01    0.01  996728         MODEL_TURB::MODEL_TURB(MODEL_TURB const&) [21]
+                0.01    0.00  996728/996728      PARAMS_TURB::PARAMS_TURB(PARAMS_TURB const&) [28]
+-----------------------------------------------
+                0.00    0.00       1/824719      main [1]
+                0.00    0.00      62/824719      StepperBase::StepperBase(NRvector<double>&, NRvector<double>&, double&, double, double, bool) [44]
+                0.00    0.00      93/824719      Odeint<StepperBS<rhs> >::Odeint(NRvector<double>&, double, double, double, double, double, double, Output<StepperBS<rhs> >&, rhs&, PARAMS, int) [26]
+                0.00    0.00      93/824719      StepperBS<rhs>::StepperBS(NRvector<double>&, NRvector<double>&, double&, double, double, bool, PARAMS) [27]
+                0.00    0.00   67468/824719      StepperBS<rhs>::dense_interp(int, NRvector<double>&, int) [17]
+                0.01    0.00  339894/824719      StepperBS<rhs>::dy(NRvector<double> const&, double, int, NRvector<double>&, int&, rhs&) [8]
+                0.01    0.00  417108/824719      StepperBS<rhs>::step(double, rhs&) [3]
+[22]     0.2    0.02    0.00  824719         NRvector<double>::NRvector(int) [22]
+-----------------------------------------------
+                0.02    0.00  996729/996729      PARAMS::~PARAMS() [19]
+[23]     0.2    0.02    0.00  996729         MODEL_TURB::~MODEL_TURB() [23]
+                0.00    0.00  996729/996729      PARAMS_TURB::~PARAMS_TURB() [54]
+-----------------------------------------------
+                0.00    0.02  106640/106640      StepperBS<rhs>::step(double, rhs&) [3]
+[24]     0.2    0.00    0.02  106640         StepperBS<rhs>::polyextr(int, NRmatrix<double>&, NRvector<double>&) [24]
+                0.01    0.00 2895072/41025790     NRmatrix<double>::operator[](int) [15]
+                0.00    0.00 1229748/61930201     NRvector<double>::operator[](int) [14]
+                0.00    0.00  102479/102541      NRvector<double>::size() const [59]
+-----------------------------------------------
+                0.01    0.00   69549/69549       Odeint<StepperBS<rhs> >::integrate() [2]
+[25]     0.2    0.01    0.00   69549         Output<StepperBS<rhs> >::out(int, double, NRvector<double> const&, StepperBS<rhs>&, double) [25]
+                0.00    0.00     589/589         Output<StepperBS<rhs> >::save_dense(StepperBS<rhs>&, double, double) [35]
+                0.00    0.00      31/62          Output<StepperBS<rhs> >::save(double, NRvector<double> const&) [37]
+                0.00    0.00     620/61930201     NRvector<double>::operator[](int) [14]
+-----------------------------------------------
+                0.00    0.01      31/31          main [1]
+[26]     0.1    0.00    0.01      31         Odeint<StepperBS<rhs> >::Odeint(NRvector<double>&, double, double, double, double, double, double, Output<StepperBS<rhs> >&, rhs&, PARAMS, int) [26]
+                0.00    0.01      31/31          StepperBS<rhs>::StepperBS(NRvector<double>&, NRvector<double>&, double&, double, double, bool, PARAMS) [27]
+                0.00    0.00      31/31          Output<StepperBS<rhs> >::init(int, double, double) [42]
+                0.00    0.00      93/824719      NRvector<double>::NRvector(int) [22]
+                0.00    0.00      62/959882      PARAMS::PARAMS(PARAMS const&) [18]
+                0.00    0.00     372/61930201     NRvector<double>::operator[](int) [14]
+                0.00    0.00      31/959883      PARAMS::~PARAMS() [19]
+                0.00    0.00      31/102541      NRvector<double>::size() const [59]
+                0.00    0.00      31/62          std::numeric_limits<double>::epsilon() [76]
+                0.00    0.00      31/31          double SIGN<double>(double const&, double const&) [80]
+-----------------------------------------------
+                0.00    0.01      31/31          Odeint<StepperBS<rhs> >::Odeint(NRvector<double>&, double, double, double, double, double, double, Output<StepperBS<rhs> >&, rhs&, PARAMS, int) [26]
+[27]     0.1    0.00    0.01      31         StepperBS<rhs>::StepperBS(NRvector<double>&, NRvector<double>&, double&, double, double, bool, PARAMS) [27]
+                0.01    0.00     124/124         NRmatrix<double>::NRmatrix(int, int) [32]
+                0.00    0.00   24025/2542421     NRvector<int>::operator[](int) [20]
+                0.00    0.00   42687/61930201     NRvector<double>::operator[](int) [14]
+                0.00    0.00    9300/41025790     NRmatrix<double>::operator[](int) [15]
+                0.00    0.00      93/824719      NRvector<double>::NRvector(int) [22]
+                0.00    0.00      31/31          StepperBase::StepperBase(NRvector<double>&, NRvector<double>&, double&, double, double, bool) [44]
+                0.00    0.00      31/959882      PARAMS::PARAMS(PARAMS const&) [18]
+                0.00    0.00      31/816367      double const& MAX<double>(double const&, double const&) [29]
+                0.00    0.00      93/93          NRvector<int>::NRvector(int) [73]
+                0.00    0.00      31/62          std::numeric_limits<double>::epsilon() [76]
+                0.00    0.00      31/32107       int const& MIN<int>(int const&, int const&) [60]
+                0.00    0.00      31/31          int const& MAX<int>(int const&, int const&) [79]
+-----------------------------------------------
+                0.01    0.00  996728/996728      MODEL_TURB::MODEL_TURB(MODEL_TURB const&) [21]
+[28]     0.1    0.01    0.00  996728         PARAMS_TURB::PARAMS_TURB(PARAMS_TURB const&) [28]
+-----------------------------------------------
+                0.00    0.00      31/816367      StepperBS<rhs>::StepperBS(NRvector<double>&, NRvector<double>&, double&, double, double, bool, PARAMS) [27]
+                0.01    0.00  816336/816367      StepperBS<rhs>::step(double, rhs&) [3]
+[29]     0.1    0.01    0.00  816367         double const& MAX<double>(double const&, double const&) [29]
+-----------------------------------------------
+                0.01    0.00     424/424         Output<StepperBS<rhs> >::build(std::string, int, double, int, int, int, char*) [31]
+[30]     0.1    0.01    0.00     424         NRmatrix<double>::operator=(NRmatrix<double> const&) [30]
+                0.00    0.00  360400/360400      NRmatrix<double>::operator[](int) const [56]
+-----------------------------------------------
+                0.00    0.01     212/212         main [1]
+[31]     0.1    0.00    0.01     212         Output<StepperBS<rhs> >::build(std::string, int, double, int, int, int, char*) [31]
+                0.01    0.00     424/424         NRmatrix<double>::operator=(NRmatrix<double> const&) [30]
+                0.00    0.00     424/424         NRmatrix<double>::NRmatrix(int, int, double const&) [70]
+                0.00    0.00     424/551         NRmatrix<double>::~NRmatrix() [68]
+                0.00    0.00     212/212         NRvector<double>::resize(int) [72]
+-----------------------------------------------
+                0.01    0.00     124/124         StepperBS<rhs>::StepperBS(NRvector<double>&, NRvector<double>&, double&, double, double, bool, PARAMS) [27]
+[32]     0.1    0.01    0.00     124         NRmatrix<double>::NRmatrix(int, int) [32]
+-----------------------------------------------
+                0.01    0.00       1/1           main [1]
+[33]     0.1    0.01    0.00       1         PARAMS::PARAMS(std::string) [33]
+                0.00    0.00       1/1           MODEL_TURB::MODEL_TURB(std::string) [99]
+-----------------------------------------------
+                0.00    0.00      62/632         Output<StepperBS<rhs> >::save(double, NRvector<double> const&) [37]
+                0.00    0.00     570/632         Output<StepperBS<rhs> >::save_dense(StepperBS<rhs>&, double, double) [35]
+[34]     0.0    0.00    0.00     632         Output<StepperBS<rhs> >::save_pitch() [34]
+                0.00    0.00     630/1136269     MODEL_TURB::calc_B(double const*) [5]
+                0.00    0.00    3780/41025790     NRmatrix<double>::operator[](int) [15]
+                0.00    0.00    1260/61930201     NRvector<double>::operator[](int) [14]
+-----------------------------------------------
+                0.00    0.00     589/589         Output<StepperBS<rhs> >::out(int, double, NRvector<double> const&, StepperBS<rhs>&, double) [25]
+[35]     0.0    0.00    0.00     589         Output<StepperBS<rhs> >::save_dense(StepperBS<rhs>&, double, double) [35]
+                0.00    0.00     570/632         Output<StepperBS<rhs> >::save_pitch() [34]
+                0.00    0.00    3420/3420        StepperBS<rhs>::dense_out(int, double, double) [38]
+                0.00    0.00    3420/41025790     NRmatrix<double>::operator[](int) [15]
+                0.00    0.00     570/61930201     NRvector<double>::operator[](int) [14]
+-----------------------------------------------
+                0.00    0.00      60/139434      Output<StepperBS<rhs> >::set_savetimes(double) [41]
+                0.00    0.00  139374/139434      StepperBS<rhs>::step(double, rhs&) [3]
+[36]     0.0    0.00    0.00  139434         NRvector<double>::operator=(NRvector<double> const&) [36]
+                0.00    0.00  810402/16440906     NRvector<double>::operator[](int) const [16]
+-----------------------------------------------
+                0.00    0.00      31/62          Odeint<StepperBS<rhs> >::integrate() [2]
+                0.00    0.00      31/62          Output<StepperBS<rhs> >::out(int, double, NRvector<double> const&, StepperBS<rhs>&, double) [25]
+[37]     0.0    0.00    0.00      62         Output<StepperBS<rhs> >::save(double, NRvector<double> const&) [37]
+                0.00    0.00      62/632         Output<StepperBS<rhs> >::save_pitch() [34]
+                0.00    0.00     372/41025790     NRmatrix<double>::operator[](int) [15]
+                0.00    0.00     372/16440906     NRvector<double>::operator[](int) const [16]
+                0.00    0.00      62/61930201     NRvector<double>::operator[](int) [14]
+-----------------------------------------------
+                0.00    0.00    3420/3420        Output<StepperBS<rhs> >::save_dense(StepperBS<rhs>&, double, double) [35]
+[38]     0.0    0.00    0.00    3420         StepperBS<rhs>::dense_out(int, double, double) [38]
+                0.00    0.00   24852/61930201     NRvector<double>::operator[](int) [14]
+                0.00    0.00    3420/1463120     double SQR<double>(double) [52]
+-----------------------------------------------
+                0.00    0.00      31/31          main [1]
+[39]     0.0    0.00    0.00      31         Output<StepperBS<rhs> >::save2file() [39]
+                0.00    0.00   10106/41025790     NRmatrix<double>::operator[](int) [15]
+                0.00    0.00      31/31          Output<StepperBS<rhs> >::build_HistTau() [40]
+                0.00    0.00    1302/61930201     NRvector<double>::operator[](int) [14]
+                0.00    0.00    7099/7099        std::setw(int) [61]
+                0.00    0.00    3999/3999        std::setprecision(int) [62]
+                0.00    0.00     651/651         calc_gamma(double) [65]
+                0.00    0.00     651/651         std::operator|(std::_Ios_Fmtflags, std::_Ios_Fmtflags) [67]
+                0.00    0.00     651/651         std::setiosflags(std::_Ios_Fmtflags) [66]
+                0.00    0.00      62/93          std::operator|(std::_Ios_Openmode, std::_Ios_Openmode) [75]
+-----------------------------------------------
+                0.00    0.00      31/31          Output<StepperBS<rhs> >::save2file() [39]
+[40]     0.0    0.00    0.00      31         Output<StepperBS<rhs> >::build_HistTau() [40]
+                0.00    0.00    5168/41025790     NRmatrix<double>::operator[](int) [15]
+-----------------------------------------------
+                0.00    0.00      31/31          Output<StepperBS<rhs> >::init(int, double, double) [42]
+[41]     0.0    0.00    0.00      31         Output<StepperBS<rhs> >::set_savetimes(double) [41]
+                0.00    0.00    1200/61930201     NRvector<double>::operator[](int) [14]
+                0.00    0.00      60/139434      NRvector<double>::operator=(NRvector<double> const&) [36]
+                0.00    0.00    1290/1290        __gnu_cxx::__promote_2<int, double, __gnu_cxx::__promote<int, std::__is_integer<int>::__value>::__type, __gnu_cxx::__promote<double, std::__is_integer<double>::__value>::__type>::__type std::pow<int, double>(int, double) [64]
+                0.00    0.00      60/60          bool std::operator==<char, std::char_traits<char>, std::allocator<char> >(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, char const*) [78]
+                0.00    0.00      60/60          NRvector<double>::NRvector(int, double const&) [77]
+                0.00    0.00      60/810868      NRvector<double>::~NRvector() [55]
+-----------------------------------------------
+                0.00    0.00      31/31          Odeint<StepperBS<rhs> >::Odeint(NRvector<double>&, double, double, double, double, double, double, Output<StepperBS<rhs> >&, rhs&, PARAMS, int) [26]
+[42]     0.0    0.00    0.00      31         Output<StepperBS<rhs> >::init(int, double, double) [42]
+                0.00    0.00      31/31          Output<StepperBS<rhs> >::set_savetimes(double) [41]
+                0.00    0.00      31/31          NRmatrix<double>::resize(int, int) [85]
+-----------------------------------------------
+                0.00    0.00      31/31          main [1]
+[43]     0.0    0.00    0.00      31         Odeint<StepperBS<rhs> >::~Odeint() [43]
+                0.00    0.00      31/959883      PARAMS::~PARAMS() [19]
+                0.00    0.00      31/31          StepperBS<rhs>::~StepperBS() [45]
+                0.00    0.00      93/810868      NRvector<double>::~NRvector() [55]
+-----------------------------------------------
+                0.00    0.00      31/31          StepperBS<rhs>::StepperBS(NRvector<double>&, NRvector<double>&, double&, double, double, bool, PARAMS) [27]
+[44]     0.0    0.00    0.00      31         StepperBase::StepperBase(NRvector<double>&, NRvector<double>&, double&, double, double, bool) [44]
+                0.00    0.00      62/824719      NRvector<double>::NRvector(int) [22]
+                0.00    0.00      31/102541      NRvector<double>::size() const [59]
+-----------------------------------------------
+                0.00    0.00      31/31          Odeint<StepperBS<rhs> >::~Odeint() [43]
+[45]     0.0    0.00    0.00      31         StepperBS<rhs>::~StepperBS() [45]
+                0.00    0.00      31/959883      PARAMS::~PARAMS() [19]
+                0.00    0.00     124/551         NRmatrix<double>::~NRmatrix() [68]
+                0.00    0.00      93/810868      NRvector<double>::~NRvector() [55]
+                0.00    0.00      93/93          NRvector<int>::~NRvector() [74]
+                0.00    0.00      31/31          StepperBase::~StepperBase() [81]
+-----------------------------------------------
+                0.00    0.00      31/31          main [1]
+[46]     0.0    0.00    0.00      31         init_orientation(int, double**, NRvector<double>&) [46]
+                0.00    0.00     186/61930201     NRvector<double>::operator[](int) [14]
+-----------------------------------------------
+                0.00    0.00   69549/1732970     Odeint<StepperBS<rhs> >::integrate() [2]
+                0.00    0.00 1663421/1732970     StepperBS<rhs>::step(double, rhs&) [3]
+[51]     0.0    0.00    0.00 1732970         std::abs(double) [51]
+-----------------------------------------------
+                0.00    0.00    3420/1463120     StepperBS<rhs>::dense_out(int, double, double) [38]
+                0.00    0.00  639840/1463120     StepperBS<rhs>::step(double, rhs&) [3]
+                0.00    0.00  819860/1463120     StepperBS<rhs>::prepare_dense(double, NRvector<double> const&, NRvector<double> const&, NRvector<double> const&, int, double&) [13]
+[52]     0.0    0.00    0.00 1463120         double SQR<double>(double) [52]
+-----------------------------------------------
+                0.00    0.00       1/996732      FASES::build(int, PARAMS_SEM*) [109]
+                0.00    0.00       2/996732      MODEL_TURB::fix_B_realization(int) [89]
+                0.00    0.00  996729/996732      PARAMS_TURB::~PARAMS_TURB() [54]
+[53]     0.0    0.00    0.00  996732         PARAMS_SEM::~PARAMS_SEM() [53]
+-----------------------------------------------
+                0.00    0.00  996729/996729      MODEL_TURB::~MODEL_TURB() [23]
+[54]     0.0    0.00    0.00  996729         PARAMS_TURB::~PARAMS_TURB() [54]
+                0.00    0.00  996729/996732      PARAMS_SEM::~PARAMS_SEM() [53]
+-----------------------------------------------
+                0.00    0.00       1/810868      main [1]
+                0.00    0.00       3/810868      Output<StepperBS<rhs> >::~Output() [113]
+                0.00    0.00      60/810868      Output<StepperBS<rhs> >::set_savetimes(double) [41]
+                0.00    0.00      62/810868      StepperBase::~StepperBase() [81]
+                0.00    0.00      93/810868      StepperBS<rhs>::~StepperBS() [45]
+                0.00    0.00      93/810868      Odeint<StepperBS<rhs> >::~Odeint() [43]
+                0.00    0.00   67468/810868      StepperBS<rhs>::dense_interp(int, NRvector<double>&, int) [17]
+                0.00    0.00  339894/810868      StepperBS<rhs>::dy(NRvector<double> const&, double, int, NRvector<double>&, int&, rhs&) [8]
+                0.00    0.00  403194/810868      StepperBS<rhs>::step(double, rhs&) [3]
+[55]     0.0    0.00    0.00  810868         NRvector<double>::~NRvector() [55]
+-----------------------------------------------
+                0.00    0.00  360400/360400      NRmatrix<double>::operator=(NRmatrix<double> const&) [30]
+[56]     0.0    0.00    0.00  360400         NRmatrix<double>::operator[](int) const [56]
+-----------------------------------------------
+                0.00    0.00       1/345011      ESCALAS::build(double) [114]
+                0.00    0.00  345010/345011      StepperBS<rhs>::prepare_dense(double, NRvector<double> const&, NRvector<double> const&, NRvector<double> const&, int, double&) [13]
+[57]     0.0    0.00    0.00  345011         std::pow(double, int) [57]
+-----------------------------------------------
+                0.00    0.00  174173/174173      StepperBS<rhs>::step(double, rhs&) [3]
+[58]     0.0    0.00    0.00  174173         double const& MIN<double>(double const&, double const&) [58]
+-----------------------------------------------
+                0.00    0.00      31/102541      StepperBase::StepperBase(NRvector<double>&, NRvector<double>&, double&, double, double, bool) [44]
+                0.00    0.00      31/102541      Odeint<StepperBS<rhs> >::Odeint(NRvector<double>&, double, double, double, double, double, double, Output<StepperBS<rhs> >&, rhs&, PARAMS, int) [26]
+                0.00    0.00  102479/102541      StepperBS<rhs>::polyextr(int, NRmatrix<double>&, NRvector<double>&) [24]
+[59]     0.0    0.00    0.00  102541         NRvector<double>::size() const [59]
+-----------------------------------------------
+                0.00    0.00      31/32107       StepperBS<rhs>::StepperBS(NRvector<double>&, NRvector<double>&, double&, double, double, bool, PARAMS) [27]
+                0.00    0.00   32076/32107       StepperBS<rhs>::step(double, rhs&) [3]
+[60]     0.0    0.00    0.00   32107         int const& MIN<int>(int const&, int const&) [60]
+-----------------------------------------------
+                0.00    0.00    7099/7099        Output<StepperBS<rhs> >::save2file() [39]
+[61]     0.0    0.00    0.00    7099         std::setw(int) [61]
+-----------------------------------------------
+                0.00    0.00    3999/3999        Output<StepperBS<rhs> >::save2file() [39]
+[62]     0.0    0.00    0.00    3999         std::setprecision(int) [62]
+-----------------------------------------------
+                0.00    0.00      14/1949        MODEL_TURB::fix_B_realization(int) [89]
+                0.00    0.00    1935/1949        FASES::construir_fases_random(PARAMS_SEM) [86]
+[63]     0.0    0.00    0.00    1949         rann0(long&) [63]
+-----------------------------------------------
+                0.00    0.00    1290/1290        Output<StepperBS<rhs> >::set_savetimes(double) [41]
+[64]     0.0    0.00    0.00    1290         __gnu_cxx::__promote_2<int, double, __gnu_cxx::__promote<int, std::__is_integer<int>::__value>::__type, __gnu_cxx::__promote<double, std::__is_integer<double>::__value>::__type>::__type std::pow<int, double>(int, double) [64]
+-----------------------------------------------
+                0.00    0.00     651/651         Output<StepperBS<rhs> >::save2file() [39]
+[65]     0.0    0.00    0.00     651         calc_gamma(double) [65]
+-----------------------------------------------
+                0.00    0.00     651/651         Output<StepperBS<rhs> >::save2file() [39]
+[66]     0.0    0.00    0.00     651         std::setiosflags(std::_Ios_Fmtflags) [66]
+-----------------------------------------------
+                0.00    0.00     651/651         Output<StepperBS<rhs> >::save2file() [39]
+[67]     0.0    0.00    0.00     651         std::operator|(std::_Ios_Fmtflags, std::_Ios_Fmtflags) [67]
+-----------------------------------------------
+                0.00    0.00       3/551         Output<StepperBS<rhs> >::~Output() [113]
+                0.00    0.00     124/551         StepperBS<rhs>::~StepperBS() [45]
+                0.00    0.00     424/551         Output<StepperBS<rhs> >::build(std::string, int, double, int, int, int, char*) [31]
+[68]     0.0    0.00    0.00     551         NRmatrix<double>::~NRmatrix() [68]
+-----------------------------------------------
+                0.00    0.00     511/511         StepperBS<rhs>::step(double, rhs&) [3]
+[69]     0.0    0.00    0.00     511         int SQR<int>(int) [69]
+-----------------------------------------------
+                0.00    0.00     424/424         Output<StepperBS<rhs> >::build(std::string, int, double, int, int, int, char*) [31]
+[70]     0.0    0.00    0.00     424         NRmatrix<double>::NRmatrix(int, int, double const&) [70]
+-----------------------------------------------
+                0.00    0.00     212/212         main [1]
+[71]     0.0    0.00    0.00     212         Output<StepperBS<rhs> >::file_exist() [71]
+-----------------------------------------------
+                0.00    0.00     212/212         Output<StepperBS<rhs> >::build(std::string, int, double, int, int, int, char*) [31]
+[72]     0.0    0.00    0.00     212         NRvector<double>::resize(int) [72]
+-----------------------------------------------
+                0.00    0.00      93/93          StepperBS<rhs>::StepperBS(NRvector<double>&, NRvector<double>&, double&, double, double, bool, PARAMS) [27]
+[73]     0.0    0.00    0.00      93         NRvector<int>::NRvector(int) [73]
+-----------------------------------------------
+                0.00    0.00      93/93          StepperBS<rhs>::~StepperBS() [45]
+[74]     0.0    0.00    0.00      93         NRvector<int>::~NRvector() [74]
+-----------------------------------------------
+                0.00    0.00      31/93          Output<StepperBS<rhs> >::claim_own() [84]
+                0.00    0.00      62/93          Output<StepperBS<rhs> >::save2file() [39]
+[75]     0.0    0.00    0.00      93         std::operator|(std::_Ios_Openmode, std::_Ios_Openmode) [75]
+-----------------------------------------------
+                0.00    0.00      31/62          Odeint<StepperBS<rhs> >::Odeint(NRvector<double>&, double, double, double, double, double, double, Output<StepperBS<rhs> >&, rhs&, PARAMS, int) [26]
+                0.00    0.00      31/62          StepperBS<rhs>::StepperBS(NRvector<double>&, NRvector<double>&, double&, double, double, bool, PARAMS) [27]
+[76]     0.0    0.00    0.00      62         std::numeric_limits<double>::epsilon() [76]
+-----------------------------------------------
+                0.00    0.00      60/60          Output<StepperBS<rhs> >::set_savetimes(double) [41]
+[77]     0.0    0.00    0.00      60         NRvector<double>::NRvector(int, double const&) [77]
+-----------------------------------------------
+                0.00    0.00      60/60          Output<StepperBS<rhs> >::set_savetimes(double) [41]
+[78]     0.0    0.00    0.00      60         bool std::operator==<char, std::char_traits<char>, std::allocator<char> >(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, char const*) [78]
+-----------------------------------------------
+                0.00    0.00      31/31          StepperBS<rhs>::StepperBS(NRvector<double>&, NRvector<double>&, double&, double, double, bool, PARAMS) [27]
+[79]     0.0    0.00    0.00      31         int const& MAX<int>(int const&, int const&) [79]
+-----------------------------------------------
+                0.00    0.00      31/31          Odeint<StepperBS<rhs> >::Odeint(NRvector<double>&, double, double, double, double, double, double, Output<StepperBS<rhs> >&, rhs&, PARAMS, int) [26]
+[80]     0.0    0.00    0.00      31         double SIGN<double>(double const&, double const&) [80]
+-----------------------------------------------
+                0.00    0.00      31/31          StepperBS<rhs>::~StepperBS() [45]
+[81]     0.0    0.00    0.00      31         StepperBase::~StepperBase() [81]
+                0.00    0.00      62/810868      NRvector<double>::~NRvector() [55]
+-----------------------------------------------
+                0.00    0.00      31/31          main [1]
+[82]     0.0    0.00    0.00      31         Output<StepperBS<rhs> >::tic() [82]
+-----------------------------------------------
+                0.00    0.00      31/31          main [1]
+[83]     0.0    0.00    0.00      31         Output<StepperBS<rhs> >::toc() [83]
+-----------------------------------------------
+                0.00    0.00      31/31          main [1]
+[84]     0.0    0.00    0.00      31         Output<StepperBS<rhs> >::claim_own() [84]
+                0.00    0.00      31/93          std::operator|(std::_Ios_Openmode, std::_Ios_Openmode) [75]
+-----------------------------------------------
+                0.00    0.00      31/31          Output<StepperBS<rhs> >::init(int, double, double) [42]
+[85]     0.0    0.00    0.00      31         NRmatrix<double>::resize(int, int) [85]
+-----------------------------------------------
+                0.00    0.00       1/3           FASES::build(int, PARAMS_SEM*) [109]
+                0.00    0.00       2/3           MODEL_TURB::fix_B_realization(int) [89]
+[86]     0.0    0.00    0.00       3         FASES::construir_fases_random(PARAMS_SEM) [86]
+                0.00    0.00    1935/1949        rann0(long&) [63]
+-----------------------------------------------
+                0.00    0.00       3/3           Output<StepperBS<rhs> >::Output() [112]
+[87]     0.0    0.00    0.00       3         NRmatrix<double>::NRmatrix() [87]
+-----------------------------------------------
+                0.00    0.00       3/3           Output<StepperBS<rhs> >::Output() [112]
+[88]     0.0    0.00    0.00       3         NRvector<double>::NRvector() [88]
+-----------------------------------------------
+                0.00    0.00       2/2           main [1]
+[89]     0.0    0.00    0.00       2         MODEL_TURB::fix_B_realization(int) [89]
+                0.00    0.00      14/1949        rann0(long&) [63]
+                0.00    0.00       2/996732      PARAMS_SEM::~PARAMS_SEM() [53]
+                0.00    0.00       2/3           FASES::construir_fases_random(PARAMS_SEM) [86]
+-----------------------------------------------
+                0.00    0.00       2/2           MPI::Intracomm::Intracomm(ompi_communicator_t*) [197]
+[90]     0.0    0.00    0.00       2         MPI::Is_initialized() [90]
+-----------------------------------------------
+                0.00    0.00       2/2           MPI::Intracomm::~Intracomm() [200]
+[91]     0.0    0.00    0.00       2         MPI::Comm::~Comm() [91]
+                0.00    0.00       2/2           MPI::Comm_Null::~Comm_Null() [92]
+-----------------------------------------------
+                0.00    0.00       2/2           MPI::Comm::~Comm() [91]
+[92]     0.0    0.00    0.00       2         MPI::Comm_Null::~Comm_Null() [92]
+-----------------------------------------------
+                0.00    0.00       1/1           __libc_csu_init [357]
+[93]     0.0    0.00    0.00       1         _GLOBAL__sub_I__ZN7ESCALAS5buildEd [93]
+                0.00    0.00       1/1           __static_initialization_and_destruction_0(int, int) [96]
+-----------------------------------------------
+                0.00    0.00       1/1           main [1]
+[94]     0.0    0.00    0.00       1         read_params(std::string, double&, double&, double&, int&, double&, double&, int&, std::string&, double&, int&) [94]
+-----------------------------------------------
+                0.00    0.00       1/1           main [1]
+[95]     0.0    0.00    0.00       1         read_orientations(std::string, int&) [95]
+                0.00    0.00       1/1           AllocMat(int, int) [97]
+-----------------------------------------------
+                0.00    0.00       1/1           _GLOBAL__sub_I__ZN7ESCALAS5buildEd [93]
+[96]     0.0    0.00    0.00       1         __static_initialization_and_destruction_0(int, int) [96]
+                0.00    0.00       1/1           std::numeric_limits<double>::quiet_NaN() [116]
+                0.00    0.00       1/1           ESCALAS::ESCALAS() [115]
+-----------------------------------------------
+                0.00    0.00       1/1           read_orientations(std::string, int&) [95]
+[97]     0.0    0.00    0.00       1         AllocMat(int, int) [97]
+-----------------------------------------------
+                0.00    0.00       1/1           MODEL_TURB::MODEL_TURB(std::string) [99]
+[98]     0.0    0.00    0.00       1         MODEL_TURB::build(std::string) [98]
+                0.00    0.00       1/1           PARAMS_TURB::build(std::string) [106]
+-----------------------------------------------
+                0.00    0.00       1/1           PARAMS::PARAMS(std::string) [33]
+[99]     0.0    0.00    0.00       1         MODEL_TURB::MODEL_TURB(std::string) [99]
+                0.00    0.00       1/1           PARAMS_TURB::PARAMS_TURB() [108]
+                0.00    0.00       1/1           MODEL_TURB::build(std::string) [98]
+-----------------------------------------------
+                0.00    0.00       1/1           PARAMS_TURB::PARAMS_TURB() [108]
+[100]    0.0    0.00    0.00       1         PARAMS_SEM::PARAMS_SEM() [100]
+-----------------------------------------------
+                0.00    0.00       1/1           PARAMS_TURB::build(std::string) [106]
+[101]    0.0    0.00    0.00       1         PARAMS_TURB::build_Bk_2D() [101]
+-----------------------------------------------
+                0.00    0.00       1/1           PARAMS_TURB::build(std::string) [106]
+[102]    0.0    0.00    0.00       1         PARAMS_TURB::read_params(std::string) [102]
+-----------------------------------------------
+                0.00    0.00       1/1           PARAMS_TURB::build(std::string) [106]
+[103]    0.0    0.00    0.00       1         PARAMS_TURB::build_sigmas() [103]
+-----------------------------------------------
+                0.00    0.00       1/1           PARAMS_TURB::build(std::string) [106]
+[104]    0.0    0.00    0.00       1         PARAMS_TURB::build_Bk_SLAB() [104]
+-----------------------------------------------
+                0.00    0.00       1/1           PARAMS_TURB::build(std::string) [106]
+[105]    0.0    0.00    0.00       1         PARAMS_TURB::build_k_and_dk() [105]
+-----------------------------------------------
+                0.00    0.00       1/1           MODEL_TURB::build(std::string) [98]
+[106]    0.0    0.00    0.00       1         PARAMS_TURB::build(std::string) [106]
+                0.00    0.00       1/1           PARAMS_TURB::read_params(std::string) [102]
+                0.00    0.00       1/1           PARAMS_TURB::build_sigmas() [103]
+                0.00    0.00       1/1           FASES::build(int, PARAMS_SEM*) [109]
+                0.00    0.00       1/1           PARAMS_TURB::build_k_and_dk() [105]
+                0.00    0.00       1/1           PARAMS_TURB::build_Bk_SLAB() [104]
+                0.00    0.00       1/1           PARAMS_TURB::report() [107]
+                0.00    0.00       1/1           PARAMS_TURB::build_Bk_2D() [101]
+-----------------------------------------------
+                0.00    0.00       1/1           PARAMS_TURB::build(std::string) [106]
+[107]    0.0    0.00    0.00       1         PARAMS_TURB::report() [107]
+-----------------------------------------------
+                0.00    0.00       1/1           MODEL_TURB::MODEL_TURB(std::string) [99]
+[108]    0.0    0.00    0.00       1         PARAMS_TURB::PARAMS_TURB() [108]
+                0.00    0.00       1/1           PARAMS_SEM::PARAMS_SEM() [100]
+                0.00    0.00       1/1           FASES::FASES() [110]
+-----------------------------------------------
+                0.00    0.00       1/1           PARAMS_TURB::build(std::string) [106]
+[109]    0.0    0.00    0.00       1         FASES::build(int, PARAMS_SEM*) [109]
+                0.00    0.00       1/3           FASES::construir_fases_random(PARAMS_SEM) [86]
+                0.00    0.00       1/996732      PARAMS_SEM::~PARAMS_SEM() [53]
+-----------------------------------------------
+                0.00    0.00       1/1           PARAMS_TURB::PARAMS_TURB() [108]
+[110]    0.0    0.00    0.00       1         FASES::FASES() [110]
+-----------------------------------------------
+                0.00    0.00       1/1           main [1]
+[111]    0.0    0.00    0.00       1         Output<StepperBS<rhs> >::set_Bmodel(PARAMS) [111]
+-----------------------------------------------
+                0.00    0.00       1/1           main [1]
+[112]    0.0    0.00    0.00       1         Output<StepperBS<rhs> >::Output() [112]
+                0.00    0.00       3/3           NRvector<double>::NRvector() [88]
+                0.00    0.00       3/3           NRmatrix<double>::NRmatrix() [87]
+-----------------------------------------------
+                0.00    0.00       1/1           main [1]
+[113]    0.0    0.00    0.00       1         Output<StepperBS<rhs> >::~Output() [113]
+                0.00    0.00       3/551         NRmatrix<double>::~NRmatrix() [68]
+                0.00    0.00       3/810868      NRvector<double>::~NRvector() [55]
+-----------------------------------------------
+                0.00    0.00       1/1           main [1]
+[114]    0.0    0.00    0.00       1         ESCALAS::build(double) [114]
+                0.00    0.00       1/345011      std::pow(double, int) [57]
+-----------------------------------------------
+                0.00    0.00       1/1           __static_initialization_and_destruction_0(int, int) [96]
+[115]    0.0    0.00    0.00       1         ESCALAS::ESCALAS() [115]
+-----------------------------------------------
+                0.00    0.00       1/1           __static_initialization_and_destruction_0(int, int) [96]
+[116]    0.0    0.00    0.00       1         std::numeric_limits<double>::quiet_NaN() [116]
+-----------------------------------------------
+
+ This table describes the call tree of the program, and was sorted by
+ the total amount of time spent in each function and its children.
+
+ Each entry in this table consists of several lines.  The line with the
+ index number at the left hand margin lists the current function.
+ The lines above it list the functions that called this function,
+ and the lines below it list the functions this one called.
+ This line lists:
+     index	A unique number given to each element of the table.
+		Index numbers are sorted numerically.
+		The index number is printed next to every function name so
+		it is easier to look up where the function in the table.
+
+     % time	This is the percentage of the `total' time that was spent
+		in this function and its children.  Note that due to
+		different viewpoints, functions excluded by options, etc,
+		these numbers will NOT add up to 100%.
+
+     self	This is the total amount of time spent in this function.
+
+     children	This is the total amount of time propagated into this
+		function by its children.
+
+     called	This is the number of times the function was called.
+		If the function called itself recursively, the number
+		only includes non-recursive calls, and is followed by
+		a `+' and the number of recursive calls.
+
+     name	The name of the current function.  The index number is
+		printed after it.  If the function is a member of a
+		cycle, the cycle number is printed between the
+		function's name and the index number.
+
+
+ For the function's parents, the fields have the following meanings:
+
+     self	This is the amount of time that was propagated directly
+		from the function into this parent.
+
+     children	This is the amount of time that was propagated from
+		the function's children into this parent.
+
+     called	This is the number of times this parent called the
+		function `/' the total number of times the function
+		was called.  Recursive calls to the function are not
+		included in the number after the `/'.
+
+     name	This is the name of the parent.  The parent's index
+		number is printed after it.  If the parent is a
+		member of a cycle, the cycle number is printed between
+		the name and the index number.
+
+ If the parents of the function cannot be determined, the word
+ `<spontaneous>' is printed in the `name' field, and all the other
+ fields are blank.
+
+ For the function's children, the fields have the following meanings:
+
+     self	This is the amount of time that was propagated directly
+		from the child into the function.
+
+     children	This is the amount of time that was propagated from the
+		child's children to the function.
+
+     called	This is the number of times the function called
+		this child `/' the total number of times the child
+		was called.  Recursive calls by the child are not
+		listed in the number after the `/'.
+
+     name	This is the name of the child.  The child's index
+		number is printed after it.  If the child is a
+		member of a cycle, the cycle number is printed
+		between the name and the index number.
+
+ If there are any cycles (circles) in the call graph, there is an
+ entry for the cycle-as-a-whole.  This entry shows who called the
+ cycle (as parents) and the members of the cycle (as children.)
+ The `+' recursive calls entry shows the number of function calls that
+ were internal to the cycle, and the calls entry for each member shows,
+ for that member, how many times it was called from other members of
+ the cycle.
+
+
+Index by function name
+
+  [93] _GLOBAL__sub_I__ZN7ESCALAS5buildEd [81] StepperBase::~StepperBase() [70] NRmatrix<double>::NRmatrix(int, int, double const&)
+  [65] calc_gamma(double)     [90] MPI::Is_initialized()  [87] NRmatrix<double>::NRmatrix()
+  [94] read_params(std::string, double&, double&, double&, int&, double&, double&, int&, std::string&, double&, int&) [91] MPI::Comm::~Comm() [68] NRmatrix<double>::~NRmatrix()
+  [46] init_orientation(int, double**, NRvector<double>&) [92] MPI::Comm_Null::~Comm_Null() [30] NRmatrix<double>::operator=(NRmatrix<double> const&)
+  [95] read_orientations(std::string, int&) [7] rhs::operator()(PARAMS, double, NRvector<double> const&, NRvector<double>&) [15] NRmatrix<double>::operator[](int)
+  [29] double const& MAX<double>(double const&, double const&) [86] FASES::construir_fases_random(PARAMS_SEM) [72] NRvector<double>::resize(int)
+  [79] int const& MAX<int>(int const&, int const&) [109] FASES::build(int, PARAMS_SEM*) [77] NRvector<double>::NRvector(int, double const&)
+  [58] double const& MIN<double>(double const&, double const&) [110] FASES::FASES() [22] NRvector<double>::NRvector(int)
+  [60] int const& MIN<int>(int const&, int const&) [11] Odeint<StepperBS<rhs> >::save_history() [88] NRvector<double>::NRvector()
+  [52] double SQR<double>(double) [12] Odeint<StepperBS<rhs> >::check_scattering() [55] NRvector<double>::~NRvector()
+  [69] int SQR<int>(int)       [2] Odeint<StepperBS<rhs> >::integrate() [36] NRvector<double>::operator=(NRvector<double> const&)
+  [96] __static_initialization_and_destruction_0(int, int) [26] Odeint<StepperBS<rhs> >::Odeint(NRvector<double>&, double, double, double, double, double, double, Output<StepperBS<rhs> >&, rhs&, PARAMS, int) [14] NRvector<double>::operator[](int)
+  [80] double SIGN<double>(double const&, double const&) [43] Odeint<StepperBS<rhs> >::~Odeint() [73] NRvector<int>::NRvector(int)
+  [63] rann0(long&)           [71] Output<StepperBS<rhs> >::file_exist() [74] NRvector<int>::~NRvector()
+  [97] AllocMat(int, int)     [35] Output<StepperBS<rhs> >::save_dense(StepperBS<rhs>&, double, double) [20] NRvector<int>::operator[](int)
+  [10] MODEL_TURB::calc_dB_2D(double const*) [34] Output<StepperBS<rhs> >::save_pitch() [17] StepperBS<rhs>::dense_interp(int, NRvector<double>&, int)
+   [9] MODEL_TURB::calc_dB_SLAB(double const*) [111] Output<StepperBS<rhs> >::set_Bmodel(PARAMS) [13] StepperBS<rhs>::prepare_dense(double, NRvector<double> const&, NRvector<double> const&, NRvector<double> const&, int, double&)
+  [89] MODEL_TURB::fix_B_realization(int) [40] Output<StepperBS<rhs> >::build_HistTau() [8] StepperBS<rhs>::dy(NRvector<double> const&, double, int, NRvector<double>&, int&, rhs&)
+  [98] MODEL_TURB::build(std::string) [41] Output<StepperBS<rhs> >::set_savetimes(double) [3] StepperBS<rhs>::step(double, rhs&)
+   [5] MODEL_TURB::calc_B(double const*) [25] Output<StepperBS<rhs> >::out(int, double, NRvector<double> const&, StepperBS<rhs>&, double) [24] StepperBS<rhs>::polyextr(int, NRmatrix<double>&, NRvector<double>&)
+   [6] MODEL_TURB::calc_dB(double const*) [82] Output<StepperBS<rhs> >::tic() [38] StepperBS<rhs>::dense_out(int, double, double)
+  [21] MODEL_TURB::MODEL_TURB(MODEL_TURB const&) [83] Output<StepperBS<rhs> >::toc() [27] StepperBS<rhs>::StepperBS(NRvector<double>&, NRvector<double>&, double&, double, double, bool, PARAMS)
+  [99] MODEL_TURB::MODEL_TURB(std::string) [42] Output<StepperBS<rhs> >::init(int, double, double) [45] StepperBS<rhs>::~StepperBS()
+  [23] MODEL_TURB::~MODEL_TURB() [37] Output<StepperBS<rhs> >::save(double, NRvector<double> const&) [56] NRmatrix<double>::operator[](int) const
+ [100] PARAMS_SEM::PARAMS_SEM() [31] Output<StepperBS<rhs> >::build(std::string, int, double, int, int, int, char*) [59] NRvector<double>::size() const
+  [53] PARAMS_SEM::~PARAMS_SEM() [84] Output<StepperBS<rhs> >::claim_own() [16] NRvector<double>::operator[](int) const
+ [101] PARAMS_TURB::build_Bk_2D() [39] Output<StepperBS<rhs> >::save2file() [76] std::numeric_limits<double>::epsilon()
+ [102] PARAMS_TURB::read_params(std::string) [112] Output<StepperBS<rhs> >::Output() [116] std::numeric_limits<double>::quiet_NaN()
+ [103] PARAMS_TURB::build_sigmas() [113] Output<StepperBS<rhs> >::~Output() [66] std::setiosflags(std::_Ios_Fmtflags)
+ [104] PARAMS_TURB::build_Bk_SLAB() [4] PARAMS::calc_Bfield(NRvector<double> const&) [62] std::setprecision(int)
+ [105] PARAMS_TURB::build_k_and_dk() [18] PARAMS::PARAMS(PARAMS const&) [51] std::abs(double)
+ [106] PARAMS_TURB::build(std::string) [33] PARAMS::PARAMS(std::string) [64] __gnu_cxx::__promote_2<int, double, __gnu_cxx::__promote<int, std::__is_integer<int>::__value>::__type, __gnu_cxx::__promote<double, std::__is_integer<double>::__value>::__type>::__type std::pow<int, double>(int, double)
+ [107] PARAMS_TURB::report()  [19] PARAMS::~PARAMS()      [57] std::pow(double, int)
+ [108] PARAMS_TURB::PARAMS_TURB() [114] ESCALAS::build(double) [61] std::setw(int)
+  [28] PARAMS_TURB::PARAMS_TURB(PARAMS_TURB const&) [115] ESCALAS::ESCALAS() [78] bool std::operator==<char, std::char_traits<char>, std::allocator<char> >(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, char const*)
+  [54] PARAMS_TURB::~PARAMS_TURB() [85] NRmatrix<double>::resize(int, int) [67] std::operator|(std::_Ios_Fmtflags, std::_Ios_Fmtflags)
+  [44] StepperBase::StepperBase(NRvector<double>&, NRvector<double>&, double&, double, double, bool) [32] NRmatrix<double>::NRmatrix(int, int) [75] std::operator|(std::_Ios_Openmode, std::_Ios_Openmode)
