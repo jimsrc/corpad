@@ -15,7 +15,7 @@ class kdiff:
         fname_plas      = '%s/plas.in' % dir_info
         fname_turb      = '%s/turb.in' % dir_info
         fname_orient    = '%s/orientations.in' % dir_info
-        NPLAS           = count_lines_in_file(fname_orient)
+        self.NPLAS      = count_lines_in_file(fname_orient)
         order_tmax      = int(log10(value(fname_plas, 'nmax_gyroperiods')))
         nfil            = int(order_tmax*value(fname_plas, 'npoints') + 1)
         ncol            = 6
@@ -27,6 +27,7 @@ class kdiff:
             par[pname] = value(fname_turb, pname)
             if pname=='n_modos':
                 par[pname] = int(par[pname]) # special treatment :\
+        par['nplas'] = self.NPLAS # no esta en el .in
 
         fname_inp    = '%s/k_vs_t_Ek.%1.1eeV' % (dir_post, Ek)
         fname_inp   += '_Nm%03d' % par['n_modos']
@@ -127,7 +128,8 @@ class kdiff:
         '_slab%1.2f' % par['percent_slab'] +\
         '_sig.%1.1e' % par['sigma_Bo_ratio'] +\
         '_Lc2d.%1.1e' % par['Lc_2d'] +\
-        '_LcSlab.%1.1e.png' % par['Lc_slab']
+        '_LcSlab.%1.1e' % par['Lc_slab'] +\
+        '_nplas.%03d.png' % par['nplas']
 
         print " ---> generando: %s" % fname_fig_perp
         fig1.savefig(fname_fig_perp, format='png', dpi=135, bbox_inches='tight')
@@ -200,7 +202,8 @@ class kdiff:
         '_slab%1.2f' % par['percent_slab'] +\
         '_sig.%1.1e' % par['sigma_Bo_ratio'] +\
         '_Lc2d.%1.1e' % par['Lc_2d'] +\
-        '_LcSlab.%1.1e.png' % par['Lc_slab']
+        '_LcSlab.%1.1e' % par['Lc_slab'] +\
+        '_nplas.%03d.png' % par['nplas']
 
         print " ---> generando: %s" % fname_fig_zz
         fig1.savefig(fname_fig_zz, format='png', dpi=135, bbox_inches='tight')
