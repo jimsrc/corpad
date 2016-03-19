@@ -8,24 +8,15 @@ MPICXX=/usr/local/bin/mpic++
 OPTIM=-O3 #-O3
 OPT_GP=-O0 #-O3 #-O0 	# for use w/ gprof
 
-.PHONY: default help object executable all clean
-SOURCE_C = $(wildcard *.cc)
-OBJECTS_C = $(patsubst %.cc, %.o, $(SOURCE_C))
-
-
 default:
 	make w_mpi
-
-%.o: %.cc
-	g++ -c $^ -o $@
-
-
 
 beta:
 	${MPICXX} ${DIR_BETA}/main_mpi.cc -o ./beta.x
 
 
 w_mpi:
+	#${MPICXX} ${DIR_SRC}/main_mpi.cc -O2 -o ${EXE_WMPI}
 	${MPICXX} ${DIR_SRC}/main_mpi.cc ${OPTIM} -o ${EXE_WMPI}
 
 
@@ -39,7 +30,3 @@ wo_mpi:
 
 clean:
 	rm *.x
-
-
-#++++++++++++++++++++++++++++++++++++++++
-

@@ -23,7 +23,6 @@ int main(int argc, char* argv[]){
 	double RIGIDITY, FRAC_GYROPERIOD, NMAX_GYROPERIODS, ATOL, RTOL, tmaxHistTau;
 	double **array_ori;
 	char *fname_turb, *fname_orientations, *fname_gral, *dir_out;
-	//char fname_out[100];
 	Doub atol, rtol;		// absolute and relative tolerance
 	VecDoub ystart(nvar);		// allocate initial x, y[0, 1] values
 	bool quest_all, quest_last, cond, exist_file;
@@ -56,7 +55,6 @@ int main(int argc, char* argv[]){
 
 	// settings para las condic iniciales de las plas
 	array_ori = read_orientations(fname_orientations, n_ori);	// lista de orientaciones de la veloc inicial
-	//xini	  = -2.*par.psw.p_turb.lambda_min / scl.rl;		// [1] posic inic x para todas las plas
 
 	//------------------ output objects w/ 'NPOINTS' points in output
 	Output<StepperBS<rhs> > outbs;
@@ -88,7 +86,6 @@ int main(int argc, char* argv[]){
 		par.fix_B_realization(j);
 		printf("\n [rank:%d] **************** NEXT Bfield realization j:%d/%d ****************", w_rank, j, n_Brealiz);
         i = 0;  // reinicio el conteo de plas
-		//for(int i=0; i<n_ori; i++){
         while(i<n_ori){
 			outbs.build(str_timescale, NPOINTS, tmaxHistTau, nHistTau, i, j, dir_out);	// reseteo objeto "Output" para c/pla
 
@@ -140,10 +137,10 @@ int main(int argc, char* argv[]){
 
 /*
  * TODO:
- * - for() ---> while()
- * - generar files "owned.B13.pla003_r.007_h.0"
- * - flag "helper=0,1"
- * - Ahora, file_exist() debe chekear el archivo "owned.."
+ * [x] for() ---> while()
+ * [x] generar files "owned.B13.pla003_r.007_h.0"
+ * [x] flag "helper=0,1"
+ * [x] Ahora, file_exist() debe chekear el archivo "owned.."
  *
  * +++++ despues de esta version oficial-temporal +++++
  * - eliminar los srand(), rand()
