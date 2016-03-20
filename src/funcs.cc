@@ -1,10 +1,120 @@
-#include "funcs.h"
 #ifndef FUNCS_CC
 #define FUNCS_CC
 
+#include "control.h"
+#include "funcs.h"
+#include "general.h"
+
 using namespace std;
 
-//---------------------------------------------------------------------------
+
+// declaration of definition in general.cc
+extern ESCALAS scl;
+
+
+/*----- FUNCIONES NORMALES -----*/
+
+// recibe una velocidad adimensionalizada
+// TODO: convertir esto en inline o macro!
+double calc_gamma(double v){
+	double beta, gamma;
+	beta = v*scl.vel / clight;
+	gamma = pow(1. - beta*beta, -.5);
+	return gamma;
+}
+
+
+/* lee parametros input en main() */
+void read_params(string fname, Doub &RIGIDITY, Doub &FRAC_GYROPERIOD, 
+        Doub &NMAX_GYROPERIODS, int &NPOINTS, Doub &ATOL, Doub &RTOL, 
+        int &n_Brealiz, string& str_timescale, Doub& tmaxHistTau, int& nHist){
+	string dummy;
+	ifstream filein(fname.c_str());
+	if (!filein.good()) {
+		cout << " problema al abrir " << fname << endl;
+		exit(1);
+	}
+	filein >> RIGIDITY		>> dummy;  // [V] rigidez de las plas
+	filein >> FRAC_GYROPERIOD	>> dummy;  // [1] fraction of gyroper
+	filein >> NMAX_GYROPERIODS	>> dummy;  // [1] nro of gyroperiods
+	filein >> NPOINTS		>> dummy;  // [1] nro output pts
+	filein >> ATOL			>> dummy;  // [units of *y] abs tolerance
+	filein >> RTOL			>> dummy;  // [1] rel tolerance
+	filein >> n_Brealiz		>> dummy;  // [1] nmbr of B-field realizations
+	filein >> str_timescale		>> dummy;  // [string] nombre de la escala temporal para la salida
+	filein >> tmaxHistTau		>> dummy;  //
+	filein >> nHist			>> dummy;  //
+}
+
+
+
+void init_orientation(int i, Doub **array_ori, VecDoub &y){
+	double th, ph, mu;	// theta, phi y pitch-cosine
+	th	= array_ori[i][0];
+	ph	= array_ori[i][1];
+	mu	= cos(th);	// pitch
+
+	y[1]	= sqrt(1.-mu*mu)*cos(ph);	// [1] vx
+	y[3]	= sqrt(1.-mu*mu)*sin(ph);	// [1] vy
+	y[5]	= mu;				// [1] vz
+	// en el origen siempre
+	y[0]	= 0.0;				// [1] x
+	y[2]	= 0.0;				// [1] y
+	y[4]	= 0.0;				// [1] z
+}
+
+
+
+void LiberaMat(Doub **Mat, int i){ 
+    for(int k=0; k<=i; k++)
+            free(Mat[i]);
+    free(Mat);
+}
+
+
+
+Doub **AllocMat(int nFilas, int nColumnas){
+    Doub **Mat;
+
+    if((Mat = (Doub**) calloc(nFilas, sizeof(Doub *))) == NULL)
+        return NULL;
+
+    for(int i=0; i<nFilas; i++)
+        if((Mat[i] = (Doub *) calloc(nColumnas, sizeof(Doub)))==NULL) {
+            LiberaMat(Mat,i);
+            return NULL;
+        }   
+    return Mat;
+}
+
+
+
+Doub **read_orientations(string fname, int &n){
+	double dummy;
+	ifstream filein(fname.c_str());
+	if (!filein.good()) {
+		cout << " problema al abrir " << fname << endl;
+		exit(1);
+	}
+	n = 0;
+	for(;;n++){
+		filein >> dummy	>> dummy;
+		if(filein.eof()) break;
+	}
+
+	ifstream file(fname.c_str());
+
+	double **array;
+	array	= AllocMat(n, 2);
+	for(int i=0; i<n; i++){
+		file >> array[i][0] >> array[i][1];
+	}
+	return array;
+}
+
+
+
+//----------------------- class Ouput
 //void Output<Stepper>::build(string str_tscalee, Int nsavee, Doub tmaxHistTau, Int nHist, char* fname_out){ 
 template <class Stepper>
 void Output<Stepper>::build(const string str_tscalee, Int nsavee, Doub tmaxHistTau, Int nHist, int i, int j, char *dir_out){
@@ -33,15 +143,19 @@ void Output<Stepper>::build(const string str_tscalee, Int nsavee, Doub tmaxHistT
 	nsteps		= 0;
 }
 
+
 template <class Stepper>
 Output<Stepper>::Output() : kmax(-1),dense(false),count(0) {}
 
+/*
+// TODO: arreglar esta implementacion si la vas a usar
 template <class Stepper>
 Output<Stepper>::Output(string str_tscalee, const Int nsavee, char* fname){
 	build(str_tscalee, nsavee, fname);
 	//kmax(500),nsave(nsavee),count(0),xsave(kmax) {
 	//dense = nsave > 0 ? true : false;
 }
+*/
 
 template <class Stepper>
 void Output<Stepper>::set_savetimes(Doub xhi){
@@ -217,15 +331,6 @@ bool Output<Stepper>::file_exist(){
 }
 
 
-//----------------------------------
-// recibe una velocidad adimensionalizada
-double calc_gamma(double v){
-	double beta, gamma;
-	beta = v*scl.vel / clight;
-	gamma = pow(1. - beta*beta, -.5);
-	return gamma;
-}
-
 template <class Stepper>
 void Output<Stepper>::build_HistTau(){
 	maxTau = dTau*nHistTau;
@@ -305,7 +410,10 @@ template <class Stepper>
 void Output<Stepper>::toc(){
 	trun = time(NULL) - trun; // [sec] tiempo de corrida para 1 pla
 }
-//-----------------------------------------------------------
+
+
+
+//------------------------------------------- class PARAMS
 PARAMS::PARAMS(string fname_turb):
 	MODEL_TURB(fname_turb) {
 	}
@@ -318,106 +426,29 @@ void PARAMS::calc_Bfield(VecDoub_I &y){
 }
 
 
+
 //-------------------------------------------
-struct rhs{  //functor for ode; copied from Numerical Recipes
-        //      Doub eps;
-        //      rhs(Doub epss) : eps(epss){}
-        //void operator() (PARAMS par, const VecDoub x, VecDoub_I &y, VecDoub_O &dydx ){ 
-        void operator() (PARAMS par, const Doub x, VecDoub_I &y, VecDoub_O &dydx ){
-                double bx, by, bz; 
-		par.calc_Bfield(y);
-		
-                bx = par.B[0] / scl.Bo;
-                by = par.B[1] / scl.Bo;
-                bz = par.B[2] / scl.Bo;
-                // rewrite x^2y"(x)+xy'(x)+x^2y=0 as coupled FOODEa
-                dydx[0] = y[1];
-                dydx[1] = y[3] * bz - y[5] * by; 
-                dydx[2] = y[3];
-                dydx[3] =-y[1] * bz + y[5] * bx; 
-                dydx[4] = y[5];
-                dydx[5] =-y[3] * bx + y[1] * by; 
-        }   
-};
-//-------------------------------------------
-void read_params(string fname, double &RIGIDITY, double &FRAC_GYROPERIOD, double &NMAX_GYROPERIODS, 
-		int &NPOINTS, double &ATOL, double &RTOL, int &n_Brealiz, string& str_timescale,
-		double& tmaxHistTau, int& nHist){
-	string dummy;
-	ifstream filein(fname.c_str());
-	if (!filein.good()) {
-		cout << " problema al abrir " << fname << endl;
-		exit(1);
-	}
-	filein >> RIGIDITY		>> dummy;  // [V] rigidez de las plas
-	filein >> FRAC_GYROPERIOD	>> dummy;  // [1] fraction of gyroper
-	filein >> NMAX_GYROPERIODS	>> dummy;  // [1] nro of gyroperiods
-	filein >> NPOINTS		>> dummy;  // [1] nro output pts
-	filein >> ATOL			>> dummy;  // [units of *y] abs tolerance
-	filein >> RTOL			>> dummy;  // [1] rel tolerance
-	filein >> n_Brealiz		>> dummy;  // [1] nmbr of B-field realizations
-	filein >> str_timescale		>> dummy;  // [string] nombre de la escala temporal para la salida
-	filein >> tmaxHistTau		>> dummy;  //
-	filein >> nHist			>> dummy;  //
-}
-//-------------------------------------------
-void init_orientation(int i, double **array_ori, VecDoub &y){
-	double th, ph, mu;	// theta, phi y pitch-cosine
-	th	= array_ori[i][0];
-	ph	= array_ori[i][1];
-	mu	= cos(th);	// pitch
+void rhs::operator() (PARAMS par, const Doub x, VecDoub_I &y, VecDoub_O &dydx ){
+    //double bx, by, bz; 
+    par.calc_Bfield(y);
 
-	y[1]	= sqrt(1.-mu*mu)*cos(ph);	// [1] vx
-	y[3]	= sqrt(1.-mu*mu)*sin(ph);	// [1] vy
-	y[5]	= mu;				// [1] vz
-	// en el origen siempre
-	y[0]	= 0.0;				// [1] x
-	y[2]	= 0.0;				// [1] y
-	y[4]	= 0.0;				// [1] z
+    bx = par.B[0] / scl.Bo;
+    by = par.B[1] / scl.Bo;
+    bz = par.B[2] / scl.Bo;
+    // rewrite x^2y"(x)+xy'(x)+x^2y=0 as coupled FOODEa
+    dydx[0] = y[1];
+    dydx[1] = y[3] * bz - y[5] * by; 
+    dydx[2] = y[3];
+    dydx[3] =-y[1] * bz + y[5] * bx; 
+    dydx[4] = y[5];
+    dydx[5] =-y[3] * bx + y[1] * by; 
 }
 
-void LiberaMat(double **Mat,int i){ 
-        for(int k=0; k<=i; k++)
-                free(Mat[i]);
-        free(Mat);
-}
 
-double **AllocMat(int nFilas, int nColumnas){
-    double **Mat;
+// declare/define (?) class w/ specific template
+#include "stepperbs.h"
+template class Output<StepperBS<rhs> >; // rhs: system of equations I use!
 
-    if((Mat = (double**) calloc(nFilas, sizeof(double *))) == NULL)
-        return NULL;
 
-    for(int i=0; i<nFilas; i++)
-        if((Mat[i] = (double *) calloc(nColumnas, sizeof(double)))==NULL) {
-            LiberaMat(Mat,i);
-            return NULL;
-        }   
-    return Mat;
-}
-//-------------------------------------------
-double **read_orientations(string fname, int &n){
-	double dummy;
-	ifstream filein(fname.c_str());
-	if (!filein.good()) {
-		cout << " problema al abrir " << fname << endl;
-		exit(1);
-	}
-	n = 0;
-	for(;;n++){
-		filein >> dummy	>> dummy;
-		if(filein.eof()) break;
-	}
-
-	ifstream file(fname.c_str());
-
-	double **array;
-	array	= AllocMat(n, 2);
-	for(int i=0; i<n; i++){
-		file >> array[i][0] >> array[i][1];
-	}
-	return array;
-	//cout << " arr:" << array[1][0] << endl;
-}
-//-------------------------------------------//
 #endif //FUNCS_CC
+//EOF

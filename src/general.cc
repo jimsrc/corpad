@@ -1,9 +1,9 @@
 //
-#include "general.h"
-
 #ifndef GENERAL_CC
 #define GENERAL_CC
 
+#include "general.h"
+#include "control.h"
 //using namespace std;
 
 void ESCALAS::build(const double RIGIDITY){
@@ -22,5 +22,6 @@ void ESCALAS::build(const double RIGIDITY){
     rl      = vel / wc;                                     // [cm]
 }
 
-ESCALAS scl;
+ESCALAS scl;    // global instance
+
 #endif //GENERAL_CC

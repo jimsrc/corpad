@@ -1,10 +1,18 @@
-/*------------------------------------------------------*/
-#include "defs_turb.h"
-
 #ifndef DEFS_TURB_CC
 #define DEFS_TURB_CC
-#include "general.cc"
-//============================================================================
+
+
+#include "control.h"
+#include "general.h"
+#include "defs_turb.h"
+#include "funcs.h"
+
+
+// declaration of definition in general.cc
+extern ESCALAS scl;
+
+
+//=========================================================================
 
 /*---------------------DEFs para "rann0" ---------------*/
 #define IA 16807
@@ -65,7 +73,11 @@ void FASES::construir_fases_random(PARAMS_SEM sem){
 		//printf(" b2d(%d): %f\n", i, b_2d[i]);
 	}
 }
-/*-----------------------------------------------------------------------*/
+
+
+
+
+//---------------------------------------- class PARAMS_TURB
 
 PARAMS_TURB::PARAMS_TURB(){
 	cout << " ...construyendo PARAMS_TURB *sin* input." << endl;
@@ -93,6 +105,7 @@ void PARAMS_TURB::report(void){
 	cerr << " ----------------------------------------------------------------" << endl;
 }
 
+
 void PARAMS_TURB::build(string fname_input){
 	FNAME_INPUT = fname_input;
 
@@ -113,8 +126,8 @@ void PARAMS_TURB::build(string fname_input){
 	report();
 }
 
+
 void PARAMS_TURB::read_params(string fname_input){
-		//double lmin, double lmax, double lc, double sig_Bo, double perc_sl, double perc_2d){
 	string dummy;
 	ifstream filein(fname_input.c_str());
 	if (!filein.good()) {
@@ -124,8 +137,8 @@ void PARAMS_TURB::read_params(string fname_input){
 
 	// parametros del modelo
 	filein >> n_modos		>> dummy;	// [1] (entero) nro de modos
-	filein >> lambda_max		>> dummy;	// [AU] escala minima de fluctuaciones
-	filein >> lambda_min		>> dummy;	// [AU] escala maxima de fluctuaciones
+	filein >> lambda_max	>> dummy;	// [AU] escala minima de fluctuaciones
+	filein >> lambda_min	>> dummy;	// [AU] escala maxima de fluctuaciones
 	filein >> Lc_slab		>> dummy;	// [AU] longitud de correlacion Lc, SLAB 
 	filein >> Lc_2d			>> dummy;	// [AU] longitud de correlacion Lc, 2D
 	filein >> Bo			>> dummy;	// [G] campo medio
@@ -146,6 +159,7 @@ void PARAMS_TURB::read_params(string fname_input){
 	lambda_min	*= AU_in_cm;		// [cm]
 }
 
+
 void PARAMS_TURB::build_sigmas(){
 	double sigma;
 	sigma           = sqrt(sigma_Bo_ratio) * Bo;
@@ -153,14 +167,16 @@ void PARAMS_TURB::build_sigmas(){
 	sigma_2D	= sqrt(percent_2d) * sigma;
 }
 
+
 void PARAMS_TURB::build_k_and_dk(){
 	double kmin = 2. * M_PI / lambda_max;		// [cm^-1]
 	double kmax = 2. * M_PI / lambda_min;		// [cm^-1]
 	for(int i=0; i<n_modos; i++){
-		k[i]  = kmin * pow(kmax/kmin, 1.*i/(n_modos-1.));               // [cm^-1]
-		dk[i] = k[i] * (pow(kmax/kmin, 1./(n_modos-1)) - 1.);           // [cm^-1]
+		k[i]  = kmin * pow(kmax/kmin, 1.*i/(n_modos-1.));       // [cm^-1]
+		dk[i] = k[i] * (pow(kmax/kmin, 1./(n_modos-1)) - 1.);   // [cm^-1]
 	}
 }
+
 
 void PARAMS_TURB::build_Bk_SLAB(){
 	int i;
@@ -173,6 +189,7 @@ void PARAMS_TURB::build_Bk_SLAB(){
 		Bk_SLAB[i] = sigma_S * pow(FACTOR, 0.5);            // [G]
 	}
 }
+
 
 void PARAMS_TURB::build_Bk_2D(){
 	int i;
@@ -187,16 +204,34 @@ void PARAMS_TURB::build_Bk_2D(){
 		Bk_2D[i] = sigma_2D * pow(FACTOR, 0.5);             // [G]
 	}
 }
-/*----------------------------------------------------------------------------------*/
 
-void MODEL_TURB::build(string fname_input){		// construyo leyendo los params desde archivo
+
+
+
+//-------------------------------------- class MODEL_TURB
+
+MODEL_TURB::MODEL_TURB(string fname_input) {  // constructor
+    build(fname_input);
+}	
+
+
+// TODO: hacer a dB, dB_SLAB, dB_2D arrays con direcciones de memo 
+//       continuas! Usar malloc() en vez de 'new double'. Propuesta:
+//       fields  = double[3*4];  // esto en "defs_turb.h"
+//       // esto en esta rutina
+//       dB      = fields
+//       dB_SLAB = fields + 3
+//       dB_2D   = fields + 6
+//       B       = fields + 9
+//
+void MODEL_TURB::build(string fname_input){	// construyo leyendo los params desde archivo
 	FNAME_INPUT	= fname_input;
 	cout <<endl<< " ...construyendo MODEL_TURB: " << FNAME_INPUT << endl<<endl;
 
-	dB	= new double[3];
+	dB	    = new double[3];
 	dB_SLAB	= new double[3];
 	dB_2D	= new double[3];
-	B	= new double[3];
+	B	    = new double[3];
 
 	// NOTA: en particular, debemos asegurarnos de q la
 	// componente z del campo turb sea nula (y asi se quedara
@@ -207,13 +242,16 @@ void MODEL_TURB::build(string fname_input){		// construyo leyendo los params des
 		dB_2D[i]	= 0.0;
 	}
 
-	// Con esto, seteo las semillas, los modos, las fases, el espectro Fourier, etc...
+	// Con esto, seteo las semillas, los modos, las fases, el espectro Fourier, etc.
 	p_turb.build(fname_input);			// inicializo parametros/semillas del modelo
 }
 
-PARAMS_TURB MODEL_TURB::params_turb(){			// para accesar a la variables privadas desde el main()
+
+// TODO: es necesario esto? (estructuralmente no tiene sentido)
+PARAMS_TURB MODEL_TURB::params_turb(){	//para accesar a la variables privadas desde el main()
 	return p_turb;
 }
+
 
 void MODEL_TURB::fix_B_realization(const int nBrz){
 	long seed = 100*nBrz;   // semilla queda en funcion del nro de realizacion
@@ -228,6 +266,7 @@ void MODEL_TURB::fix_B_realization(const int nBrz){
 	p_turb.fases.construir_fases_random(p_turb.sem);
 }
 
+
 void MODEL_TURB::next_B_realization(){
 	long seed = p_turb.sem.two[1];
 	srand(seed);
@@ -241,16 +280,19 @@ void MODEL_TURB::next_B_realization(){
 	p_turb.fases.construir_fases_random(p_turb.sem);
 }
 
+
+// TODO: convertir estas variables COSCOS, phi, etc, en miembros 
+//       privados de MODEL_TURB
 void MODEL_TURB::calc_dB_SLAB(const Doub *pos){
-	double COSCOS, SINSIN, FACTOR_X, FACTOR_Y, k;
-	double b, a, phi;				// fases random Slab
-	dB_SLAB[0] = 0.; dB_SLAB[1]=0.;			// reseteo el vector en ceros
+	Doub COSCOS, SINSIN, FACTOR_X, FACTOR_Y, k;
+	Doub b, a, phi;				        // fases random Slab
+	dB_SLAB[0] = 0.; dB_SLAB[1]=0.;		// reseteo el vector en ceros
 
 	for(int i=0; i<p_turb.n_modos; i++){
-		a		= p_turb.fases.a_s[i];
-		b		= p_turb.fases.b_s[i];
-		phi		= p_turb.fases.phi_s[i];
-		k		= p_turb.k[i];
+		a		    = p_turb.fases.a_s[i];
+		b		    = p_turb.fases.b_s[i];
+		phi		    = p_turb.fases.phi_s[i];
+		k		    = p_turb.k[i];
 		COSCOS 		= cos(k*pos[2] + b) * cos(a);
 		SINSIN 		= sin(k*pos[2] + b) * sin(a);
 		FACTOR_X	= COSCOS * cos(phi) + SINSIN * sin(phi);
@@ -261,6 +303,9 @@ void MODEL_TURB::calc_dB_SLAB(const Doub *pos){
 	}
 }
 
+
+// TODO: convertir declaraciones en variables privadas!, y 
+//       probar "const Doub const *pos".
 void MODEL_TURB::calc_dB_2D(const Doub *pos){
 	double FACTOR, k;
 	double phi, b;					// fases random 2D
@@ -276,6 +321,21 @@ void MODEL_TURB::calc_dB_2D(const Doub *pos){
 	}
 }
 
+
+// TODO: estos if(..>0.0) se pueden evitar con una variable const, asi:
+//       --------------
+//       const void calc_dB_some;
+//       const bool a = check_pure_model(p_turb, calc_dB_some)
+//       if (a){  // if True, calc_dB_some will point to the pure model
+//          calc_dB_some(pos);
+//       }
+//       else{
+//          calc_dB_SLAB(pos);
+//          calc_dB_2D(pos);
+//       }
+//       --------------
+//       De esta forma, no tenemos q chequear en c/iteracion!!
+//       Tmb probar "const Doub const *pos".
 // NOTA: 'pos' es el vector posicion (x,y,z) en [cm]
 void MODEL_TURB::calc_dB(const Doub *pos){
 	if(p_turb.percent_slab > 0.0)		// solo calculo si vale la pena
@@ -290,10 +350,12 @@ void MODEL_TURB::calc_dB(const Doub *pos){
 	}
 }
 
+
+// TODO: probar "const Doub const *pos".
 void MODEL_TURB::calc_B(const Doub *pos){
-	calc_dB(pos);		// 
-	B[0] = dB[0];			// [G] Bx
-	B[1] = dB[1];			// [G] By
+	calc_dB(pos);
+	B[0] = dB[0];			    // [G] Bx
+	B[1] = dB[1];			    // [G] By
 	B[2] = dB[2] + p_turb.Bo;	// [G] Bz
 }
 

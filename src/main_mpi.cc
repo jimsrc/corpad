@@ -1,13 +1,17 @@
 #include <mpi.h>	// (**1) 
 
-#include <iostream>
-#include <math.h>
-#include <cstdlib>
-#include "general.cc"
-#include "nr3.h"
-#include "stepper.h"
-#include "defs_turb.cc"
-#include "funcs.cc"	//--
+//#include <iostream>
+//#include <math.h>
+//#include <cstdlib>
+//#include "general.cc"
+//#include "nr3.h"
+
+//#include "stepper.h"
+//#include "defs_turb.cc"
+//#include "funcs.cc"	//--
+#include "control.h"
+#include "general.h"
+#include "funcs.h"
 #include "odeintt.h"	// "odeint.h"
 #include "stepperbs.h"
 //#include <mpi.h>	// (**2)
@@ -16,12 +20,16 @@
 // standard de linux, debo ponerlo arriba
 //******************************************************************
 
-// main program largely copied from Numerical Recipes Ch 17
+
+// declarations of variables defined in other objects .o
+extern ESCALAS scl;
+
+
 int main(int argc, char* argv[]){
-	int ord, NPOINTS, n_ori, Nplas_rank, w_rank, w_size, imin, imax, n_Brealiz, nHistTau;
+	Int ord, NPOINTS, n_ori, Nplas_rank, w_rank, w_size, imin, imax, n_Brealiz, nHistTau;
 	const Int nvar=6;		// nmbr of y-variables
-	double RIGIDITY, FRAC_GYROPERIOD, NMAX_GYROPERIODS, ATOL, RTOL, tmaxHistTau;
-	double **array_ori;
+	Doub RIGIDITY, FRAC_GYROPERIOD, NMAX_GYROPERIODS, ATOL, RTOL, tmaxHistTau;
+	Doub **array_ori;
 	char *fname_turb, *fname_orientations, *fname_gral, *dir_out;
 	Doub atol, rtol;		// absolute and relative tolerance
 	VecDoub ystart(nvar);		// allocate initial x, y[0, 1] values
@@ -31,15 +39,15 @@ int main(int argc, char* argv[]){
 
 	fname_turb        	= argv[1];	// parametros de turbulencia SW: solar wind
 	fname_orientations	= argv[2];	// orientaciones de las plas
-	fname_gral		= argv[3];	// input de propiedades de pla y otros
-	dir_out			= argv[4];	// directorio donde guardo las salidas
+	fname_gral		    = argv[3];	// input de propiedades de pla y otros
+	dir_out			    = argv[4];	// directorio donde guardo las salidas
 
 	//----------------------- leo parametros grales
 	read_params(fname_gral, RIGIDITY, FRAC_GYROPERIOD, NMAX_GYROPERIODS, 
 			NPOINTS, ATOL, RTOL, n_Brealiz, str_timescale, tmaxHistTau, nHistTau);
 	printf(" -------------------->>>>\n");
 	// construyo escalas fisicas
-	scl.build(RIGIDITY);				// ya declare la variable 'scl' en "./general.cc"
+	scl.build(RIGIDITY);			// ya declare la variable 'scl' en "./general.cc"
 	cout << " scl.beta: "<<scl.beta << endl;
 	cout << " rigid: "<< RIGIDITY << endl;
 	cout << " frac_gy: "<< FRAC_GYROPERIOD << endl;
@@ -57,8 +65,8 @@ int main(int argc, char* argv[]){
 	array_ori = read_orientations(fname_orientations, n_ori);	// lista de orientaciones de la veloc inicial
 
 	//------------------ output objects w/ 'NPOINTS' points in output
-	Output<StepperBS<rhs> > outbs;
-	outbs.set_Bmodel(par);
+	Output<StepperBS<rhs> > outbs;    // DES-COMENTAR
+	outbs.set_Bmodel(par);            // DES-COMENTAR
 	rhs d;						// object representing system-of-equations
 	//---------------------------------------------------------------
 	atol	= ATOL;
@@ -78,9 +86,10 @@ int main(int argc, char* argv[]){
 
 	Nplas_rank      = n_ori / w_size;
 	printf(" Nplas_rank (plas para c/proc): %d/%d", Nplas_rank, n_ori);
-
+    
     bool helper=false; // no ayudo por defecto
     int i, j; i = j = 0;
+    
     while(j<n_Brealiz){
 		// nueva realizacion de Bfield
 		par.fix_B_realization(j);
@@ -125,6 +134,7 @@ int main(int argc, char* argv[]){
 		}
         j++;
 	}
+    
 	//------------------------------------------------
 	printf(" [rank:%d] scl.rl [AU]: %g\n", w_rank, scl.rl/AU_in_cm);
 	printf(" [rank:%d] scl.wc [s-1]: %g\n", w_rank, scl.wc);
@@ -141,6 +151,10 @@ int main(int argc, char* argv[]){
  * [x] generar files "owned.B13.pla003_r.007_h.0"
  * [x] flag "helper=0,1"
  * [x] Ahora, file_exist() debe chekear el archivo "owned.."
+ * [ ] hacer a 'scl' const
+ * [ ] convertir a calc_gamma() en inline o macro!
+ * [ ] rann0() ----> ZIGGURATZ
+ * [ ] se pueden evitar las declaraciones en void MODEL_TURB::calc_dB_SLAB(..)??
  *
  * +++++ despues de esta version oficial-temporal +++++
  * - eliminar los srand(), rand()

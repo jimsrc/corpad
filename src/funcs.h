@@ -1,6 +1,11 @@
 #ifndef FUNCS_H
 #define FUNCS_H
 
+//#include "control.h"
+//#include "general.h"
+#include "nr3.h"
+#include "defs_turb.h"
+
 //---------------------------------------------------
 class PARAMS : public MODEL_TURB{
 	public:
@@ -10,6 +15,20 @@ class PARAMS : public MODEL_TURB{
 	private:
 		double pos[3];
 };
+
+
+
+//---------------------------------------------------
+struct rhs{  
+    //functor for ode; copied from Numerical Recipes
+    //      Doub eps;
+    //      rhs(Doub epss) : eps(epss){}
+    //void operator() (PARAMS par, const VecDoub x, VecDoub_I &y, VecDoub_O &dydx ){ 
+    Doub bx, by, bz;
+    void operator() (PARAMS par, const Doub x, VecDoub_I &y, VecDoub_O &dydx);
+};
+
+
 
 //---------------------------------------------------
 template <class Stepper>
@@ -26,7 +45,7 @@ class Output {
 		//void build(string, Int, Doub, Int, char*); 
 		void build(const string, Int, Doub, Int, int, int, char*);
 		Output(void);
-		Output(string, const Int, char*);
+		//Output(string, const Int, char*); // mal implementado
 		void init(const Int, const Doub, const Doub);
 		void resize(void);
 		void save_dense(Stepper &, const Doub, const Doub);
@@ -71,4 +90,17 @@ class Output {
 		void build_HistTau(void);
 };
 
+
+/*----- FUNCIONES NORMALES -----*/
+
+double calc_gamma(double v);
+void read_params(string fname, Doub &RIGIDITY, Doub &FRAC_GYROPERIOD, 
+        Doub &NMAX_GYROPERIODS, int &NPOINTS, Doub &ATOL, Doub &RTOL, 
+        int &n_Brealiz, string& str_timescale, Doub& tmaxHistTau, int& nHist);
+void init_orientation(int i, Doub **array_ori, VecDoub &y);
+void LiberaMat(Doub **Mat, int i);
+Doub **AllocMat(int nFilas, int nColumnas);
+Doub **read_orientations(string fname, int &n);
+
 #endif //FUNCS_H
+//EOF

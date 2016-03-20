@@ -1,6 +1,6 @@
 #ifndef DEFS_TURB_H
 #define DEFS_TURB_H
-#include "general.h"
+//#include "general.h"
 /*-------------------------------------------------------*/
 
 class PARAMS_SEM{
@@ -43,7 +43,7 @@ class PARAMS_TURB{
 
 		int n_modos;
 		Doub lambda_min;
-	       	Doub lambda_max;
+        Doub lambda_max;
 		Doub Lc_slab, Lc_2d;	// longitudes de correlacion
 		Doub sigma_Bo_ratio;
 		Doub percent_slab;
@@ -65,13 +65,13 @@ class PARAMS_TURB{
 		void build(string);			// puedo usarlo si es q use el contructor con "void"
 };
 
-/*-------------------------- parametros turbulencia --------------------------------*/
+/*------------------ parametros turbulencia -----------------------*/
 class MODEL_TURB{
 	/*private:
 		PARAMS_TURB p_turb;*/
 	public:
 		string FNAME_INPUT;
-		MODEL_TURB(string fname_input) {build(fname_input);};			// constructor
+		MODEL_TURB(string fname_input); //{build(fname_input);};  // constructor
 		MODEL_TURB(void) {};			// constructor "trivial"
 		//~MODEL_TURB(void);			// destructor
 

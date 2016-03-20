@@ -26,7 +26,7 @@ beta:
 
 
 w_mpi:
-	${MPICXX} ${DIR_SRC}/main_mpi.cc ${OPTIM} -o ${EXE_WMPI}
+	${MPICXX} ${DIR_SRC}/main_mpi.cc ${OPTIM} -o ${EXE_WMPI} && ls -lhtr ${EXE_WMPI}
 
 
 mpi-w-gprof:
