@@ -3,11 +3,11 @@
 *.so
 *.pyc
 
-# me gustan los comentarios!
+#--- me gustan los comentarios!
 !*COMENTARIOS.txt
 
-# no puedo acumular tantos archivos, sino se me 
-# dificulta controlar mi codigo
+#--- no puedo acumular tantos archivos, sino se me 
+#--- dificulta controlar mi codigo
 *.dat
 *.log
 *.owned
@@ -26,3 +26,6 @@ output/
 *png
 
 src/tags
+
+#--- ignore backups of previous executables
+CRs.diff.x_19mar2016
