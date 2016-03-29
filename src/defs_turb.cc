@@ -9,7 +9,7 @@
 
 
 // declaration of definition in general.cc
-extern ESCALAS scl;
+//extern ESCALAS scl;
 
 
 //=========================================================================
@@ -110,8 +110,8 @@ void PARAMS_TURB::build(string fname_input){
 	FNAME_INPUT = fname_input;
 
 	read_params(fname_input); // setea n_modos, Lc_slab, Lc_2d, lambda_min, etc...
-	gS  = 5./3.;        // potencia espectral slab
-	g2D = 8./3.;        // potencia espectral 2D
+	//gS  = 5./3.;        // potencia espectral slab
+	//g2D = 8./3.;        // potencia espectral 2D
 
 	dk	= new double[n_modos];
 	k	= new double[n_modos];

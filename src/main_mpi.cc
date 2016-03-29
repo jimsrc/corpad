@@ -22,7 +22,7 @@
 
 
 // declarations of variables defined in other objects .o
-extern ESCALAS scl;
+//extern ESCALAS scl;
 
 
 int main(int argc, char* argv[]){

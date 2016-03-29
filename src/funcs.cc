@@ -9,7 +9,7 @@ using namespace std;
 
 
 // declaration of definition in general.cc
-extern ESCALAS scl;
+//extern ESCALAS scl;
 
 
 /*----- FUNCIONES NORMALES -----*/
