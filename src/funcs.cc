@@ -418,6 +418,7 @@ PARAMS::PARAMS(string fname_turb):
 	MODEL_TURB(fname_turb) {
 	}
 
+
 void PARAMS::calc_Bfield(VecDoub_I &y){
 	pos[0] = y[0] *scl.rl;		// [cm] x
 	pos[1] = y[2] *scl.rl;		// [cm] y

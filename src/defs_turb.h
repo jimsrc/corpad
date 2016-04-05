@@ -1,6 +1,7 @@
 #ifndef DEFS_TURB_H
 #define DEFS_TURB_H
-//#include "general.h"
+#include "nr3.h"
+#include "general.h"
 /*-------------------------------------------------------*/
 
 class PARAMS_SEM{
@@ -43,7 +44,7 @@ class PARAMS_TURB{
 
 		string FNAME_INPUT;
 
-		int n_modos;
+		Int n_modos;
 		Doub lambda_min;
         Doub lambda_max;
 		Doub Lc_slab, Lc_2d;	// longitudes de correlacion
@@ -62,6 +63,7 @@ class PARAMS_TURB{
 		PARAMS_SEM sem;
 		FASES fases;
 
+        void build_spectra();
 		void build(string);			// puedo usarlo si es q use el contructor con "void"
 };
 

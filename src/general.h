@@ -39,6 +39,6 @@ class ESCALAS{
         Doub B;// = 5e-5;                   // [G] 5nT en Gauss
 };
 
-//ESCALAS scl;    // global instance
-extern ESCALAS scl;
+
+extern ESCALAS scl;    // global instance
 #endif //GENERAL_H

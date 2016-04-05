@@ -24,7 +24,8 @@ struct Odeint {
 	Doub x,h;
 	Odeint(VecDoub_IO &ystartt,const Doub xx1,const Doub xx2,
 		const Doub atol,const Doub rtol,const Doub h1,
-		const Doub hminn,Output<Stepper> &outt,typename Stepper::Dtype &derivss, 
+		const Doub hminn,Output<Stepper> &outt,
+        typename Stepper::Dtype &derivss, 
         PARAMS, int);
 	void integrate();
 	PARAMS par;
