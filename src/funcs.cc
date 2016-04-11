@@ -303,8 +303,8 @@ void Output<Stepper>::out(const Int nstp,const Doub x,VecDoub_I &y,Stepper &s,co
 //esto lo agrego para guardar cosas de la historia de 
 //las trayectorias:
 template <class Stepper>
-void Output<Stepper>::set_Bmodel(PARAMS pmm){
-	pm = &pmm;
+void Output<Stepper>::set_Bmodel(PARAMS *pmm){
+	pm = pmm;
 }
 
 

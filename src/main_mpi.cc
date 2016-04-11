@@ -66,7 +66,7 @@ int main(int argc, char* argv[]){
 
 	//------------------ output objects w/ 'NPOINTS' points in output
 	Output<StepperBS<rhs> > outbs;    // DES-COMENTAR
-	outbs.set_Bmodel(par);            // DES-COMENTAR
+	outbs.set_Bmodel(&par);            // DES-COMENTAR
 	rhs d;						// object representing system-of-equations
 	//---------------------------------------------------------------
 	atol	= ATOL;
