@@ -19,6 +19,10 @@ using namespace std;
 double calc_gamma(double v){
 	double beta, gamma;
 	beta = v*scl.vel / clight;
+    #ifdef BETA_CHECK
+    if (beta>=1.0)
+        printf(" beta>=1.0!!, beta: %g, v: %g\n", beta, v);
+    #endif
 	gamma = pow(1. - beta*beta, -.5);
 	return gamma;
 }
@@ -141,6 +145,22 @@ void Output<Stepper>::build(const string str_tscalee, Int nsavee, Doub tmaxHistT
 	dimHistTau	= 2;
 	HistTau		= MatDoub(nHistTau, dimHistTau, 0.0);	// histog 1-D
 	nsteps		= 0;
+
+    #ifdef MONIT_STEP
+    HistStep    = MatDoub(NStep, 4);
+    dstep       = MaxStep/(1.0*NStep);
+    dstep_part  = dstep/8.;
+    //MinStep     = 1e3;
+    for(int i=0; i<NStep; i++){
+        HistStep[i][0] = (i+.5)*dstep;
+        HistStep[i][1] = 0.0;               // counts
+        HistStep[i][2] = (i+.5)*(dstep_part);
+        HistStep[i][3] = 0.0;               // counts
+    }
+    printf(" NStep: %d\n", NStep);
+    printf(" MaxStep: %g\n", MaxStep);
+    //printf(" HistStep: %g\n", HistStep[0][1]);
+    #endif //MONIT_STEP
 }
 
 
@@ -245,10 +265,48 @@ void Output<Stepper>::resizeTau(){	// redimensiona el vector 'xsave' hacia el do
 			Tau[i][j] = tempmat[i][j];
 }
 
+
+#ifdef MONIT_STEP
+template <class Stepper>
+void Output<Stepper>::build_HistSeq(const Stepper s){
+    HistSeq = MatDoub(s.IMAXX, 2);
+    for(int i=0; i<s.IMAXX; i++){
+        HistSeq[i][0] = s.nseq[i];
+        HistSeq[i][1] = 0.0;
+    }
+}
+
+
+template <class Stepper>
+//void Output<Stepper>::monit_step(const Doub hdid){
+void Output<Stepper>::monit_step(const Stepper s){
+    /*if(hdid!=0.05)
+        MinStep = MIN(MinStep, hdid);*/
+    int ns;
+    if(s.hdid<=MaxStep){
+        // h total
+        ns = int(s.hdid/dstep);
+        HistStep[ns][1]++;
+    }
+    if((s.hdid/s.nstep)<=(NStep*dstep_part)){
+        // h partial
+        ns = int((s.hdid/s.nstep)/(dstep_part));
+        HistStep[ns][3]++;
+    }
+    //
+    for(int i=0; i<HistSeq.nrows(); i++){
+        if(s.nstep==HistSeq[i][0])
+            HistSeq[i][1]++;
+    }
+}
+#endif //MONIT_STEP
+
+
 template <class Stepper>
 void Output<Stepper>::save_pitch(){
 	for(int i=0;i<3;i++)
 		pos[i] = (ysave[(2*i)][count]) *scl.rl;	// [cm]
+    //printf(" >>> save_pitch...\n");
 	pm->calc_B(pos);
 
 	bx=pm->B[0];		by=pm->B[1];		bz=pm->B[2];		// [G]
@@ -369,7 +427,7 @@ void Output<Stepper>::save2file(){
 		vx 	= ysave[1][i];  			// [1] 
 		vy 	= ysave[3][i];  			// [1]
 		vz 	= ysave[5][i];  			// [1]
-		v 	= pow(vx*vx + vy*vy + vz*vz, .5); 	// [1]
+		v 	= pow(vx*vx + vy*vy + vz*vz, .5); 	// [1] TODO: CAMBIARLO A 'sqrt'
 		gamma	= calc_gamma(v);
 		err	= gamma/scl.gamma - 1.;			// error relativ del gamma relativista
 
@@ -420,6 +478,7 @@ PARAMS::PARAMS(string fname_turb):
 
 
 void PARAMS::calc_Bfield(VecDoub_I &y){
+    //printf(" >>> calc_Bfield...\n");
 	pos[0] = y[0] *scl.rl;		// [cm] x
 	pos[1] = y[2] *scl.rl;		// [cm] y
 	pos[2] = y[4] *scl.rl;		// [cm] z

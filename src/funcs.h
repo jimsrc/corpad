@@ -9,6 +9,9 @@
 //---------------------------------------------------
 class PARAMS : public MODEL_TURB{
 	public:
+        #ifdef CYTHON
+        PARAMS(){};         // good to have for cython handling
+        #endif //CYTHON
 		PARAMS(string);
 		void calc_Bfield(VecDoub_I &);
 		//PARAMS & operator=(const PARAMS &rhs);
@@ -73,6 +76,18 @@ class Output {
 		char fname_trj[200];
         char fname_misc[200];
         char fname_owned[200];
+
+        #ifdef MONIT_STEP
+        MatDoub HistStep;
+        MatDoub HistSeq;
+        static const Doub MaxStep=1.0;
+        static const Int NStep=500;
+        Doub dstep, dstep_part;
+        //void monit_step(const Doub hdid);
+        void monit_step(const Stepper s);
+        void build_HistSeq(const Stepper s);
+        #endif //MONIT_STEP
+
 	private:
 		PARAMS *pm;
 		double pos[3], vmod, bmod;
