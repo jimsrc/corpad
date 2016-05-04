@@ -155,6 +155,13 @@ int main(int argc, char* argv[]){
  * [ ] convertir a calc_gamma() en inline o macro!
  * [ ] rann0() ----> ZIGGURATZ
  * [ ] se pueden evitar las declaraciones en void MODEL_TURB::calc_dB_SLAB(..)??
+ * [ ] hacer q las variables tipo VeDoub (e.g. ysave, ym, yn, etc) sean 
+ *     miembros privados de la clase, para asi evitar q se 
+ *     inicialicen c/vez q use StepperBS::step(), StepperBS::dy(), 
+       Odeint::Odeint(.., Output out,..), etc.
+ * [ ] en las mismas rutinas del punto anterior, convertir los argumentos
+ *     tipo &ptr --> *ptr. Es decir q el argumento NO sea tipo *referencia*,
+ *     sino tipo *puntero*!! (las referencias generan copias!)
  *
  * +++++ despues de esta version oficial-temporal +++++
  * - eliminar los srand(), rand()
