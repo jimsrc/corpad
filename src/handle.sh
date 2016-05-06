@@ -12,6 +12,8 @@ function get_sources(){
     funcs.h
     stepperbs.cc
     stepperbs.h
+    odeintt.h
+    odeintt.cc
     )
     echo "${l[@]}"
 }
