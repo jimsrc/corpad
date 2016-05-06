@@ -19,8 +19,20 @@ Odeint<Stepper>::Odeint(VecDoub_IO &ystartt, const Doub xx1, const Doub xx2,
 	out.init(s.neqn, x1, x2);
 }
 
+/*
+template<class Stepper>
+void Odeint<Stepper>::integrate(Doub xx2) {
+    x2 = xx2;
+    integrate();
+}
+*/
+
 template<class Stepper>
 void Odeint<Stepper>::integrate() {
+    #ifdef MONIT_STEP
+    out.build_HistSeq(s);       // inicializa histog del "nseq"
+    #endif
+
 	int i=0;
 	derivs(par, x, y, dydx);
 	if (dense)
@@ -39,6 +51,11 @@ void Odeint<Stepper>::integrate() {
 		check_scattering();				//--- scattering stuff
 
 		if (s.hdid == h) ++nok; else ++nbad;
+
+        #ifdef MONIT_STEP
+        out.monit_step(s);               // monitoreo del step
+        #endif //MONIT_STEP
+
 		if (dense){
 			out.out(nstp, x, y, s, s.hdid);		// guarda solo si x>xout
 		}
