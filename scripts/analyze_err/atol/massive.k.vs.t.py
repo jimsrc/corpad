@@ -8,16 +8,17 @@ from calc_k_vs_t import k_vs_t
 import os
 from os.path import isdir, isfile
 
-Ek	 = 1e8 #6e5	# [eV]
+Ek	 = 1e9 #6e5	# [eV]
 Bo   = 5e-5
 atol = 1e-6
 
 #atol = 1e-6
 PLAS = os.environ['PLAS']
-dir_data = '%s/output/output_Ek.1e8eV_atol.1e-6_nB.50' % PLAS
+dir_data = '%s/output/output_Ek.1e9eV_atol.1e-6_nB.50' % PLAS
 #dir_data = '%s/output/Ek.%1.1eeV_rtol.%1.0e' % (PLAS, Ek, rtol)
 dir_out  = '%s/post/atol/Ek.%1.1eeV_atol.%1.0e' % (PLAS, Ek, atol)
-os.mkdir(dir_out)
+if not(isdir(dir_out)):
+    os.mkdir(dir_out)
 """
 Nm		= 128
 perc_slab	= 0.2 #0.02 #0.05 #0.10 # 0.00, 0.20, 0.40, 0.60, 1.00
