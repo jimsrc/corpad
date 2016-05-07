@@ -5,8 +5,9 @@ from lmfit import minimize, Parameters, Parameter, report_errors
 from h5py import File as f5
 from numpy import (
     zeros, empty, ones, nan, 
-    savetxt, loadtxt, mean, median,
-    nanmean, nanmedian)
+    savetxt, loadtxt, mean, median, std
+    nanmean, nanmedian
+)
 #
 def value(fname, value_name):
     cc = read_contents(fname)
@@ -295,6 +296,39 @@ def sqr_deviations(DATA, time, every):
         j   += 1
 
     return tt, x2, y2, z2
+
+
+def sqr_deviations_ii(DATA, time, every):
+    nfil    = len(time)
+    n       = nfil/every + (nfil%every!=0)
+    x2_avr, y2_avr, z2_avr  = zeros(n), zeros(n), zeros(n)
+    x2_std, y2_std, z2_std  = zeros(n), zeros(n), zeros(n)
+    tt      = zeros(n)
+    j       = 0
+    print " calculando <x2>(t), <y2(t)>... y sus errores"
+    for i in range(0, nfil, every):     # yendo de 'every' en 'every'
+        cond                 = DATA.T[0]==time[i]
+        x                    = DATA.T[1][cond]
+        y                    = DATA.T[2][cond]
+        z                    = DATA.T[3][cond]
+        x2, y2, z2           = x*x, y*y, z*z      # [AU^2
+        x2_avr[j], x2_std[j] = mean(x2), std(x2)  # [AU^2]
+        y2_avr[j], y2_std[j] = mean(y2), std(y2)  # [AU^2]
+        z2_avr[j], z2_std[j] = mean(z2), std(z2)  # [AU^2]
+        tt[j]                = time[i]            # [seg]
+        j   += 1
+
+    o = {
+    't_dim'     : tt,
+    'x2_mean'   : x2_avr,
+    'y2_mean'   : y2_avr,
+    'z2_mean'   : z2_avr,
+    'x2_std'    : x2_std,
+    'y2_std'    : y2_std,
+    'z2_std'    : z2_std
+    }
+    return o
+
 
 # omega ciclotron para proton:
 # Ek: [eV] energ cinetica
