@@ -8,15 +8,16 @@ from calc_k_vs_t import k_vs_t
 import os
 from os.path import isdir, isfile
 
-Ek	 = 1e9 #6e5	# [eV]
+Ek	 = 1e9 #1e6 #1e9 #6e5	# [eV]
 Bo   = 5e-5
 atol = 1e-6
 
 #atol = 1e-6
 PLAS = os.environ['PLAS']
-dir_data = '%s/output/output_Ek.1e9eV_atol.1e-6_nB.50' % PLAS
+#dir_data = '%s/output/output_Ek.1e9eV_atol.1e-6_nB.50' % PLAS
+dir_data = '%s/output/output_Ek.1e9eV_atol.1e-6_nB.50_npla.122' % PLAS
 #dir_data = '%s/output/Ek.%1.1eeV_rtol.%1.0e' % (PLAS, Ek, rtol)
-dir_out  = '%s/post/atol/Ek.%1.1eeV_atol.%1.0e' % (PLAS, Ek, atol)
+dir_out  = '%s/post/atol/Ek.%1.1eeV_atol.%1.0e_npla.122' % (PLAS, Ek, atol)
 if not(isdir(dir_out)):
     os.mkdir(dir_out)
 """
@@ -34,6 +35,7 @@ assert isdir(dir_data) and isdir(dir_out), \
     " NO EXISTEN??: \n"+ dir_data + '\n' + dir_out
 
 kt = k_vs_t(Ek, dir_data)
-kt.calc_k_versus_t_ii(Bo, dir_out)
+#kt.calc_k_versus_t_ii(Bo, dir_out)
+kt.calc_k_profile(Bo, dir_out, moreinfo=True)
 
 #EOF
