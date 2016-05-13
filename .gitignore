@@ -8,11 +8,11 @@
 
 #--- no puedo acumular tantos archivos, sino se me 
 #--- dificulta controlar mi codigo
-*.dat
+*.dat*
 *.log
 *.owned
 *.out
-*.h5
+*.h5*
 *prof*.txt
 *zz
 *zz1
