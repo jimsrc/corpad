@@ -1,6 +1,7 @@
 #!/usr/bin/env ipython
 # -*- coding: utf-8 -*-
 from funcs import *
+from h5py import File as h5
 """
 Puedo comparar estos resultdos con los de Qin. Ver figura 3.4 de Shalchi 2009 (libro).
 Ahi muestra k(t). Son perfiles muy parecidos.
@@ -33,18 +34,37 @@ class kdiff:
         fname_inp   += '_Nm%03d' % par['n_modos']
         fname_inp   += '_slab%1.2f' % par['percent_slab']
         fname_inp   += '_sig.%1.1e' % par['sigma_Bo_ratio']
-        fname_inp   += '_Lc2d.%1.1e_LcSlab.%1.1e.dat' % (par['Lc_2d'], par['Lc_slab'])
+        fname_inp   += '_Lc2d.%1.1e_LcSlab.%1.1e.h5' % (par['Lc_2d'], par['Lc_slab'])
         self.fname_inp = fname_inp
 
-        #t, kxx, kyy, kzz = loadtxt(fname_inp, unpack=True)
-        t_dim, t_adim, kxx, kyy, kzz = loadtxt(fname_inp, unpack=True)
-        self.inp = {
+        self.inp = {}
+        if fname_inp[-4:]=='.txt':
+            #t, kxx, kyy, kzz = loadtxt(fname_inp, unpack=True)
+            t_dim, t_adim, kxx, kyy, kzz = loadtxt(fname_inp, unpack=True)
+        elif fname_inp[-3:]=='.h5':
+            finp = h5(fname_inp, 'r')
+            t_dim   = finp['t_dim'].value
+            t_adim  = finp['t_adim'].value
+            kxx_std = finp['kxx_std'].value
+            kyy_std = finp['kyy_std'].value
+            kzz_std = finp['kzz_std'].value
+            kxx, kyy, kzz = finp['kxx'].value, finp['kyy'].value, finp['kzz'].value
+            self.inp.update({
+                'kxx_std' : kxx_std,
+                'kyy_std' : kyy_std,
+                'kzz_std' : kzz_std,
+            })
+        else:
+            print "---> i dont know what to do with: "+fname_inp
+            raise SystemExit
+
+        self.inp.update({
             't_dim' : t_dim,
             't_adim': t_adim,
             'kxx'   : kxx,
             'kyy'   : kyy,
             'kzz'   : kzz
-        }
+        })
 
         self.wc    = calc_omega(par['Bunif'], Ek)
         self.k = {}
@@ -86,6 +106,8 @@ class kdiff:
 
         kxx  = self.inp['kxx']
         kyy  = self.inp['kyy']
+        kxx_std = self.inp['kxx_std']
+        kyy_std = self.inp['kyy_std']
         k    = self.k
         wc   = self.wc
         par  = self.par
@@ -97,14 +119,23 @@ class kdiff:
         fig1 = figure(1, figsize=(6, 4))
         ax1  = fig1.add_subplot(111)
         # plot *all* simulation data
-        ax1.scatter(t, kxx, edgecolor='none', c='red', alpha=.3)
-        ax1.scatter(t, kyy, edgecolor='none', c='blue', alpha=.3)
+        opt = {'c': 'none', 'alpha':.3, 's':9}
+        ax1.scatter(t[~cc], kxx[~cc], edgecolor='red', **opt)
+        ax1.scatter(t[~cc], kyy[~cc], edgecolor='blue', **opt)
         # plot *only* fitted data
-        ax1.scatter(t[cc], kxx[cc], edgecolor='none', c='red', label='kxx')
-        ax1.scatter(t[cc], kyy[cc], edgecolor='none', c='blue', label='kyy')
+        opt = {'edgecolor': 'none', 'alpha': 0.4, 's': 9}
+        ax1.scatter(t[cc], kxx[cc], c='red', label='kxx', **opt)
+        ax1.scatter(t[cc], kyy[cc], c='blue', label='kyy', **opt)
         # plot fitted curves
         ax1.plot(t[cc], fitted_kxx, c='red')
         ax1.plot(t[cc], fitted_kyy, c='blue')
+        # errores kxx
+        inf = kxx - kxx_std
+        sup = kxx + kxx_std
+        ax1.fill_between(t[cc], inf[cc], sup[cc], facecolor='red', alpha=0.5)
+
+        # legend
+        ax1.legend()
 
 
         FIT_RESULTS = 'fit: y=b+m/(x-xo)' +\

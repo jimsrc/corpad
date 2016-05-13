@@ -294,7 +294,7 @@ set undofile
 set viminfo='100,<50,s10,h,n~/.vim/dirs/viminfo
 set wildignore=*.pyc
 set wildmode=list:longest
-set window=42
+set window=44
 let s:so_save = &so | let s:siso_save = &siso | set so=0 siso=0
 let v:this_session=expand("<sfile>:p")
 silent only
@@ -304,9 +304,9 @@ if expand('%') == '' && !&modified && line('$') <= 1 && getline(1) == ''
 endif
 set shortmess=aoO
 badd +1 build_massive_k.profiles_rtol.py
-badd +193 funcs.py
-badd +0 calc_k.py
-badd +0 calc_k_vs_t.py
+badd +5 funcs.py
+badd +4 calc_k.py
+badd +372 calc_k_vs_t.py
 badd +0 massive.k.vs.t.py
 args build_massive_k.profiles_rtol.py
 edit massive.k.vs.t.py
@@ -427,12 +427,12 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 37 - ((35 * winheight(0) + 20) / 40)
+let s:l = 11 - ((4 * winheight(0) + 21) / 42)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-37
-normal! 03l
+11
+normal! 08l
 tabedit calc_k_vs_t.py
 set splitbelow splitright
 wincmd _ | wincmd |
@@ -441,7 +441,9 @@ vsplit
 wincmd w
 wincmd t
 set winheight=1 winwidth=1
+exe '1resize ' . ((&lines * 41 + 22) / 45)
 exe 'vert 1resize ' . ((&columns * 75 + 76) / 152)
+exe '2resize ' . ((&lines * 41 + 22) / 45)
 exe 'vert 2resize ' . ((&columns * 76 + 76) / 152)
 argglobal
 vnoremap <buffer> 	 :py isort_visual()
@@ -557,11 +559,11 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 225 - ((17 * winheight(0) + 20) / 40)
+let s:l = 384 - ((19 * winheight(0) + 20) / 41)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-225
+384
 normal! 08l
 wincmd w
 argglobal
@@ -679,15 +681,16 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 225 - ((17 * winheight(0) + 20) / 40)
+let s:l = 387 - ((30 * winheight(0) + 20) / 41)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-225
-normal! 08l
+387
+normal! 043l
 wincmd w
-2wincmd w
+exe '1resize ' . ((&lines * 41 + 22) / 45)
 exe 'vert 1resize ' . ((&columns * 75 + 76) / 152)
+exe '2resize ' . ((&lines * 41 + 22) / 45)
 exe 'vert 2resize ' . ((&columns * 76 + 76) / 152)
 tabedit build_massive_k.profiles_rtol.py
 set splitbelow splitright
@@ -813,12 +816,12 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 1 - ((0 * winheight(0) + 20) / 40)
+let s:l = 25 - ((24 * winheight(0) + 21) / 42)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-1
-normal! 0
+25
+normal! 013l
 wincmd w
 argglobal
 edit build_massive_k.profiles_rtol.py
@@ -935,14 +938,13 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 39 - ((28 * winheight(0) + 20) / 40)
+let s:l = 37 - ((25 * winheight(0) + 21) / 42)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-39
-normal! 03l
+37
+normal! 014l
 wincmd w
-2wincmd w
 exe 'vert 1resize ' . ((&columns * 75 + 76) / 152)
 exe 'vert 2resize ' . ((&columns * 76 + 76) / 152)
 tabedit calc_k.py
@@ -953,8 +955,8 @@ vsplit
 wincmd w
 wincmd t
 set winheight=1 winwidth=1
-exe 'vert 1resize ' . ((&columns * 75 + 76) / 152)
-exe 'vert 2resize ' . ((&columns * 76 + 76) / 152)
+exe 'vert 1resize ' . ((&columns * 80 + 76) / 152)
+exe 'vert 2resize ' . ((&columns * 71 + 76) / 152)
 argglobal
 vnoremap <buffer> 	 :py isort_visual()
 xnoremap <buffer> <silent> \a} `>a}`<i{
@@ -1069,12 +1071,12 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 63 - ((19 * winheight(0) + 20) / 40)
+let s:l = 119 - ((20 * winheight(0) + 21) / 42)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-63
-normal! 014l
+119
+normal! 010l
 wincmd w
 argglobal
 edit calc_k.py
@@ -1191,16 +1193,15 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 64 - ((20 * winheight(0) + 20) / 40)
+let s:l = 145 - ((30 * winheight(0) + 21) / 42)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-64
-normal! 014l
+145
+normal! 08l
 wincmd w
-2wincmd w
-exe 'vert 1resize ' . ((&columns * 75 + 76) / 152)
-exe 'vert 2resize ' . ((&columns * 76 + 76) / 152)
+exe 'vert 1resize ' . ((&columns * 80 + 76) / 152)
+exe 'vert 2resize ' . ((&columns * 71 + 76) / 152)
 tabedit funcs.py
 set splitbelow splitright
 wincmd _ | wincmd |
@@ -1325,12 +1326,12 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 4 - ((0 * winheight(0) + 20) / 40)
+let s:l = 335 - ((35 * winheight(0) + 21) / 42)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-4
-normal! 0
+335
+normal! 08l
 wincmd w
 argglobal
 edit funcs.py
@@ -1447,17 +1448,16 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 64 - ((32 * winheight(0) + 20) / 40)
+let s:l = 209 - ((24 * winheight(0) + 21) / 42)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-64
-normal! 0
+209
+normal! 020l
 wincmd w
-2wincmd w
 exe 'vert 1resize ' . ((&columns * 75 + 76) / 152)
 exe 'vert 2resize ' . ((&columns * 76 + 76) / 152)
-tabnext 2
+tabnext 5
 if exists('s:wipebuf')
   silent exe 'bwipe ' . s:wipebuf
 endif
