@@ -47,7 +47,7 @@ def build_h5_ii(ntot_B, ntot_pla, dir_src, dir_dst, fname_out_base):
     with open(flist[0], 'r') as ftemp:
         ntau = len(ftemp.readlines())-nskip_misc # N of tau-histogram bins
     
-    fname_out = '%s/%s_' % (dir_dst, fname_out_base) #'%s/test.h5' % dir_dst
+    fname_out = '%s/%s' % (dir_dst, fname_out_base) #'%s/test.h5' % dir_dst
     fo        = h5(fname_out, 'w')
     nok, nbad = 0, 0
 
@@ -121,6 +121,7 @@ def build_h5_ii(ntot_B, ntot_pla, dir_src, dir_dst, fname_out_base):
         for name in misc.keys():
             fo[path+'/misc/'+name] = misc[name]
 
+    fo['time']  = time
     fo['nok']   = nok   # total nmbr of simulated plas
     fo['nbad']  = nbad  # plas that were *not* simulated (but were suposed to)
     fo['ntot_B'] = ntot_B # total nmbr of B realizations
