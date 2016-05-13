@@ -2,10 +2,10 @@
 from pylab import *
 from numpy import *
 from lmfit import minimize, Parameters, Parameter, report_errors
-from h5py import File as f5
+from h5py import File as h5
 from numpy import (
     zeros, empty, ones, nan, 
-    savetxt, loadtxt, mean, median, std
+    savetxt, loadtxt, mean, median, std,
     nanmean, nanmedian
 )
 #
@@ -191,7 +191,7 @@ def load_trajectories_from_h5(NBs, NPLAS, dir_data):
     n_noexist   = 0
 
     fname_inp = '%s/out.h5' % dir_data
-    f = f5(fname_inp, 'r')
+    f =h5(fname_inp, 'r')
 
     for j in range(NBs):
         for i in range(NPLAS):
@@ -298,35 +298,74 @@ def sqr_deviations(DATA, time, every):
     return tt, x2, y2, z2
 
 
-def sqr_deviations_ii(DATA, time, every):
-    nfil    = len(time)
-    n       = nfil/every + (nfil%every!=0)
-    x2_avr, y2_avr, z2_avr  = zeros(n), zeros(n), zeros(n)
-    x2_std, y2_std, z2_std  = zeros(n), zeros(n), zeros(n)
-    tt      = zeros(n)
-    j       = 0
-    print " calculando <x2>(t), <y2(t)>... y sus errores"
-    for i in range(0, nfil, every):     # yendo de 'every' en 'every'
-        cond                 = DATA.T[0]==time[i]
-        x                    = DATA.T[1][cond]
-        y                    = DATA.T[2][cond]
-        z                    = DATA.T[3][cond]
-        x2, y2, z2           = x*x, y*y, z*z      # [AU^2
-        x2_avr[j], x2_std[j] = mean(x2), std(x2)  # [AU^2]
-        y2_avr[j], y2_std[j] = mean(y2), std(y2)  # [AU^2]
-        z2_avr[j], z2_std[j] = mean(z2), std(z2)  # [AU^2]
-        tt[j]                = time[i]            # [seg]
-        j   += 1
+#def sqr_deviations_ii(DATA, time, every):
+def sqr_deviations_ii(fname_inp, moreinfo=False):
+    """
+    Del archivo de entrada, leeremos trayectorias corresponientes
+    a PARTICULAS (de las cuales leemos sus trayectorias) y 
+    a REALIZACIONES DE CAMPO. 
+    Aqui haremos promedios sobre las particulas en cada realizacion.
+    'x2[iB,:]', 'y2[iB,:]', 'z2[iB,:]' son promedios (a lo largo del
+    tiempo (axis=1)) sobre particulas, para c/realizacion 'iB'; 
+    mientras que 'x2_avr', 'y2_avr', 'z2_avr' son promedios sobre 
+    los promedios 'x2[]', 'y2[]', 'z2[]' sobre las realizaciones 
+    (axis=0); y 'x2_std', 'y2_std', 'z2_std' son las desviaciones 
+    estandard correspondientes.
+    """
+    f        = h5(fname_inp, 'r')
+    nB, npla = f['ntot_B'].value, f['ntot_pla'].value
+    nt       = f['ntimes'].value
 
+    x2_avr, y2_avr, z2_avr  = zeros(nt), zeros(nt), zeros(nt)
+    x2_std, y2_std, z2_std  = zeros(nt), zeros(nt), zeros(nt)
+
+    x2, y2, z2 = nans((nB,nt)), nans((nB,nt)), nans((nB,nt))
+    x2std, y2std, z2std = nans((nB,nt)), nans((nB,nt)), nans((nB,nt))
+
+    print " calculando <x2>(t), <y2(t)>... y sus errores"
+    for iB in range(nB):
+        path = 'B%02d'%iB
+        x = f[path+'/x'][...] # [AU] (nt, npla)
+        y = f[path+'/y'][...] # [AU] (nt, npla)
+        z = f[path+'/z'][...] # [AU] (nt, npla)
+        x2[iB,:] = (x*x).mean(axis=1) # promedio sobre particulas
+        y2[iB,:] = (y*y).mean(axis=1) # promedio sobre particulas
+        z2[iB,:] = (z*z).mean(axis=1) # promedio sobre particulas
+        x2std[iB,:] = (x*x).std(axis=1) # std sobre particulas
+        y2std[iB,:] = (y*y).std(axis=1) # std sobre particulas
+        z2std[iB,:] = (z*z).std(axis=1) # std sobre particulas
+        
+    # promedios y errores standard sobre las realizaciones
+    x2_avr  = x2.mean(axis=0)
+    y2_avr  = y2.mean(axis=0)
+    z2_avr  = z2.mean(axis=0)
+    # error: std sobre los valores medios de c/realizacion
+    x2_std  = x2.std(axis=0)
+    y2_std  = y2.std(axis=0)
+    z2_std  = z2.std(axis=0)
+    # otra version de error
+    x2_std2 = x2std.mean(axis=0)
+    y2_std2 = y2std.mean(axis=0)
+    z2_std2 = z2std.mean(axis=0)
+
+    tsec = f['time'][...] # [seg] times of trajectory points
     o = {
-    't_dim'     : tt,
-    'x2_mean'   : x2_avr,
-    'y2_mean'   : y2_avr,
-    'z2_mean'   : z2_avr,
-    'x2_std'    : x2_std,
-    'y2_std'    : y2_std,
-    'z2_std'    : z2_std
+    't_dim'     : tsec,     # [seg]
+    'x2_mean'   : x2_avr,   # [AU]
+    'y2_mean'   : y2_avr,   # [AU]
+    'z2_mean'   : z2_avr,   # ..
+    'x2_std'    : x2_std,   # ..
+    'y2_std'    : y2_std,   # ..
+    'z2_std'    : z2_std,   # ..
+    #'x2_std2'   : x2_std2,  # ..
+    #'y2_std2'   : y2_std2,  # ..
+    #'z2_std2'   : z2_std2,  # ..
     }
+    if moreinfo:
+        o.update({
+            'x2': x2, 'y2': y2, 'z2': z2,
+            'x2std': x2std, 'y2std':y2std, 'z2std':z2std,
+        })
     return o
 
 
