@@ -343,8 +343,8 @@ class k_vs_t:
         '_Lc2d.%1.1e' % s.par['Lc_2d'] +\
         '_LcSlab.%1.1e.h5' % s.par['Lc_slab'] 
 
-        fname_inp = s.dir_data+'/out.h5'
-        SQR       = sqr_deviations_ii(fname_inp, moreinfo)
+        s.fname_inp = s.dir_data+'/out.h5'
+        SQR       = sqr_deviations_ii(s.fname_inp, moreinfo)
 
         AUinkm  = 1.5e8
         AUincm  = AUinkm*1e5            # [cm]
