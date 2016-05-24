@@ -1,0 +1,6 @@
+# no figure files
+plots/*.png
+plots/**/*.png
+
+# no bckp files
+plots/*bckp*
