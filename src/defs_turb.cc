@@ -38,7 +38,7 @@ float rann0(long &idum){        // lo nombre diferente a "ran0" para evitar
     cout << " xxx destruyendo FASES." << endl;
 }*/
 
-void FASES::build(Int nm_slab, Int nm_2d, PARAMS_SEM *sem){     // constructor
+void FASES::build(Int nm_slab, Int nm_2d, PARAMS_SEM *sem){ // constructor
     cout << " ...construyendo FASES." << endl;
     Nm_slab = nm_slab;
     Nm_2d   = nm_2d;
@@ -49,7 +49,7 @@ void FASES::build(Int nm_slab, Int nm_2d, PARAMS_SEM *sem){     // constructor
     phi_2d  = new double[Nm_2d];
     b_2d    = new double[Nm_2d];
 
-    construir_fases_random(*sem);           // le mando *sem para q no me cambie los valores originales
+    construir_fases_random(*sem); // le mando *sem para q no me cambie los valores originales
 }
 
 void FASES::construir_fases_random(PARAMS_SEM sem){
@@ -63,12 +63,15 @@ void FASES::construir_fases_random(PARAMS_SEM sem){
     for(int i=0;i<2;i++) rann0(sem.two[i]);
     //------------------------------
     
-    for(int i=0; i<n_modos; i++){
-        //cout << " ----> semtwo1: "<< sem.two[1] << endl;
+    for(int i=0; i<Nm_slab; i++){
         // fases para SLAB
         phi_s[i]    = 2.*M_PI* rann0(sem.slab[0]);
         a_s[i]      = 2.*M_PI* rann0(sem.slab[1]);
         b_s[i]      = 2.*M_PI* rann0(sem.slab[2]);
+    }
+
+    for(int i=0; i<Nm_2d; i++){
+        //cout << " ----> semtwo1: "<< sem.two[1] << endl;
         // fases para 2D
         phi_2d[i]   = 2.*M_PI* rann0(sem.two[0]);
         b_2d[i]     = 2.*M_PI* rann0(sem.two[1]);
@@ -89,13 +92,16 @@ PARAMS_TURB::PARAMS_TURB(string fname_input){
     build(fname_input);
 }
 
+
 /*PARAMS_TURB::~PARAMS_TURB(){
     cout << " xxx destruyendo PARAMS_TURB: " << FNAME_INPUT << endl;
 }*/
 
+
 void PARAMS_TURB::report(void){
-    cerr << " REPORTE DE OBJETO PARAMS_TURB:----------------------------------" << endl;
-    cerr << " n_modos:      " << n_modos            << endl;
+    cerr << " REPORTE DE OBJETO PARAMS_TURB:-----------------------------" << endl;
+    cerr << " Nm_slab:      " << Nm_slab        << endl;
+    cerr << " Nm_2d:      " << Nm_2d          << endl;
     cerr << " lambda_max [AU]:  " << lambda_max / AU_in_cm  << endl;
     cerr << " lambda_min [AU]:  " << lambda_min / AU_in_cm  << endl;
     cerr << " Lc_slab [AU]:     " << Lc_slab / AU_in_cm         << endl;
@@ -106,20 +112,20 @@ void PARAMS_TURB::report(void){
     cerr << " percent_2d [%]:   " << 100.*percent_2d        << endl;
     cerr << " gS [1]: " << gS << endl;
     cerr << " g2D [1]: " << g2D << endl;
-    cerr << " ----------------------------------------------------------------" << endl;
+    cerr << " -----------------------------------------------------------" << endl;
 }
 
 
 void PARAMS_TURB::build(string fname_input){
     FNAME_INPUT = fname_input;
-
-    read_params(fname_input); // setea n_modos, Lc_slab, Lc_2d, lambda_min, etc...
+    read_params(fname_input); // setea Nm_slab, Lc_slab, Lc_2d, lambda_min, etc...
     build_spectra();
 }
 
 
 /* Deben estar definidos:
- * n_modos          [1]
+ * Nm_slab          [1]
+ * Nm_2d            [1]
  * sigma_Bo_ratio   [1]
  * Bo               [G]
  * percent_slab     [1] fraction
@@ -132,15 +138,14 @@ void PARAMS_TURB::build(string fname_input){
  * sem.two[]        [1] dos semillas
 */
 void PARAMS_TURB::build_spectra(){
-    dk      = new double[n_modos];
-    k       = new double[n_modos];
-    Bk_SLAB = new double[n_modos];
-    Bk_2D   = new double[n_modos];
+    dk_s    = new Doub[Nm_slab];
+    dk_2d   = new Doub[Nm_2d];
+    k_s     = new Doub[Nm_slab];
+    k_2d    = new Doub[Nm_2d];
+    Bk_SLAB = new Doub[Nm_slab];
+    Bk_2D   = new Doub[Nm_2d];
 
-    //gS  = 5./3.;        // potencia espectral slab
-    //g2D = 8./3.;        // potencia espectral 2D
-
-    fases.build(n_modos, &sem);
+    fases.build(Nm_slab, Nm_2d, &sem);
     build_sigmas();
     build_k_and_dk();
     build_Bk_SLAB();
@@ -158,15 +163,17 @@ void PARAMS_TURB::read_params(string fname_input){
     }
 
     // parametros del modelo
-    filein >> n_modos       >> dummy;   // [1] (entero) nro de modos
-    filein >> lambda_max    >> dummy;   // [AU] escala minima de fluctuaciones
-    filein >> lambda_min    >> dummy;   // [AU] escala maxima de fluctuaciones
-    filein >> Lc_slab       >> dummy;   // [AU] longitud de correlacion Lc, SLAB 
-    filein >> Lc_2d         >> dummy;   // [AU] longitud de correlacion Lc, 2D
-    filein >> Bo            >> dummy;   // [G] campo medio
-    filein >> sigma_Bo_ratio    >> dummy;   // [1] sigma^2 = (sigma_Bo_ratio) * Bo^2 
-    filein >> percent_slab      >> dummy;   // [fraccion] sigma_SLAB^2 = percent_slab * sigma^2
-    filein >> percent_2d        >> dummy;   // [fraccion] sigma_2D^2 = percent_2D * sigma^2a
+    filein >> Nm_slab     >> dummy; // [1] (entero) nro modos Slab
+    filein >> Nm_2d       >> dummy; // [1] (entero) nro modos 2D
+    //filein >> n_modos       >> dummy;   // [1] (entero) nro de modos
+    filein >> lambda_max  >> dummy; // [AU] escala minima de fluctuaciones
+    filein >> lambda_min  >> dummy; // [AU] escala maxima de fluctuaciones
+    filein >> Lc_slab     >> dummy; // [AU] longitud de correlacion Lc, SLAB 
+    filein >> Lc_2d       >> dummy; // [AU] longitud de correlacion Lc, 2D
+    filein >> Bo          >> dummy; // [G] campo medio Bo
+    filein >> sigma_Bo_ratio >> dummy; // [1] sigma^2 = (sigma_Bo_ratio) * Bo^2 
+    filein >> percent_slab   >> dummy; // [fraccion] sigma_SLAB^2 = percent_slab * sigma^2
+    filein >> percent_2d     >> dummy; // [fraccion] sigma_2D^2 = percent_2D * sigma^2a
 
     // semillas
     filein >> sem.slab[0]       >> dummy;
@@ -183,46 +190,57 @@ void PARAMS_TURB::read_params(string fname_input){
 
 
 void PARAMS_TURB::build_sigmas(){
-    double sigma;
-    sigma           = sqrt(sigma_Bo_ratio) * Bo;
-    sigma_S     = sqrt(percent_slab) * sigma;
-    sigma_2D    = sqrt(percent_2d) * sigma;
+    Doub sigma;
+    sigma    = sqrt(sigma_Bo_ratio) * Bo;  // [G]
+    sigma_S  = sqrt(percent_slab) * sigma; // [G]
+    sigma_2D = sqrt(percent_2d) * sigma;   // [G]
 }
 
 
 void PARAMS_TURB::build_k_and_dk(){
-    double kmin = (2. * M_PI) / lambda_max;     // [cm^-1]
-    double kmax = (2. * M_PI) / lambda_min;     // [cm^-1]
-    for(int i=0; i<n_modos; i++){
-        k[i]  = kmin * pow(kmax/kmin, 1.*i/(n_modos-1.));       // [cm^-1]
-        dk[i] = k[i] * (pow(kmax/kmin, 1./(n_modos-1)) - 1.);   // [cm^-1]
+    Doub kmin, kmax;
+
+    //--- wavevectors slab
+    kmin = (2. * M_PI) / lambda_max;     // [cm^-1]
+    kmax = (2. * M_PI) / lambda_min;     // [cm^-1]
+    for(int i=0; i<Nm_slab; i++){
+        k_s[i]  = kmin * pow(kmax/kmin, 1.*i/(Nm_slab-1.));       // [cm^-1]
+        dk_s[i] = k_s[i] * (pow(kmax/kmin, 1./(Nm_slab-1)) - 1.); // [cm^-1]
+    }
+
+    //--- wavevectors 2d
+    kmin = (2. * M_PI) / lambda_max;     // [cm^-1]
+    kmax = (2. * M_PI) / lambda_min;     // [cm^-1]
+    for(int i=0; i<Nm_2d; i++){
+        k_2d[i]  = kmin * pow(kmax/kmin, 1.*i/(Nm_2d-1.));       // [cm^-1]
+        dk_2d[i] = k_2d[i] * (pow(kmax/kmin, 1./(Nm_2d-1)) - 1.);   // [cm^-1]
     }
 }
 
 
 void PARAMS_TURB::build_Bk_SLAB(){
-    int i;
-    double DENOMINADOR=0., FACTOR;
-    for(i=0; i<n_modos; i++){
-        DENOMINADOR += dk[i] / (1. + pow(k[i]*Lc_slab, gS));
+    Int i;
+    Doub DENOMINADOR=0.0, FACTOR;
+    for(i=0; i<Nm_slab; i++){
+        DENOMINADOR += dk_s[i] / (1. + pow(k_s[i]*Lc_slab, gS));
     }
-    for(i=0; i<n_modos; i++){
-        FACTOR = dk[i] / (1. + pow(k[i]*Lc_slab, gS)) / DENOMINADOR;
+    for(i=0; i<Nm_slab; i++){
+        FACTOR = dk_s[i] / (1. + pow(k_s[i]*Lc_slab, gS)) / DENOMINADOR;
         Bk_SLAB[i] = sigma_S * pow(FACTOR, 0.5);            // [G]
     }
 }
 
 
 void PARAMS_TURB::build_Bk_2D(){
-    int i;
-    double DENOMINADOR=0., FACTOR, dV;
-    for(i=0; i<n_modos; i++){
-        dV = 2.*M_PI*k[i]*dk[i];
-        DENOMINADOR += dV / (1.0 + pow(k[i]*Lc_2d, g2D));
+    Int i;
+    Doub DENOMINADOR=0.0, FACTOR, dV;
+    for(i=0; i<Nm_2d; i++){
+        dV = 2.*M_PI*k_2d[i]*dk_2d[i];
+        DENOMINADOR += dV / (1. + pow(k_2d[i]*Lc_2d, g2D));
     }
-    for(i=0; i<n_modos; i++){
-        dV = 2.*M_PI*k[i]*dk[i];
-        FACTOR = dV / (1. + pow(k[i]*Lc_2d, g2D)) / DENOMINADOR;
+    for(i=0; i<Nm_2d; i++){
+        dV = 2.*M_PI*k_2d[i]*dk_2d[i];
+        FACTOR = dV / (1. + pow(k_2d[i]*Lc_2d, g2D)) / DENOMINADOR;
         Bk_2D[i] = sigma_2D * pow(FACTOR, 0.5);             // [G]
     }
 }
@@ -250,10 +268,10 @@ void MODEL_TURB::build(string fname_input){ // construyo leyendo los params desd
     FNAME_INPUT = fname_input;
     cout <<endl<< " ...construyendo MODEL_TURB: " << FNAME_INPUT << endl<<endl;
 
-    dB      = new double[3];
-    dB_SLAB = new double[3];
-    dB_2D   = new double[3];
-    B       = new double[3];
+    dB      = new Doub[3];
+    dB_SLAB = new Doub[3];
+    dB_2D   = new Doub[3];
+    B       = new Doub[3];
 
     // NOTA: en particular, debemos asegurarnos de q la
     // componente z del campo turb sea nula (y asi se quedara
@@ -264,14 +282,8 @@ void MODEL_TURB::build(string fname_input){ // construyo leyendo los params desd
         dB_2D[i]    = 0.0;
     }
 
-    // Con esto, seteo las semillas, los modos, las fases, el espectro Fourier, etc.
+    // seteo: semillas, los modos, las fases, el espectro Fourier, etc.
     p_turb.build(fname_input);          // inicializo parametros/semillas del modelo
-}
-
-
-// TODO: es necesario esto? (estructuralmente no tiene sentido)
-PARAMS_TURB MODEL_TURB::params_turb(){  //para accesar a la variables privadas desde el main()
-    return p_turb;
 }
 
 
@@ -288,34 +300,25 @@ void MODEL_TURB::fix_B_realization(const int nBrz){
 }
 
 
-void MODEL_TURB::next_B_realization(){
-    long seed = p_turb.sem.two[1];
-    srand(seed);
-
-    p_turb.sem.slab[0]  = rand();
-    p_turb.sem.slab[1]  = rand();
-    p_turb.sem.slab[2]  = rand();
-    p_turb.sem.two[0]   = rand();
-    p_turb.sem.two[1]   = rand();
-
-    p_turb.fases.construir_fases_random(p_turb.sem);
-}
-
-
 // TODO: convertir estas variables COSCOS, phi, etc, en miembros 
 //       privados de MODEL_TURB
 // TODO: tal vez usar sin(x)=sqrt(1-cos(x)^2) resulte mas barato 
 //       computacionalmente? (cuidado q sqrt() SIEMPRE DA POSITIVO)
+// TODO: para evitar tener a 'p_turb' como publico, podriamos poner un
+//       macro para q sea publico solo con Cython.
+// TODO: servira de algo hacer copias de p_turb.fases.a_s[], etc para
+//       accesar mas rapido a esos valores aqui?
+//       Dichas copias las haria en MODEL_TURB::build(string)
 void MODEL_TURB::calc_dB_SLAB(const Doub *pos){
     Doub COSCOS, SINSIN, FACTOR_X, FACTOR_Y, k;
     Doub b, a, phi;                     // fases random Slab
     dB_SLAB[0] = 0.; dB_SLAB[1]=0.;     // reseteo el vector en ceros
 
-    for(int i=0; i<p_turb.n_modos; i++){
+    for(Int i=0; i<p_turb.Nm_slab; i++){
         a           = p_turb.fases.a_s[i];
         b           = p_turb.fases.b_s[i];
         phi         = p_turb.fases.phi_s[i];
-        k           = p_turb.k[i];
+        k           = p_turb.k_s[i];
         COSCOS      = cos(k*pos[2] + b) * cos(a);
         SINSIN      = sin(k*pos[2] + b) * sin(a);
         FACTOR_X    = COSCOS * cos(phi) + SINSIN * sin(phi);
@@ -329,15 +332,20 @@ void MODEL_TURB::calc_dB_SLAB(const Doub *pos){
 
 // TODO: convertir declaraciones en variables privadas!, y 
 //       probar "const Doub const *pos".
+// TODO: esta calculando 'sin(FACTOR)' DOS VECES!!!
+//       Borrar 'FACTOR', y usemos:
+//       Doub sinFACTOR;
+//       sinFACTOR = sin( k*(pos[0]...) );
+//       dB_2D[0] += ... * sinFACTOR;
 void MODEL_TURB::calc_dB_2D(const Doub *pos){
-    double FACTOR, k;
-    double phi, b;                  // fases random 2D
-    dB_2D[0]=0.; dB_2D[1]=0.;           // reseteo el vector en ceros
+    Doub FACTOR, k;
+    Doub phi, b;                 // fases random 2D
+    dB_2D[0]=0.0; dB_2D[1]=0.0;  // reseteo el vector en ceros
 
-    for(int i=0; i<p_turb.n_modos; i++){
+    for(Int i=0; i<p_turb.Nm_2d; i++){
         b        = p_turb.fases.b_2d[i];
         phi      = p_turb.fases.phi_2d[i];
-        k        = p_turb.k[i];
+        k        = p_turb.k_2d[i];
         FACTOR   = k*(pos[0]*cos(phi) + pos[1]*sin(phi)) + b;
         dB_2D[0] += p_turb.Bk_2D[i] * sin(phi) * sin(FACTOR);
         dB_2D[1] +=-p_turb.Bk_2D[i] * cos(phi) * sin(FACTOR);
@@ -360,6 +368,8 @@ void MODEL_TURB::calc_dB_2D(const Doub *pos){
 //       De esta forma, no tenemos q chequear en c/iteracion!!
 //       Tmb probar "const Doub const *pos".
 // NOTA: 'pos' es el vector posicion (x,y,z) en [cm]
+//
+// TODO: Sino sacar los if( ... > 0.0 ) xq nunca los uso!
 void MODEL_TURB::calc_dB(const Doub *pos){
     if(p_turb.percent_slab > 0.0) // solo calculo si vale la pena
         calc_dB_SLAB(pos);

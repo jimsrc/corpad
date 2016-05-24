@@ -474,7 +474,7 @@ void Output<Stepper>::toc(){
 //------------------------------------------- class PARAMS
 PARAMS::PARAMS(string fname_turb):
 	MODEL_TURB(fname_turb) {
-	}
+}
 
 
 void PARAMS::calc_Bfield(VecDoub_I &y){

@@ -10,7 +10,7 @@
 class PARAMS : public MODEL_TURB{
 	public:
         #ifdef CYTHON
-        PARAMS(){};         // good to have for cython handling
+        PARAMS(){};// good to have for cython handling
         #endif //CYTHON
 		PARAMS(string);
 		void calc_Bfield(VecDoub_I &);
