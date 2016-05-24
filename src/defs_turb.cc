@@ -302,6 +302,8 @@ void MODEL_TURB::next_B_realization(){
 
 // TODO: convertir estas variables COSCOS, phi, etc, en miembros 
 //       privados de MODEL_TURB
+// TODO: tal vez usar sin(x)=sqrt(1-cos(x)^2) resulte mas barato 
+//       computacionalmente? (cuidado q sqrt() SIEMPRE DA POSITIVO)
 void MODEL_TURB::calc_dB_SLAB(const Doub *pos){
 	Doub COSCOS, SINSIN, FACTOR_X, FACTOR_Y, k;
 	Doub b, a, phi;				        // fases random Slab
