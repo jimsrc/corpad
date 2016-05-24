@@ -54,7 +54,7 @@ if __name__=='__main__':
 
     #--- eb
     ax.plot(r_eb, sigmaBoB, '-*', label='$e_b/V_A^2$')
-    ax.set_xscale('log')
+    #ax.set_xscale('log')
     ax.set_xlim(0.3, 5.)
     ax.grid()
 
