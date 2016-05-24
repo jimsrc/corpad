@@ -15,7 +15,8 @@ class PARAMS_SEM{
 /*-------------------------- fases random -------------------------------*/
 class FASES{
 	private:
-		Int n_modos;
+		Int Nm_slab;
+        Int Nm_2d;
 
 	public:
 		FASES(void) {};
