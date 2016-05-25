@@ -48,9 +48,9 @@ class PARAMS_TURB{
 		//Int n_modos;
 		Int Nm_slab;
 		Int Nm_2d;
-		Doub lambda_min;
-        Doub lambda_max;
-		Doub Lc_slab, Lc_2d;	// longitudes de correlacion
+        Doub lmin_s, lmax_s;    // escalas de turbulencia Slab
+        Doub lmin_2d, lmax_2d;  // escalas de turbulencia 2D
+		Doub Lc_slab, Lc_2d;	// longitudes de correlacion slab && 2d
 		Doub sigma_Bo_ratio;
 		Doub percent_slab;
 		Doub percent_2d;

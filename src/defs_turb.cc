@@ -102,8 +102,10 @@ void PARAMS_TURB::report(void){
     cerr << " REPORTE DE OBJETO PARAMS_TURB:-----------------------------" << endl;
     cerr << " Nm_slab:      " << Nm_slab        << endl;
     cerr << " Nm_2d:      " << Nm_2d          << endl;
-    cerr << " lambda_max [AU]:  " << lambda_max / AU_in_cm  << endl;
-    cerr << " lambda_min [AU]:  " << lambda_min / AU_in_cm  << endl;
+    cerr << " lmin_s [AU]:  " << lmin_s / AU_in_cm  << endl;
+    cerr << " lmax_s [AU]:  " << lmax_s / AU_in_cm  << endl;
+    cerr << " lmin_2d [AU]:  " << lmin_2d / AU_in_cm  << endl;
+    cerr << " lmax_2d [AU]:  " << lmax_2d / AU_in_cm  << endl;
     cerr << " Lc_slab [AU]:     " << Lc_slab / AU_in_cm         << endl;
     cerr << " Lc_2d   [AU]:     " << Lc_2d / AU_in_cm       << endl;
     cerr << " Bo [nT]:      " << Bo / nT_in_G       << endl;
@@ -130,8 +132,8 @@ void PARAMS_TURB::build(string fname_input){
  * Bo               [G]
  * percent_slab     [1] fraction
  * percent_2d       [1] fraction
- * lambda_max       [cm]
- * lambda_min       [cm]
+ * lmin_s,  lmax_s  [cm] escalas de turb slab
+ * lmin_2d, lmax_2d [cm] escalas de turb 2d
  * Lc_slab          [cm]
  * Lc_2d            [cm]
  * sem.slab[]       [1] tres semillas
@@ -165,9 +167,10 @@ void PARAMS_TURB::read_params(string fname_input){
     // parametros del modelo
     filein >> Nm_slab     >> dummy; // [1] (entero) nro modos Slab
     filein >> Nm_2d       >> dummy; // [1] (entero) nro modos 2D
-    //filein >> n_modos       >> dummy;   // [1] (entero) nro de modos
-    filein >> lambda_max  >> dummy; // [AU] escala minima de fluctuaciones
-    filein >> lambda_min  >> dummy; // [AU] escala maxima de fluctuaciones
+    filein >> lmin_s  >> dummy; // [AU] escala max Slab
+    filein >> lmax_s  >> dummy; // [AU] escala min Slab
+    filein >> lmin_2d >> dummy; // [AU] escala min 2D
+    filein >> lmax_2d >> dummy; // [AU] escala max 2D
     filein >> Lc_slab     >> dummy; // [AU] longitud de correlacion Lc, SLAB 
     filein >> Lc_2d       >> dummy; // [AU] longitud de correlacion Lc, 2D
     filein >> Bo          >> dummy; // [G] campo medio Bo
@@ -184,8 +187,11 @@ void PARAMS_TURB::read_params(string fname_input){
     // correcc a unidades fisicas
     Lc_slab     *= AU_in_cm;        // [cm]
     Lc_2d       *= AU_in_cm;        // [cm]
-    lambda_max  *= AU_in_cm;        // [cm]
-    lambda_min  *= AU_in_cm;        // [cm]
+    lmax_s      *= AU_in_cm;        // [cm]
+    lmin_s      *= AU_in_cm;        // [cm]
+    lmax_2d     *= AU_in_cm;        // [cm]
+    lmin_2d     *= AU_in_cm;        // [cm]
+
 }
 
 
@@ -201,16 +207,16 @@ void PARAMS_TURB::build_k_and_dk(){
     Doub kmin, kmax;
 
     //--- wavevectors slab
-    kmin = (2. * M_PI) / lambda_max;     // [cm^-1]
-    kmax = (2. * M_PI) / lambda_min;     // [cm^-1]
+    kmin = (2. * M_PI) / lmax_s;     // [cm^-1]
+    kmax = (2. * M_PI) / lmin_s;     // [cm^-1]
     for(int i=0; i<Nm_slab; i++){
         k_s[i]  = kmin * pow(kmax/kmin, 1.*i/(Nm_slab-1.));       // [cm^-1]
         dk_s[i] = k_s[i] * (pow(kmax/kmin, 1./(Nm_slab-1)) - 1.); // [cm^-1]
     }
 
     //--- wavevectors 2d
-    kmin = (2. * M_PI) / lambda_max;     // [cm^-1]
-    kmax = (2. * M_PI) / lambda_min;     // [cm^-1]
+    kmin = (2. * M_PI) / lmax_2d;     // [cm^-1]
+    kmax = (2. * M_PI) / lmin_2d;     // [cm^-1]
     for(int i=0; i<Nm_2d; i++){
         k_2d[i]  = kmin * pow(kmax/kmin, 1.*i/(Nm_2d-1.));       // [cm^-1]
         dk_2d[i] = k_2d[i] * (pow(kmax/kmin, 1./(Nm_2d-1)) - 1.);   // [cm^-1]
