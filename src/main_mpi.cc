@@ -26,7 +26,7 @@
 
 
 int main(int argc, char* argv[]){
-	Int ord, NPOINTS, n_ori, Nplas_rank, w_rank, w_size, imin, imax, n_Brealiz, nHistTau;
+	Int ord, NPOINTS, n_ori, Nplas_rank, w_rank, w_size, imin, imax, n_Brealiz, nHistTau, nThColl;
 	const Int nvar=6;		// nmbr of y-variables
 	Doub RIGIDITY, FRAC_GYROPERIOD, NMAX_GYROPERIODS, ATOL, RTOL, tmaxHistTau;
 	Doub **array_ori;
@@ -44,7 +44,8 @@ int main(int argc, char* argv[]){
 
 	//----------------------- leo parametros grales
 	read_params(fname_gral, RIGIDITY, FRAC_GYROPERIOD, NMAX_GYROPERIODS, 
-			NPOINTS, ATOL, RTOL, n_Brealiz, str_timescale, tmaxHistTau, nHistTau);
+			NPOINTS, ATOL, RTOL, n_Brealiz, str_timescale, tmaxHistTau,
+            nHistTau, nThColl);
 	printf(" -------------------->>>>\n");
 	// construyo escalas fisicas
 	scl.build(RIGIDITY);			// ya declare la variable 'scl' en "./general.cc"
@@ -96,7 +97,7 @@ int main(int argc, char* argv[]){
 		printf("\n [rank:%d] **************** NEXT Bfield realization j:%d/%d ****************", w_rank, j, n_Brealiz);
         i = 0;  // reinicio el conteo de plas
         while(i<n_ori){
-			outbs.build(str_timescale, NPOINTS, tmaxHistTau, nHistTau, i, j, dir_out);	// reseteo objeto "Output" para c/pla
+			outbs.build(str_timescale, NPOINTS, tmaxHistTau, nHistTau, nThColl, i, j, dir_out);	// reseteo objeto "Output" para c/pla
 
 			exist_file	= outbs.file_exist();		// le pregunto con "outbs" xq el es quien maneja los nombres finales de los archivos de salida
 			imin		= w_rank*Nplas_rank;		// i-minimo para c/procesador
