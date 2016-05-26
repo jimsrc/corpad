@@ -48,7 +48,9 @@ void Odeint<Stepper>::integrate() {
 			h=x2-x;
 		s.step(h, derivs);
 
+        #ifdef MONIT_SCATTERING
 		check_scattering();				//--- scattering stuff
+        #endif //MONIT_SCATTERING
 
 		if (s.hdid == h) ++nok; else ++nbad;
 
@@ -76,6 +78,8 @@ void Odeint<Stepper>::integrate() {
 	throw("Too many steps in routine Odeint");
 }
 
+
+#ifdef MONIT_SCATTERING
 template<class Stepper>
 void Odeint<Stepper>::check_scattering(){
 	par.calc_Bfield(y);
@@ -99,6 +103,8 @@ void Odeint<Stepper>::check_scattering(){
 		dtau = 0.0;
 	}
 }
+#endif //MONIT_SCATTERING
+
 
 template<class Stepper>
 void Odeint<Stepper>::save_history(){

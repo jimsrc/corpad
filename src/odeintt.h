@@ -31,7 +31,9 @@ struct Odeint {
 	PARAMS par;
 	//------------------- scattering stuff
 	void save_history(void);
+    #ifdef MONIT_SCATTERING
 	void check_scattering(void);
+    #endif //MONIT_SCATTERING 
 	double mu_old, mu_new, Bmod, vmod, dtau;
 	// ------------------ otros
 	int wrank;

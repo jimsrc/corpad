@@ -135,13 +135,15 @@ void Output<Stepper>::build(const string str_tscalee, Int nsavee, Doub tmaxHistT
 	sprintf(fname_misc, "%s_misc.dat", fname_out);
 	sprintf(fname_owned, "%s.owned", fname_out);
 
+	str_tscale = str_tscalee;	// tipo de escala temporal para la salida
+
+    #ifdef MONIT_SCATTERING
 	//-------- cosas de scatterings:
 	nfilTau = 500;
 	nreb	= 0;  // nro inic de rebotes
 	ncolTau	= 4;  // 4 columnas: 1 para el tau de scattering, 2 para las posic parall/perp, y 1 para el angulo entre el plano x-y y z.
 	Tau 	= MatDoub(nfilTau, ncolTau, 0.0); // (*) para grabbar tiempos de scattering, y la posic x
 	// (*): inicializo en ceros
-	str_tscale = str_tscalee;	// tipo de escala temporal para la salida
 
 	//-------- histograma del 'Tau'
 	nHistTau 	= nHist;				// nro de bines
@@ -157,6 +159,7 @@ void Output<Stepper>::build(const string str_tscalee, Int nsavee, Doub tmaxHistT
     }
     nThColl     = nThColl_;
     HistThColl  = MatDoub(nThColl, 2, 0.0); // histog 1-D
+    #endif //MONIT_SCATTERING
 
     #ifdef MONIT_STEP
     HistStep    = MatDoub(NStep, 4);
@@ -479,6 +482,8 @@ void Output<Stepper>::save2file(){
 	//--- nro de rebotes, y colission-time promedio
 	ofile_misc.open(fname_misc);
     ofile_misc << "# ***** MISC INFO *****" << endl;
+
+    #ifdef MONIT_SCATTERING
     ofile_misc << "# Histogram on measured collision-times 'Tau'" << endl;
 	ofile_misc << "# nro_rebotes: " << nreb << endl;
 	//--- histograma de 'Taus'
@@ -501,6 +506,9 @@ void Output<Stepper>::save2file(){
         ofile_misc << HistThColl[i][0] << " "; // [deg] bin centrado
         ofile_misc << setw(10) << HistThColl[i][1] << endl; // [1] nro de cuentas
     }
+    #else
+    ofile_misc << "# +++++ NO SCATTERING INFORMATION +++++" << endl;
+    #endif //MONIT_SCATTERING
 
 	// cerramos archivo de misc
 	ofile_misc.close();

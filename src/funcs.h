@@ -104,7 +104,7 @@ class Output {
 		string str_tscale; //tipo de escala temporal para la salida
 		Doub decade, dt;
 		void set_savetimes(Doub);
-
+    
     PRIVATE_OR_PUBLIC: // depends on CYTHON macro
 		//----- histo del 'Tau'
 		MatDoub HistTau;
