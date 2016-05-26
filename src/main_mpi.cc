@@ -20,10 +20,9 @@
 // standard de linux, debo ponerlo arriba
 //******************************************************************
 
-
-// declarations of variables defined in other objects .o
-//extern ESCALAS scl;
-
+//typedef Odeint<StepperBS<rhs> > Odeint_BS;
+template<class Stepper> 
+Odeint<Stepper>* Odeint<Stepper>::_thisptr = NULL;
 
 int main(int argc, char* argv[]){
 	Int ord, NPOINTS, n_ori, Nplas_rank, w_rank, w_size, imin, imax, n_Brealiz, nHistTau, nThColl;
