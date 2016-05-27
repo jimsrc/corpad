@@ -61,9 +61,6 @@ class Output {
 		void save(const Doub, VecDoub_I &);
 		void out(const Int,const Doub,VecDoub_I &,Stepper &,const Doub);
 		void save2file(void);
-		ofstream ofile_trj;
-        ofstream ofile_misc;
-        ofstream ofile_own; 
         void claim_own(void);
 		bool file_exist(void);
 		void resizeTau(void);
@@ -104,6 +101,9 @@ class Output {
 		string str_tscale; //tipo de escala temporal para la salida
 		Doub decade, dt;
 		void set_savetimes(Doub);
+		ofstream ofile_trj;
+        ofstream ofile_misc;
+        ofstream ofile_own; 
     
     PRIVATE_OR_PUBLIC: // depends on CYTHON macro
 		//----- histo del 'Tau'

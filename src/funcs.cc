@@ -231,7 +231,7 @@ void Output<Stepper>::set_savetimes(Doub xhi){
 		cc = 0;
 	}
 	else
-		throw(" USAR 'linear' O 'mixed' SOLAMENTE! (Jimmy)");
+		throw_nr(" USAR 'linear' O 'mixed' SOLAMENTE! (Jimmy)");
 }
 
 template <class Stepper>
@@ -243,7 +243,7 @@ void Output<Stepper>::init(const Int neqn, const Doub xlo, const Doub xhi) {
 		x1=xlo;
 		x2=xhi;
 		xout=x1;
-		if(xout>0.0) throw(" NO ESTA IMPLEMENTADO PARA EMPEZAR EN TIEMPO t>0 (Jimmy).");
+		if(xout>0.0) throw_nr(" NO ESTA IMPLEMENTADO PARA EMPEZAR EN TIEMPO t>0 (Jimmy).");
 		//---- seteo los tiempos a guardar
 		set_savetimes(xhi);
 	}
@@ -358,7 +358,7 @@ template <class Stepper>
 void Output<Stepper>::out(const Int nstp,const Doub x,VecDoub_I &y,Stepper &s,const Doub h) {
 	//if(count>=200) {printf(" COUNT=%d AQUI!\n", count); getchar();}
 	if (!dense)
-		throw("dense output not set in Output!");
+		throw_nr("dense output not set in Output!");
 	if (nstp == -1) {
 		save(x, y); 
 		xout = XSaveGen[cc];

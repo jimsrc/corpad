@@ -20,9 +20,24 @@
 // standard de linux, debo ponerlo arriba
 //******************************************************************
 
-//typedef Odeint<StepperBS<rhs> > Odeint_BS;
+#ifdef KILL_HANDLER
+// I use the static "self-pointer" to access the
+// members of the instance 'bsode' inside the main()  =D =D
 template<class Stepper> 
 Odeint<Stepper>* Odeint<Stepper>::_thisptr = NULL;
+
+
+// to be called when ctrl-c (SIGINT) signal is sent to process
+void signal_handler(int signum){
+    //printf(" Caught signal %d\n",signum);
+    // Cleanup and close up stuff here
+    Odeint<StepperBS<rhs> >::_thisptr->abort_mission(signum);
+
+    // Terminate program
+    exit(signum);
+}
+#endif //KILL_HANDLER
+
 
 int main(int argc, char* argv[]){
 	Int ord, NPOINTS, n_ori, Nplas_rank, w_rank, w_size, imin, imax, n_Brealiz, nHistTau, nThColl;
@@ -91,6 +106,11 @@ int main(int argc, char* argv[]){
     int i, j; i = j = 0;
     
     while(j<n_Brealiz){
+        #ifdef KILL_HANDLER
+        signal(SIGTERM, signal_handler);
+        signal(SIGINT, signal_handler);
+        #endif //KILL_HANDLER
+
 		// nueva realizacion de Bfield
 		par.fix_B_realization(j);
 		printf("\n [rank:%d] **************** NEXT Bfield realization j:%d/%d ****************", w_rank, j, n_Brealiz);
@@ -113,6 +133,11 @@ int main(int argc, char* argv[]){
 				init_orientation(i, array_ori, ystart);		// values for initial y-values
 
 				Odeint<StepperBS<rhs> > bsode(ystart,x1,x2,atol,rtol,h1,hmin,outbs,d,par,w_rank);	// inicializo el integrador para c/pla
+
+                #ifdef KILL_HANDLER
+                bsode._thisptr = &bsode; // 'bsode' address 
+                #endif //KILL_HANDLER
+
 				outbs.tic();				// medimos el tiempo de simulac de c/pla
 				bsode.integrate();
 				outbs.toc();

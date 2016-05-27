@@ -266,7 +266,7 @@ void StepperBS<D>::step(const Doub htry, D &derivs) {
 		firstk=false;
 		reject=false;
 		if (abs(h) <= abs(x)*EPS)
-			throw("step size underflow in StepperBS");
+			throw_nr("step size underflow in StepperBS");
 		Int ipt=-1;
 		for (k=0; k<=k_targ+1;k++) {
 			dy(ysav,h,k,yseq,ipt,derivs);

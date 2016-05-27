@@ -67,7 +67,12 @@ inline void SWAP(T &a, T &b)
 // exception handling
 
 #ifndef _USENRERRORCLASS_
-#define throw(message) \
+/* let's not overwrite the throw() of C language to
+ * avoid compilation errors when using libraries 
+ * like signal.h =)
+ * So we levae throw() alone and define throw_nr()
+ * for our personalized error handler */
+#define throw_nr(message) \
 {printf("ERROR: %s\n     in file %s at line %d\n", message,__FILE__,__LINE__); throw(1);}
 #else
 struct NRerror {
@@ -76,7 +81,7 @@ struct NRerror {
 	int line;
 	NRerror(char *m, char *f, int l) : message(m), file(f), line(l) {}
 };
-#define throw(message) throw(NRerror(message,__FILE__,__LINE__));
+#define throw_nr(message) throw(NRerror(message,__FILE__,__LINE__));
 void NRcatch(NRerror err) {
 	printf("ERROR: %s\n     in file %s at line %d\n",
 		err.message, err.file, err.line);
@@ -172,7 +177,7 @@ inline T & NRvector<T>::operator[](const int i)	//subscripting
 {
 #ifdef _CHECKBOUNDS_
 if (i<0 || i>=nn) {
-	throw("NRvector subscript out of bounds");
+	throw_nr("NRvector subscript out of bounds");
 }
 #endif
 	return v[i];
@@ -183,7 +188,7 @@ inline const T & NRvector<T>::operator[](const int i) const	//subscripting
 {
 #ifdef _CHECKBOUNDS_
 if (i<0 || i>=nn) {
-	throw("NRvector subscript out of bounds");
+	throw_nr("NRvector subscript out of bounds");
 }
 #endif
 	return v[i];
@@ -317,7 +322,7 @@ inline T* NRmatrix<T>::operator[](const int i)	//subscripting: pointer to row i
 {
 #ifdef _CHECKBOUNDS_
 if (i<0 || i>=nn) {
-	throw("NRmatrix subscript out of bounds");
+	throw_nr("NRmatrix subscript out of bounds");
 }
 #endif
 	return v[i];
@@ -328,7 +333,7 @@ inline const T* NRmatrix<T>::operator[](const int i) const
 {
 #ifdef _CHECKBOUNDS_
 if (i<0 || i>=nn) {
-	throw("NRmatrix subscript out of bounds");
+	throw_nr("NRmatrix subscript out of bounds");
 }
 #endif
 	return v[i];

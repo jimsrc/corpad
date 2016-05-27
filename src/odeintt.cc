@@ -27,6 +27,21 @@ void Odeint<Stepper>::integrate(Doub xx2) {
 }
 */
 
+
+#ifdef KILL_HANDLER
+template<class Stepper>
+void Odeint<Stepper>::abort_mission(int signum){
+    printf(" [r:%d] ---> ABORTANDO SIMULACION (signal: %d): %s\n", wrank, signum, out.fname_owned);
+    char syscommand[4000];
+    sprintf(syscommand, "rm %s", out.fname_owned);
+    if (system(syscommand)==0)
+        printf(" [r:%d] removed: %s\n", wrank, out.fname_owned);
+    else
+        printf(" [r:%d] Couldn't remove!: %s\n", wrank, out.fname_owned);
+}
+#endif //KILL_HANDLER
+
+
 template<class Stepper>
 void Odeint<Stepper>::integrate() {
     #ifdef MONIT_STEP
@@ -72,10 +87,10 @@ void Odeint<Stepper>::integrate() {
 			out.nsteps = nstp;			// me gusta saber el nro total de pasos
 			return;
 		}
-		if (abs(s.hnext) <= hmin) throw("Step size too small in Odeint");
+		if (abs(s.hnext) <= hmin) throw_nr("Step size too small in Odeint");
 		h=s.hnext;
 	}
-	throw("Too many steps in routine Odeint");
+	throw_nr("Too many steps in routine Odeint");
 }
 
 
