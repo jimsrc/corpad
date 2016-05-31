@@ -10,6 +10,6 @@ INP_GRAL="../inputs/INPUT_GRAL.xx1.inp"
 #INP_GRAL="$PLAS/inputs/patron/plas.in"
 INPUTS="$INP_TURB $INP_ORI $INP_GRAL"
 OUTPUT_DIR="../output/xx"
-NPROCS="-np 4"
+NPROCS="-np 3"
 ${MPIRUN} $NPROCS $EXE $INPUTS $OUTPUT_DIR #1> mon1.log 2> mon2.log 
 #EOF

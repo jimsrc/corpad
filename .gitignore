@@ -32,4 +32,7 @@ CRs.diff.x_19mar2016
 #--- este es un symlink
 !CRs.diff.x
 
+# no quiero los profiling logs
+*.gcda
+
 #EOF
