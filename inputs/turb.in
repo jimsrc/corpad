@@ -1,0 +1,17 @@
+128	    Nm_slab
+128	    Nm_2d
+5e-5	lmin_s
+1.0	    lmax_s
+5e-5	lmin_2d
+1.0	    lmax_2d
+0.0044548	Lc_slab
+0.0044548	Lc_2d
+0.00125001874	Bunif
+0.3	    sigma_Bo_ratio
+0.2	    percent_slab
+0.8	    percent_2d
+17	    SEM_SLAB[0]
+101	    SEM_SLAB[1]
+33	    SEM_SLAB[2]
+14	    SEM_2D[0]
+79	    SEM_2D[1]

@@ -1,10 +1,10 @@
-128	n_modos
+256	n_modos
 1.0	lambda_max
 5e-5	lambda_min
 0.01	Lc_slab
 0.01	Lc_2d
 5e-5	Bunif
-1.0	sigma_Bo_ratio
+100.0	sigma_Bo_ratio
 0.2	percent_slab
 0.8	percent_2d
 17	SEM_SLAB[0]

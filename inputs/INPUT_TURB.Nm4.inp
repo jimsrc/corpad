@@ -1,6 +1,6 @@
-128	n_modos
+4	n_modos
 1.0	lambda_max
-5e-5	lambda_min
+5e-4	lambda_min
 0.01	Lc_slab
 0.01	Lc_2d
 5e-5	Bunif

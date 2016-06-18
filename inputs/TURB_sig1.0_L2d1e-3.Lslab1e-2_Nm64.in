@@ -1,8 +1,8 @@
-128	n_modos
+64	n_modos
 1.0	lambda_max
 5e-5	lambda_min
 0.01	Lc_slab
-0.01	Lc_2d
+0.001	Lc_2d
 5e-5	Bunif
 1.0	sigma_Bo_ratio
 0.2	percent_slab
