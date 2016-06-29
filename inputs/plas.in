@@ -1,8 +1,8 @@
 1.69604E+09 rigidity
 5e-2	frac_gyroperiod
-2e3	nmax_gyroperiods
+3e4	nmax_gyroperiods
 20	npoints
-1.66e-05	absolute_tolerance_atol
+1.35115e-6	absolute_tolerance_atol
 0.0	relative_tolerance_rtol
 50	nro_Bfield_realizations
 mixed	timescale_outpout
