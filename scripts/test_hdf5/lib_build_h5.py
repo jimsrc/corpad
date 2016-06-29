@@ -15,11 +15,16 @@ def read_params(fname):
     par = {} #output
     for i in range(10): # esta dentro de las primeras 10 lineas
         l = f.readline().split()
+        #print " ---> ", l
         number = u'%s' % l[-1] # presumably a number
         if not number.replace('.','').replace('-','').isnumeric():
-            continue # we proceed ONLY IF this is numeric string
-
+            if l[0]=='#####':
+                break
+            else:
+                continue # we proceed ONLY IF this is numeric string
+        #print ' FIRST: ', l[0]
         if l[0]=='#####':
+            #print "IM I HERE????"
             break # end of header
 
         name = l[1][:-1] # l[0] es '#', y -1 para comernos el ":"
@@ -41,7 +46,7 @@ ntot_pla = 122
 """
 
 def build_h5_ii(ntot_B, ntot_pla, dir_src, dir_dst, fname_out_base):
-    nskip_misc = 5 # lineas para obviar en los misc-files
+    nskip_misc = 10 #5 # lineas para obviar en los misc-files
     assert isdir(dir_dst) or isdir(dir_src), \
             " ---> paths don't exist! :\n --> %s\n --> %s" % (dir_dst, dir_src)
     flist = glob(dir_src+'/B*traj*.dat')

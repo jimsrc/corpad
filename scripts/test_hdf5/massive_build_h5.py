@@ -8,10 +8,11 @@ from os.path import isfile, isdir
 #dir_src  = '%s/output/Ek.1.0e+10eV_ii' % PLAS
 #dir_src  = '../../output/output_Ek.1e6eV_rtol.1e-6'
 #dir_src  = '../../output/output_Ek.1e8eV_atol.1e-6_nB.50'
-dir_src  = '../../output/output_Ek.1e9eV_atol.1e-6_nB.50'
+#dir_src  = '../../output/output_Ek.1e9eV_atol.1e-6_nB.50'
+dir_src  = '../../output/r.0.20_NmS.128_Nm2d.256'
 dir_dst  = dir_src #'.'
 ntot_B   = 50
-ntot_pla = 242 #122
+ntot_pla = 122 #242 #122
 fname_out_base = 'out.h5' #'Ek.1e6eV_rtol.1e-6.h5'
 #
 """
