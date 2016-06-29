@@ -88,7 +88,7 @@ int main(int argc, char* argv[]){
 	if(RTOL==-1){
 		rtol = atol;				// as suggested in p.914
 	}
-	else if(RTOL>=.0){
+	else if(RTOL>0.0){  // scrictly grater than zero!
 		rtol = RTOL;
 	}
 	cout << " ABSOLUTE TOLERANCE = " << atol << endl;
