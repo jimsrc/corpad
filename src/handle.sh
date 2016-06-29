@@ -23,9 +23,10 @@ fname_list=$(get_sources)
 echo $fname_list
 #echo $ll
 
-
+dir_comp=$PLA1/src # directorio con el q vamos a comparar
+echo -e "\n ---> comparing with:\n " ${dir_comp}"\n"
 for fname in ${fname_list[@]}; do
-    fname2=$PLA1/src/$fname
+    fname2=${dir_comp}/$fname
     diff_result=$(diff $fname $fname2) # compare text
     #if cmp -s $fname $fname2; then
     if [ "$diff_result" == "" ]; then

@@ -8,15 +8,22 @@ from subprocess import check_output
 from glob import glob
 
 def read_params(fname):
+    """ done for first header.
+    TODO: we need to grab the 2nd header too!!
+    """
     f = open(fname, 'r')
     par = {} #output
     for i in range(10): # esta dentro de las primeras 10 lineas
         l = f.readline().split()
-        if l[0]=='#####':
-            break
+        number = u'%s' % l[-1] # presumably a number
+        if not number.replace('.','').replace('-','').isnumeric():
+            continue # we proceed ONLY IF this is numeric string
 
-        name = l[0][:-1] # -1 para comernos el ":"
-        value = np.float(l[1])
+        if l[0]=='#####':
+            break # end of header
+
+        name = l[1][:-1] # l[0] es '#', y -1 para comernos el ":"
+        value = np.float(l[2]) # l[2] es el valor
         par[name] = value
 
     return par
