@@ -2,12 +2,16 @@
 # -*- coding: utf-8 -*-
 from funcs import *
 from h5py import File as h5
+from numpy import (
+    sqrt, power, nanmean, nanmedian, nanstd,
+    mean, median, std
+)
 """
 Puedo comparar estos resultdos con los de Qin. Ver figura 3.4 de Shalchi 2009 (libro).
 Ahi muestra k(t). Son perfiles muy parecidos.
 """
 class kdiff:
-    def __init__(self, Ek, dir_info, dir_post, dir_plots):
+    def __init__(self, Ek, dir_info, dir_post, dir_plots, fname_inp=None):
         self.dir_info   = dir_info
         self.dir_plots  = dir_plots
         self.dir_post   = dir_post
@@ -22,19 +26,20 @@ class kdiff:
         ncol            = 6
 
         self.par  = par  = {}
-        par_names = ('n_modos', 'Bunif', 'sigma_Bo_ratio', 'percent_2d', 'percent_slab', \
+        par_names = ('Nm_slab', 'Nm_2d', 'Bunif', 'sigma_Bo_ratio', 'percent_2d', 'percent_slab', \
                     'Lc_2d', 'Lc_slab', 'lambda_min', 'lambda_max')
         for pname in par_names:
             par[pname] = value(fname_turb, pname)
-            if pname=='n_modos':
+            if pname=='Nm_slab' or pname=='Nm_2d':
                 par[pname] = int(par[pname]) # special treatment :\
         par['nplas'] = self.NPLAS # no esta en el .in
 
-        fname_inp    = '%s/k_vs_t_Ek.%1.1eeV' % (dir_post, Ek)
-        fname_inp   += '_Nm%03d' % par['n_modos']
-        fname_inp   += '_slab%1.2f' % par['percent_slab']
-        fname_inp   += '_sig.%1.1e' % par['sigma_Bo_ratio']
-        fname_inp   += '_Lc2d.%1.1e_LcSlab.%1.1e.h5' % (par['Lc_2d'], par['Lc_slab'])
+        if fname_inp is None:
+            fname_inp    = '%s/k_vs_t_Ek.%1.1eeV' % (dir_post, Ek)
+            fname_inp   += '_Nm%03d' % par['n_modos']
+            fname_inp   += '_slab%1.2f' % par['percent_slab']
+            fname_inp   += '_sig.%1.1e' % par['sigma_Bo_ratio']
+            fname_inp   += '_Lc2d.%1.1e_LcSlab.%1.1e.h5' % (par['Lc_2d'], par['Lc_slab'])
         self.fname_inp = fname_inp
 
         self.inp = {}
@@ -63,7 +68,8 @@ class kdiff:
             't_adim': t_adim,
             'kxx'   : kxx,
             'kyy'   : kyy,
-            'kzz'   : kzz
+            'kzz'   : kzz,
+            'nB'    : finp['nB'].value
         })
 
         self.wc    = calc_omega(par['Bunif'], Ek)
@@ -111,6 +117,8 @@ class kdiff:
         k    = self.k
         wc   = self.wc
         par  = self.par
+        nB   = self.inp['nB']
+        #npla = self.finp['npla'] # no lo uso
 
         # build fitted curves
         fitted_kxx = fun_hyperbola(k['kxx_fit'], k['kxx_fit_p1'], k['kxx_fit_p2'], t[cc]/wc)
@@ -130,8 +138,8 @@ class kdiff:
         ax1.plot(t[cc], fitted_kxx, c='red')
         ax1.plot(t[cc], fitted_kyy, c='blue')
         # errores kxx
-        inf = kxx - kxx_std
-        sup = kxx + kxx_std
+        inf = kxx - kxx_std/np.sqrt(nB)
+        sup = kxx + kxx_std/np.sqrt(nB)
         ax1.fill_between(t[cc], inf[cc], sup[cc], facecolor='red', alpha=0.5)
 
         # legend
@@ -143,7 +151,7 @@ class kdiff:
         '\nKperp: %1.2e' % self.kperp
 
         SIMULAT_PARAMS  = 'Ek[eV]:%1.1e    perc_slab:%1.2f' % (self.Ek, par['percent_slab']) +\
-        '\nNm:%d    $(\sigma/Bo)^2$:%1.1e' % (par['n_modos'], par['sigma_Bo_ratio']) +\
+        '\nNmS, Nm2d: %d,%d    $(\sigma/Bo)^2$:%1.1e' % (par['Nm_slab'], par['Nm_2d'], par['sigma_Bo_ratio']) +\
         '\n$Lc^{2D}$[AU]:%1.1e    $Lc^{slab}$[AU]:%1.1e' % (par['Lc_2d'], par['Lc_slab'])
 
         TITLE   = '%s\n%s' % (SIMULAT_PARAMS, FIT_RESULTS)
@@ -155,7 +163,8 @@ class kdiff:
         #--------------------------------------------
         fname_fig_perp = '%s/kperp_asymptotic.fit' % self.dir_plots +\
         '_Ek.%1.2eeV' % self.Ek +\
-        '_Nm%03d' % par['n_modos'] +\
+        '_NmS%03d' % par['Nm_slab'] +\
+        '_Nm2d%03d' % par['Nm_2d'] +\
         '_slab%1.2f' % par['percent_slab'] +\
         '_sig.%1.1e' % par['sigma_Bo_ratio'] +\
         '_Lc2d.%1.1e' % par['Lc_2d'] +\
@@ -217,7 +226,7 @@ class kdiff:
         '   Kparall: %1.1e' % k['kzz_fit']
 
         SIMULAT_PARAMS  = 'Ek[eV]:%1.1e    perc_slab:%1.2f' % (self.Ek, par['percent_slab']) +\
-        '\nNm:%d    $(\sigma/Bo)^2$:%1.1e' % (par['n_modos'], par['sigma_Bo_ratio']) +\
+        '\nNmS,Nm2d: %d,%d    $(\sigma/Bo)^2$:%1.1e' % (par['Nm_slab'], par['Nm_2d'], par['sigma_Bo_ratio']) +\
         '\n$Lc^{2D}$[AU]:%1.1e    $Lc^{slab}$[AU]:%1.1e' % (par['Lc_2d'], par['Lc_slab'])
 
         TITLE   = '%s\n%s' % (SIMULAT_PARAMS, FIT_RESULTS)
@@ -229,7 +238,8 @@ class kdiff:
         #--------------------------------------------
         fname_fig_zz = '%s/kzz_asymptotic.fit' % self.dir_plots +\
         '_Ek.%1.2eeV' % self.Ek +\
-        '_Nm%03d' % par['n_modos'] +\
+        '_NmS%03d' % par['Nm_slab'] +\
+        '_Nm2d%03d' % par['Nm_2d'] +\
         '_slab%1.2f' % par['percent_slab'] +\
         '_sig.%1.1e' % par['sigma_Bo_ratio'] +\
         '_Lc2d.%1.1e' % par['Lc_2d'] +\

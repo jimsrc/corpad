@@ -335,11 +335,11 @@ def sqr_deviations_ii(fname_inp, moreinfo=False):
         y2std[iB,:] = (y*y).std(axis=1) # std sobre particulas
         z2std[iB,:] = (z*z).std(axis=1) # std sobre particulas
         
-    # promedios y errores standard sobre las realizaciones
+    # promedios y errores standard sobre las B-realizaciones
     x2_avr  = x2.mean(axis=0)
     y2_avr  = y2.mean(axis=0)
     z2_avr  = z2.mean(axis=0)
-    # error: std sobre los valores medios de c/realizacion
+    # error: std sobre los valores medios de c/ B-realizacion
     x2_std  = x2.std(axis=0)
     y2_std  = y2.std(axis=0)
     z2_std  = z2.std(axis=0)
@@ -360,6 +360,8 @@ def sqr_deviations_ii(fname_inp, moreinfo=False):
     #'x2_std2'   : x2_std2,  # ..
     #'y2_std2'   : y2_std2,  # ..
     #'z2_std2'   : z2_std2,  # ..
+    'nB'        : nB,
+    'npla'      : npla,
     }
     if moreinfo:
         o.update({

@@ -147,15 +147,18 @@ class k_vs_t:
         'nplas': s.NPLAS,
         'nB': int(value(s.fname_plas, 'nro_Bfield_realizations')),
         'rigidity': value(s.fname_plas, 'rigidity'),
-        'Nm': int(value(s.fname_turb, 'n_modos')),
+        'Nm_s': int(value(s.fname_turb, 'Nm_slab')),
+        'Nm_2d': int(value(s.fname_turb, 'Nm_2d')),
         'Bo': value(s.fname_turb, 'Bunif'),
         'sig': value(s.fname_turb, 'sigma_Bo_ratio'),
         'perc_2d': value(s.fname_turb, 'percent_2d'),
         'perc_slab': value(s.fname_turb, 'percent_slab'),
         'Lc_2d': value(s.fname_turb, 'Lc_2d'),
         'Lc_slab': value(s.fname_turb, 'Lc_slab'),
-        'lambda_min': value(s.fname_turb, 'lambda_min'),
-        'lambda_max': value(s.fname_turb, 'lambda_max')
+        'lmin_s': value(s.fname_turb, 'lmin_s'),
+        'lmin_2d': value(s.fname_turb, 'lmin_2d'),
+        'lmax_s': value(s.fname_turb, 'lmax_s'),
+        'lmax_2d': value(s.fname_turb, 'lmax_2d'),
         }
         """
         print " ------> Ek [eV]: %g" % Ek
@@ -337,7 +340,8 @@ class k_vs_t:
 
     def calc_k_profile(s, Bo, dir_out, moreinfo=False):
         fname_out = '%s/k_vs_t_Ek.%1.1eeV' % (dir_out, s.Ek) +\
-        '_Nm%03d' % s.par['Nm'] +\
+        '_NmS%03d' % s.par['Nm_s'] +\
+        '_Nm2d%03d' % s.par['Nm_2d'] +\
         '_slab%1.2f' % s.par['perc_slab'] +\
         '_sig.%1.1e' % s.par['sig'] +\
         '_Lc2d.%1.1e' % s.par['Lc_2d'] +\
@@ -394,6 +398,8 @@ class k_vs_t:
         #'kxx_std2': kxx_std2,                 # [cm2/s]
         #'kyy_std2': kyy_std2,                 # [cm2/s]
         #'kzz_std2': kzz_std2,                 # [cm2/s]
+        'nB'   : SQR['nB'],
+        'npla' : SQR['npla'],
         }
         if moreinfo:
             s.profile.update({

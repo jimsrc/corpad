@@ -24,17 +24,20 @@ perc_slab = 0.2
 
 Ek      = 1e9 #1e9 #1e6 #6e5       # [eV] kinetic energy
 atol    = 1e-6 #1e-5
-dir_post = '%s/post/atol/Ek.%1.1eeV_atol.%1.0e_npla.122' % (PLAS, Ek, atol)
+#dir_post = '%s/post/atol/Ek.%1.1eeV_atol.%1.0e_npla.122' % (PLAS, Ek, atol)
+dir_post = '%s/post/vs_r' % (PLAS)
+fname_inp = dir_post+'/k_vs_t_Ek.1.0e+09eV_NmS128_Nm2d256_slab0.20_sig.3.0e-01_Lc2d.5.3e-03_LcSlab.5.3e-03.h5'
 #dir_info = '%s/output/Ek.%1.1eeV_rtol.%1.0e/info' % (PLAS, Ek, rtol)
-dir_info = '%s/output/output_Ek.1e9eV_atol.1e-6_nB.50_npla.122/info' % PLAS
+#dir_info = '%s/output/output_Ek.1e9eV_atol.1e-6_nB.50_npla.122/info' % PLAS
+dir_info = '%s/out/r.0.30_NmS.128_Nm2d.256/info' % PLAS
 assert isdir(dir_post) and isdir(dir_info), \
     " revisar nombres de directorios!!!"
 #dir_info = '%s/output/Ek.%1.1eeV' % (PLAS, Ek) +\
 #'/Nm%03d/slab%1.2f/sig.%1.1e' % (Nm, perc_slab, sig) +\
 #'/Lc2D.%1.1e_LcSlab.%1.1e/info' % (Lc_2d, Lc_slab)
 
-kd = kdiff(Ek, dir_info, dir_post, dir_plot)
-t_decr      = 6000 #300 #800 #TDECRs[i]  #200#200 #500 # 1000
+kd = kdiff(Ek, dir_info, dir_post, dir_plot, fname_inp=fname_inp)
+t_decr      = 300 #6000 #300 #800 #TDECRs[i]  #200#200 #500 # 1000
 
 kd.fit_kperp(t_decr)
 kd.plot_kperp()

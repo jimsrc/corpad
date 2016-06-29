@@ -15,9 +15,11 @@ atol = 1e-6
 #atol = 1e-6
 PLAS = os.environ['PLAS']
 #dir_data = '%s/output/output_Ek.1e9eV_atol.1e-6_nB.50' % PLAS
-dir_data = '%s/output/output_Ek.1e9eV_atol.1e-6_nB.50_npla.122' % PLAS
+#dir_data = '%s/output/output_Ek.1e9eV_atol.1e-6_nB.50_npla.122' % PLAS
+dir_data = '%s/out/r.0.30_NmS.128_Nm2d.256' % PLAS
 #dir_data = '%s/output/Ek.%1.1eeV_rtol.%1.0e' % (PLAS, Ek, rtol)
-dir_out  = '%s/post/atol/Ek.%1.1eeV_atol.%1.0e_npla.122' % (PLAS, Ek, atol)
+#dir_out  = '%s/post/atol/Ek.%1.1eeV_atol.%1.0e_npla.122' % (PLAS, Ek, atol)
+dir_out = '%s/post/vs_r' % PLAS
 if not(isdir(dir_out)):
     os.mkdir(dir_out)
 """
