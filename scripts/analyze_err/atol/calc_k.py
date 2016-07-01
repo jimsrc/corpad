@@ -107,6 +107,9 @@ class kdiff:
         assert hasattr(self, 't_decr_kperp'), \
             "\n ----> antes de plotear, hay q fitear kperp!!\n"
 
+        # colors for kxx & kyy
+        ckxx, ckyy = 'red', 'blue'
+
         t    = self.inp['t_dim']
         cc   = t>self.t_decr_kperp
 
@@ -132,19 +135,24 @@ class kdiff:
         ax1.scatter(t[~cc], kyy[~cc], edgecolor='blue', **opt)
         # plot *only* fitted data
         opt = {'edgecolor': 'none', 'alpha': 0.4, 's': 9}
-        ax1.scatter(t[cc], kxx[cc], c='red', label='kxx', **opt)
-        ax1.scatter(t[cc], kyy[cc], c='blue', label='kyy', **opt)
+        ax1.scatter(t[cc], kxx[cc], c=ckxx, label='kxx', **opt)
+        ax1.scatter(t[cc], kyy[cc], c=ckyy, label='kyy', **opt)
         # plot fitted curves
-        ax1.plot(t[cc], fitted_kxx, c='red')
-        ax1.plot(t[cc], fitted_kyy, c='blue')
+        ax1.plot(t[cc], fitted_kxx, c=ckxx)
+        ax1.plot(t[cc], fitted_kyy, c=ckyy)
+
         # errores kxx
         inf = kxx - kxx_std/np.sqrt(nB)
         sup = kxx + kxx_std/np.sqrt(nB)
-        ax1.fill_between(t[cc], inf[cc], sup[cc], facecolor='red', alpha=0.5)
+        ax1.fill_between(t[cc], inf[cc], sup[cc], facecolor=ckxx, alpha=0.5)
+
+        # errores kyy
+        inf = kyy - kyy_std/np.sqrt(nB)
+        sup = kyy + kyy_std/np.sqrt(nB)
+        ax1.fill_between(t[cc], inf[cc], sup[cc], facecolor=ckyy, alpha=0.5)
 
         # legend
         ax1.legend()
-
 
         FIT_RESULTS = 'fit: y=b+m/(x-xo)' +\
         '\nKxx: %1.1e   Kyy:%1.1e'%(k['kxx_fit'],k['kyy_fit']) +\
