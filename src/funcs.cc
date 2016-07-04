@@ -17,14 +17,14 @@ using namespace std;
 // recibe una velocidad adimensionalizada
 // TODO: convertir esto en inline o macro!
 double calc_gamma(double v){
-	double beta, gamma;
-	beta = v*scl.vel / clight;
+    double beta, gamma;
+    beta = v*scl.vel / clight;
     #ifdef BETA_CHECK
     if (beta>=1.0)
         printf(" beta>=1.0!!, beta: %g, v: %g\n", beta, v);
     #endif
-	gamma = pow(1. - beta*beta, -.5);
-	return gamma;
+    gamma = pow(1. - beta*beta, -.5);
+    return gamma;
 }
 
 
@@ -33,40 +33,40 @@ void read_params(string fname, Doub &RIGIDITY, Doub &FRAC_GYROPERIOD,
         Doub &NMAX_GYROPERIODS, Int &NPOINTS, Doub &ATOL, Doub &RTOL, 
         Int &n_Brealiz, string& str_timescale, Doub& tmaxHistTau, 
         Int& nHist, Int& nThColl){
-	string dummy;
-	ifstream filein(fname.c_str());
-	if (!filein.good()) {
-		cout << " problema al abrir " << fname << endl;
-		exit(1);
-	}
-	filein >> RIGIDITY		>> dummy;  // [V] rigidez de las plas
-	filein >> FRAC_GYROPERIOD	>> dummy;  // [1] fraction of gyroper
-	filein >> NMAX_GYROPERIODS	>> dummy;  // [1] nro of gyroperiods
-	filein >> NPOINTS		>> dummy;  // [1] nro output pts
-	filein >> ATOL			>> dummy;  // [units of *y] abs tolerance
-	filein >> RTOL			>> dummy;  // [1] rel tolerance
-	filein >> n_Brealiz		>> dummy;  // [1] nmbr of B-field realizations
-	filein >> str_timescale >> dummy;  // [string] nombre de la escala temporal para la salida
-	filein >> tmaxHistTau	>> dummy;  // [1] max collision time (in gyro-period units) for histogram of collision times 
-	filein >> nHist			>> dummy;  // [1] nmbr of bins for histogram of collision-times
-	filein >> nThColl		>> dummy;  // [1] nmbr of bins for histogram of the angle between the x-y plane and z axis.
+    string dummy;
+    ifstream filein(fname.c_str());
+    if (!filein.good()) {
+        cout << " problema al abrir " << fname << endl;
+        exit(1);
+    }
+    filein >> RIGIDITY      >> dummy;  // [V] rigidez de las plas
+    filein >> FRAC_GYROPERIOD   >> dummy;  // [1] fraction of gyroper
+    filein >> NMAX_GYROPERIODS  >> dummy;  // [1] nro of gyroperiods
+    filein >> NPOINTS       >> dummy;  // [1] nro output pts
+    filein >> ATOL          >> dummy;  // [units of *y] abs tolerance
+    filein >> RTOL          >> dummy;  // [1] rel tolerance
+    filein >> n_Brealiz     >> dummy;  // [1] nmbr of B-field realizations
+    filein >> str_timescale >> dummy;  // [string] nombre de la escala temporal para la salida
+    filein >> tmaxHistTau   >> dummy;  // [1] max collision time (in gyro-period units) for histogram of collision times 
+    filein >> nHist         >> dummy;  // [1] nmbr of bins for histogram of collision-times
+    filein >> nThColl       >> dummy;  // [1] nmbr of bins for histogram of the angle between the x-y plane and z axis.
 }
 
 
 
 void init_orientation(int i, Doub **array_ori, VecDoub &y){
-	double th, ph, mu;	// theta, phi y pitch-cosine
-	th	= array_ori[i][0];
-	ph	= array_ori[i][1];
-	mu	= cos(th);	// pitch
+    double th, ph, mu;  // theta, phi y pitch-cosine
+    th  = array_ori[i][0];
+    ph  = array_ori[i][1];
+    mu  = cos(th);  // pitch
 
-	y[1]	= sqrt(1.-mu*mu)*cos(ph);	// [1] vx
-	y[3]	= sqrt(1.-mu*mu)*sin(ph);	// [1] vy
-	y[5]	= mu;				// [1] vz
-	// en el origen siempre
-	y[0]	= 0.0;				// [1] x
-	y[2]	= 0.0;				// [1] y
-	y[4]	= 0.0;				// [1] z
+    y[1]    = sqrt(1.-mu*mu)*cos(ph);   // [1] vx
+    y[3]    = sqrt(1.-mu*mu)*sin(ph);   // [1] vy
+    y[5]    = mu;               // [1] vz
+    // en el origen siempre
+    y[0]    = 0.0;              // [1] x
+    y[2]    = 0.0;              // [1] y
+    y[4]    = 0.0;              // [1] z
 }
 
 
@@ -96,26 +96,26 @@ Doub **AllocMat(int nFilas, int nColumnas){
 
 
 Doub **read_orientations(string fname, int &n){
-	double dummy;
-	ifstream filein(fname.c_str());
-	if (!filein.good()) {
-		cout << " problema al abrir " << fname << endl;
-		exit(1);
-	}
-	n = 0;
-	for(;;n++){
-		filein >> dummy	>> dummy;
-		if(filein.eof()) break;
-	}
+    double dummy;
+    ifstream filein(fname.c_str());
+    if (!filein.good()) {
+        cout << " problema al abrir " << fname << endl;
+        exit(1);
+    }
+    n = 0;
+    for(;;n++){
+        filein >> dummy >> dummy;
+        if(filein.eof()) break;
+    }
 
-	ifstream file(fname.c_str());
+    ifstream file(fname.c_str());
 
-	double **array;
-	array	= AllocMat(n, 2);
-	for(int i=0; i<n; i++){
-		file >> array[i][0] >> array[i][1];
-	}
-	return array;
+    double **array;
+    array   = AllocMat(n, 2);
+    for(int i=0; i<n; i++){
+        file >> array[i][0] >> array[i][1];
+    }
+    return array;
 }
 
 
@@ -124,38 +124,38 @@ Doub **read_orientations(string fname, int &n){
 //void Output<Stepper>::build(string str_tscalee, Int nsavee, Doub tmaxHistTau, Int nHist, char* fname_out){ 
 template <class Stepper>
 void Output<Stepper>::build(const string str_tscalee, Int nsavee, Doub tmaxHistTau, Int nHist, Int nThColl_, int i, int j, char *dir_out){
-	kmax	= 500;
-	nsave	= nsavee;
-	count	= 0;
-	xsave.resize(kmax);
-	dense 	= nsave > 0 ? true : false;
-	//-------------------- archivos de salida 
+    kmax    = 500;
+    nsave   = nsavee;
+    count   = 0;
+    xsave.resize(kmax);
+    dense   = nsave > 0 ? true : false;
+    //-------------------- archivos de salida 
     sprintf(fname_out, "%s/B%02d_pla%03d", dir_out, j, i);
-	sprintf(fname_trj,  "%s_traj.dat",  fname_out);
-	sprintf(fname_misc, "%s_misc.dat", fname_out);
-	sprintf(fname_owned, "%s.owned", fname_out);
+    sprintf(fname_trj,  "%s_traj.dat",  fname_out);
+    sprintf(fname_misc, "%s_misc.dat", fname_out);
+    sprintf(fname_owned, "%s.owned", fname_out);
 
-	str_tscale = str_tscalee;	// tipo de escala temporal para la salida
+    str_tscale = str_tscalee;   // tipo de escala temporal para la salida
 
     #ifdef MONIT_SCATTERING
-	//-------- cosas de scatterings:
-	nfilTau = 500;// tamanio inicial
-	//nreb	= 0;  // nro inic de rebotes
-	ncolTau	= 5;  // 5 columnas: 1 para el tiempo, 1 para el scattering-tau, 2 para las posic parall/perp, y 1 para el angulo entre el plano x-y y z.
-	//Tau = MatDoub(nfilTau, ncolTau, 0.0); // (*) para grabar tiempos de scattering, y la posic x, etc
+    //-------- cosas de scatterings:
+    nfilTau = 500;// tamanio inicial
+    //nreb  = 0;  // nro inic de rebotes
+    ncolTau = 5;  // 5 columnas: 1 para el tiempo, 1 para el scattering-tau, 2 para las posic parall/perp, y 1 para el angulo entre el plano x-y y z.
+    //Tau = MatDoub(nfilTau, ncolTau, 0.0); // (*) para grabar tiempos de scattering, y la posic x, etc
     Tau = (MatDoub*) malloc(nreg*sizeof(MatDoub));
     for(int i=0; i<nreg; i++){
         nreb[i] = 0; // (*) nro de rebotes en c/regimen
         Tau[i]  = MatDoub(nfilTau, ncolTau, 0.0); // (*) tiempos de scattering, y la posic x, etc... en c/ regimen
     }
-	// (*): inicializo en ceros
+    // (*): inicializo en ceros
 
-	//-------- histograma del 'Tau'
-	nHistTau 	= nHist;				// nro de bines
-	dTau 		= tmaxHistTau / nHistTau;		// ancho del bin
-	dimHistTau	= 2;
-	HistTau		= MatDoub(nHistTau, dimHistTau, 0.0);	// histog 1-D
-	nsteps		= 0;
+    //-------- histograma del 'Tau'
+    nHistTau    = nHist;                // nro de bines
+    dTau        = tmaxHistTau / nHistTau;       // ancho del bin
+    dimHistTau  = 2;
+    HistTau     = MatDoub(nHistTau, dimHistTau, 0.0);   // histog 1-D
+    nsteps      = 0;
 
     //-------- histograma del 'ThetaColl'
     if(fmod(nThColl_, 2.0)!=0.0) {
@@ -191,86 +191,86 @@ Output<Stepper>::Output() : kmax(-1),dense(false),count(0) {}
 // TODO: arreglar esta implementacion si la vas a usar
 template <class Stepper>
 Output<Stepper>::Output(string str_tscalee, const Int nsavee, char* fname){
-	build(str_tscalee, nsavee, fname);
-	//kmax(500),nsave(nsavee),count(0),xsave(kmax) {
-	//dense = nsave > 0 ? true : false;
+    build(str_tscalee, nsavee, fname);
+    //kmax(500),nsave(nsavee),count(0),xsave(kmax) {
+    //dense = nsave > 0 ? true : false;
 }
 */
 
 template <class Stepper>
 void Output<Stepper>::set_savetimes(Doub xhi){
-	if(str_tscale=="linear"){
-		dxout=(x2-x1)/nsave;
-		mu  	 = VecDoub(nsave, 0.0);		// (*)
-		XSaveGen = VecDoub(nsave, 0.0);
-		for(int i=0; i<nsave; i++){
-			XSaveGen[i] = (i+1)*dxout;
-			//printf(" XMix(%d) [wc-1]: %g\n", i, XSaveGen[i]);
-		}
-		cc = 0;					// indice para 'XSaveGen'
-	}
-	else if(str_tscale=="mixed"){
-		inid = 1;
-		maxd = int(M_LOG10E*log(xhi));
-		ndec = maxd - inid + 1;  // number of decades
-		mu  	 = VecDoub(nsave*ndec, 0.0); // (*) 
-		XSaveGen = VecDoub(nsave*ndec, 0.0);
+    if(str_tscale=="linear"){
+        dxout=(x2-x1)/nsave;
+        mu       = VecDoub(nsave, 0.0);     // (*)
+        XSaveGen = VecDoub(nsave, 0.0);
+        for(int i=0; i<nsave; i++){
+            XSaveGen[i] = (i+1)*dxout;
+            //printf(" XMix(%d) [wc-1]: %g\n", i, XSaveGen[i]);
+        }
+        cc = 0;                 // indice para 'XSaveGen'
+    }
+    else if(str_tscale=="mixed"){
+        inid = 1;
+        maxd = int(M_LOG10E*log(xhi));
+        ndec = maxd - inid + 1;  // number of decades
+        mu       = VecDoub(nsave*ndec, 0.0); // (*) 
+        XSaveGen = VecDoub(nsave*ndec, 0.0);
 
-		nd = inid;
-		for(nd=inid; nd<maxd; nd++){
-			dt = (pow(10, (1.0*(nd+1))) - pow(10, (1.0*nd)))/nsave;
-			for(int i=0; i<nsave; i++){
-				cc = i+(nd-inid)*nsave;
-				XSaveGen[cc] = pow(10, 1.0*(nd)) + (i+1)*dt;
-			}
-		}
+        nd = inid;
+        for(nd=inid; nd<maxd; nd++){
+            dt = (pow(10, (1.0*(nd+1))) - pow(10, (1.0*nd)))/nsave;
+            for(int i=0; i<nsave; i++){
+                cc = i+(nd-inid)*nsave;
+                XSaveGen[cc] = pow(10, 1.0*(nd)) + (i+1)*dt;
+            }
+        }
 
-		dt = (xhi - pow(10, 1.0*(maxd) ))/nsave;
-		for(int i=0; i<nsave; i++){
-			cc = i+(maxd-inid)*nsave;
-			XSaveGen[cc] = pow(10, 1.0*(maxd) ) + (i+1)*dt;
-		}
-		// reseteo indice:
-		cc = 0;
-	}
-	else
-		throw_nr(" USAR 'linear' O 'mixed' SOLAMENTE! (Jimmy)");
+        dt = (xhi - pow(10, 1.0*(maxd) ))/nsave;
+        for(int i=0; i<nsave; i++){
+            cc = i+(maxd-inid)*nsave;
+            XSaveGen[cc] = pow(10, 1.0*(maxd) ) + (i+1)*dt;
+        }
+        // reseteo indice:
+        cc = 0;
+    }
+    else
+        throw_nr(" USAR 'linear' O 'mixed' SOLAMENTE! (Jimmy)");
 /*  (*): pitch en los tiempos "xsave"
  */
 }
 
 template <class Stepper>
 void Output<Stepper>::init(const Int neqn, const Doub xlo, const Doub xhi) {
-	nvar=neqn;
-	if (kmax == -1) return;
-	ysave.resize(nvar,kmax);
-	if (dense) {
-		x1=xlo;
-		x2=xhi;
-		xout=x1;
-		if(xout>0.0) throw_nr(" NO ESTA IMPLEMENTADO PARA EMPEZAR EN TIEMPO t>0 (Jimmy).");
-		//---- seteo los tiempos a guardar
-		set_savetimes(xhi);
-	}
+    nvar=neqn;
+    if (kmax == -1) return;
+    ysave.resize(nvar,kmax);
+    if (dense) {
+        x1=xlo;
+        x2=xhi;
+        xout=x1;
+        if(xout>0.0) throw_nr(" NO ESTA IMPLEMENTADO PARA EMPEZAR EN TIEMPO t>0 (Jimmy).");
+        //---- seteo los tiempos a guardar
+        set_savetimes(xhi);
+    }
 }
 
 template <class Stepper>
-void Output<Stepper>::resize(){	
+void Output<Stepper>::resize(){ 
     /* redimensiona el vector 'xsave' hacia el doble de su longitud, y 
        redimensiona el array 'ysave' hacia las dimensiones (nvar,kmax).
-   	   Como no preserva los valores, los guarda temporalmente antes de 
+       Como no preserva los valores, los guarda temporalmente antes de 
        redimensionar.Despues de redimensionar,recupera la data temporal.*/
-	Int kold=kmax;
-	kmax *= 2;
-	VecDoub tempvec(xsave);	// backup de 'xsave'
-	xsave.resize(kmax);
-	for (Int k=0; k<kold; k++)
-		xsave[k]=tempvec[k];
-	MatDoub tempmat(ysave);	// backup de 'ysave'
-	ysave.resize(nvar,kmax);
-	for (Int i=0; i<nvar; i++)
-		for (Int k=0; k<kold; k++)
-			ysave[i][k]=tempmat[i][k];
+    Int kold=kmax;
+    kmax *= 2;
+    VecDoub tempvec(xsave); // backup de 'xsave'
+    xsave.resize(kmax);
+    for (Int k=0; k<kold; k++)
+        xsave[k]=tempvec[k];
+    MatDoub tempmat(ysave); // backup de 'ysave'
+    ysave.resize(nvar,kmax);
+    for (Int i=0; i<nvar; i++)
+        for (Int k=0; k<kold; k++)
+            ysave[i][k]=tempmat[i][k];
 }
 
 template <class Stepper>
@@ -280,13 +280,13 @@ void Output<Stepper>::resizeTau(int it){
      * redimensionar.Despues de redimensionar,recupera la data temporal. 
      * TODO: make this an inline function! */
     nfilTau  = Tau[it].nrows(); // nmbr of rows NOW
-	Int nold = nfilTau;
-	nfilTau *= 2;
-	MatDoub tempmat(Tau[it]);	// backup de 'Tau[it]'
-	Tau[it].resize(nfilTau, ncolTau);
-	for(Int i=0; i<nold; i++)
-		for(Int j=0; j<ncolTau; j++)
-			Tau[it][i][j] = tempmat[i][j];
+    Int nold = nfilTau;
+    nfilTau *= 2;
+    MatDoub tempmat(Tau[it]);   // backup de 'Tau[it]'
+    Tau[it].resize(nfilTau, ncolTau);
+    for(Int i=0; i<nold; i++)
+        for(Int j=0; j<ncolTau; j++)
+            Tau[it][i][j] = tempmat[i][j];
 }
 
 
@@ -328,57 +328,57 @@ void Output<Stepper>::monit_step(const Stepper s){
 
 template <class Stepper>
 void Output<Stepper>::save_pitch(){
-	for(int i=0;i<3;i++)
-		pos[i] = (ysave[(2*i)][count]) *scl.rl;	// [cm]
+    for(int i=0;i<3;i++)
+        pos[i] = (ysave[(2*i)][count]) *scl.rl; // [cm]
     //printf(" >>> save_pitch...\n");
-	pm->calc_B(pos);
+    pm->calc_B(pos);
 
-	bx=pm->B[0];		by=pm->B[1];		bz=pm->B[2];		// [G]
-	vx=ysave[1][count];	vy=ysave[3][count];	vz=ysave[5][count];	// [1]
+    bx=pm->B[0];        by=pm->B[1];        bz=pm->B[2];        // [G]
+    vx=ysave[1][count]; vy=ysave[3][count]; vz=ysave[5][count]; // [1]
 
-	bmod = pow(bx*bx + by*by + bz*bz, .5);
-	vmod = pow(vx*vx + vy*vy + vz*vz, .5);
-	mu[count] = vx*bx + vy*by + vz*bz;
-	mu[count] /= vmod*bmod;
+    bmod = pow(bx*bx + by*by + bz*bz, .5);
+    vmod = pow(vx*vx + vy*vy + vz*vz, .5);
+    mu[count] = vx*bx + vy*by + vz*bz;
+    mu[count] /= vmod*bmod;
 }
 
 template <class Stepper>
 void Output<Stepper>::save_dense(Stepper &s, const Doub xout, const Doub h){
-	if (count == kmax) resize();
-	for (Int i=0;i<nvar;i++){
-		ysave[i][count]=s.dense_out(i,xout,h);
-	}
-	save_pitch();			// calcula mu
-	xsave[count++]=xout;		// <=> xsave[count]=xout; count++;
+    if (count == kmax) resize();
+    for (Int i=0;i<nvar;i++){
+        ysave[i][count]=s.dense_out(i,xout,h);
+    }
+    save_pitch();           // calcula mu
+    xsave[count++]=xout;        // <=> xsave[count]=xout; count++;
 }
 
 template <class Stepper>
 void Output<Stepper>::save(const Doub x, VecDoub_I &y) {
-	if (kmax <= 0) return;
-	if (count == kmax) resize();
-	for (Int i=0;i<nvar;i++)
-		ysave[i][count]=y[i];
-	save_pitch();			// calcula mu
-	xsave[count++] = x;//x;		// <=> xsave[count]=x; count++;
-	//cc++;
+    if (kmax <= 0) return;
+    if (count == kmax) resize();
+    for (Int i=0;i<nvar;i++)
+        ysave[i][count]=y[i];
+    save_pitch();           // calcula mu
+    xsave[count++] = x;//x;     // <=> xsave[count]=x; count++;
+    //cc++;
 }
 
 template <class Stepper>
 void Output<Stepper>::out(const Int nstp,const Doub x,VecDoub_I &y,Stepper &s,const Doub h) {
-	//if(count>=200) {printf(" COUNT=%d AQUI!\n", count); getchar();}
-	if (!dense)
-		throw_nr("dense output not set in Output!");
-	if (nstp == -1) {
-		save(x, y); 
-		xout = XSaveGen[cc];
-		cc++;	//+= dxout;
-	} else {
-		while ((x-xout)*(x2-x1) > 0.0) {
-			save_dense(s, xout, h);		// interpola a 'xout'
-			xout = XSaveGen[cc]; //+= dxout;			// avanza 'xout' en 'dxout'
-			cc++;
-		}
-	}
+    //if(count>=200) {printf(" COUNT=%d AQUI!\n", count); getchar();}
+    if (!dense)
+        throw_nr("dense output not set in Output!");
+    if (nstp == -1) {
+        save(x, y); 
+        xout = XSaveGen[cc];
+        cc++;   //+= dxout;
+    } else {
+        while ((x-xout)*(x2-x1) > 0.0) {
+            save_dense(s, xout, h);     // interpola a 'xout'
+            xout = XSaveGen[cc]; //+= dxout; // avanza 'xout' en 'dxout'
+            cc++;
+        }
+    }
 }
 
 
@@ -386,7 +386,7 @@ void Output<Stepper>::out(const Int nstp,const Doub x,VecDoub_I &y,Stepper &s,co
 //las trayectorias:
 template <class Stepper>
 void Output<Stepper>::set_Bmodel(PARAMS *pmm){
-	pm = pmm;
+    pm = pmm;
 }
 
 
@@ -403,13 +403,12 @@ void Output<Stepper>::claim_own(){
 // chekea si existe (aunq su tamanio sea 0 bytes) o no un archivo.
 template <class Stepper>
 bool Output<Stepper>::file_exist(){
-   	//if(ifstream(fname_trj)){
-   	if(ifstream(fname_owned)){
-		printf("\n YA EXISTE: %s\n", fname_owned);
-		return true;
-	}
-	printf("\n AUN NO EXISTE: %s\n", fname_owned);
-	return false;
+    if(ifstream(fname_owned)){
+        printf("\n YA EXISTE: %s\n", fname_owned);
+        return true;
+    }
+    printf("\n AUN NO EXISTE: %s\n", fname_owned);
+    return false;
 }
 
 
@@ -419,7 +418,7 @@ void Output<Stepper>::build_HistTau(int it){
      * termino (todas las colisiones YA ocurrieron). Entonces
      * el 'nreb' es el nro total de colisiones ocurridas en
      * toda la simulacion. */
-	//maxTau = dTau*nHistTau;
+    //maxTau = dTau*nHistTau;
     Doub tmin, tmax; // time limits for regime 'it'
     Int ini, end;    // indexes for time limits
     Int nit = XSaveGen.size()/nreg; // size of regime-block
@@ -437,29 +436,29 @@ void Output<Stepper>::build_HistTau(int it){
     Doub taumin = 1.0e31, taumax = 0.0, t;
     for(Int i=0; i<nreb[it]; i++){
         t = Tau[it][i][0]; // [1] time
-		if(t>tmin & t<tmax){
+        if(t>tmin & t<tmax){
             taumin = MIN(taumin, Tau[it][i][1]);
             taumax = MAX(taumax, Tau[it][i][1]);
-		}
+        }
     }
 
     dTau = (taumax-taumin)/nHistTau; // [1] define bin-width for hist
-	for(int i=0; i<nHistTau; i++){
-		HistTau[i][0] = taumin + (i+.5)*dTau; // centered bins
-	}
+    for(int i=0; i<nHistTau; i++){
+        HistTau[i][0] = taumin + (i+.5)*dTau; // centered bins
+    }
 
-	for(int i=0; i<nreb; i++){
-		if(Tau[i][0] <= maxTau){
-			nTau = int(Tau[i][0] / dTau);
-			HistTau[nTau][1] += 1;
-		}
-	}
-	//--- calculo la media
-	avrTau = 0.0;
-	for(int i=0; i<nreb; i++){
-		avrTau += Tau[i][0];
-	}
-	avrTau /= nreb;
+    for(int i=0; i<nreb; i++){
+        if(Tau[i][0] <= maxTau){
+            nTau = int(Tau[i][0] / dTau);
+            HistTau[nTau][1] += 1;
+        }
+    }
+    //--- calculo la media
+    avrTau = 0.0;
+    for(int i=0; i<nreb; i++){
+        avrTau += Tau[i][0];
+    }
+    avrTau /= nreb;
 }
 
 
@@ -485,12 +484,12 @@ void Output<Stepper>::build_ThetaColl(int it){
 
 template <class Stepper>
 void Output<Stepper>::save2file(){
-	double t, x, y, z, v;
-	double vx, vy, vz;
+    double t, x, y, z, v;
+    double vx, vy, vz;
     double err, gamma;
-	//-------------------- guardo la trayectoria
-	//printf(" COUNT @ save2file: %d\n", count); getchar();
-	ofile_trj.open(fname_trj);
+    //-------------------- guardo la trayectoria
+    //printf(" COUNT @ save2file: %d\n", count); getchar();
+    ofile_trj.open(fname_trj);
     ofile_trj<<"#BEGIN TRAJECTORY"<<endl;
     ofile_trj<<"# velocity : "<< scl.vel << endl; // [cm/s]
     ofile_trj<<"# scl_omega : "<< scl.wc << endl; // [s^-1]
@@ -498,50 +497,46 @@ void Output<Stepper>::save2file(){
     ofile_trj<<"## format of trajectory data below:"<<endl;
     ofile_trj<<"## t[sec]  x,y,z[AU], mu[1] (pitch), err[1] (relative error of relativistic gamma)" << endl;
     ofile_trj<<"#begin_traj"<<endl;
-	for(int i=0; i<count; i++){
-		t 	= xsave[i] / scl.wc;			// [seg]
-		x 	= ysave[0][i] * scl.rl/AU_in_cm; 	// [AU]
-		y 	= ysave[2][i] * scl.rl/AU_in_cm; 	// [AU]
-		z 	= ysave[4][i] * scl.rl/AU_in_cm; 	// [AU]
-		vx 	= ysave[1][i];  			// [1] 
-		vy 	= ysave[3][i];  			// [1]
-		vz 	= ysave[5][i];  			// [1]
-		v 	= sqrt(vx*vx + vy*vy + vz*vz); 	// [1]
-		gamma	= calc_gamma(v);
-		err	= gamma/scl.gamma - 1.;	// error relativ del gamma relativista
+    for(int i=0; i<count; i++){
+        t   = xsave[i] / scl.wc;            // [seg]
+        x   = ysave[0][i] * scl.rl/AU_in_cm;    // [AU]
+        y   = ysave[2][i] * scl.rl/AU_in_cm;    // [AU]
+        z   = ysave[4][i] * scl.rl/AU_in_cm;    // [AU]
+        vx  = ysave[1][i];              // [1] 
+        vy  = ysave[3][i];              // [1]
+        vz  = ysave[5][i];              // [1]
+        v   = sqrt(vx*vx + vy*vy + vz*vz);  // [1]
+        gamma   = calc_gamma(v);
+        err = gamma/scl.gamma - 1.; // error relativ del gamma relativista
 
-		ofile_trj << setiosflags(ios :: showpoint | ios :: uppercase);
-		ofile_trj << setw(5) << setprecision(8) << t << " ";
-		ofile_trj << setw(5) << setprecision(8) << x << " ";    
-		ofile_trj << setw(5) << setprecision(8) << y << " ";   
-		ofile_trj << setw(5) << setprecision(8) << z << " ";
-		ofile_trj << setw(5) << setprecision(8) << mu[i] << " ";
-		ofile_trj << setw(5) << setprecision(8) << err << endl;
-	}
+        ofile_trj << setiosflags(ios :: showpoint | ios :: uppercase);
+        ofile_trj << setw(5) << setprecision(8) << t << " ";
+        ofile_trj << setw(5) << setprecision(8) << x << " ";    
+        ofile_trj << setw(5) << setprecision(8) << y << " ";   
+        ofile_trj << setw(5) << setprecision(8) << z << " ";
+        ofile_trj << setw(5) << setprecision(8) << mu[i] << " ";
+        ofile_trj << setw(5) << setprecision(8) << err << endl;
+    }
     ofile_trj<<"#end_traj"<<endl;
-	// finalizamos seccion de trayectoria
+    // finalizamos seccion de trayectoria
     ofile_trj<< "#END\n\n";
-	//ofile_trj.close();
-
-	/**** guardamos otras cosas sobre la historia de la trayectoria ***/
-	//--- nro de rebotes, y colission-time promedio
-	//ofile_trj.open(fname_misc);
-    //ofile_trj << "# ***** MISC INFO *****" << endl;
 
     #ifdef MONIT_SCATTERING
+    /**** guardamos otras cosas sobre la historia de la trayectoria ***/
+    //--- nro de rebotes, y colission-time promedio
     ofile_trj << "#BEGIN SCATTERING"
     ofile_trj << "## Histogram on measured collision-times 'Tau'" << endl;
-	ofile_trj << "# nro_rebotes : " << nreb << endl;
-	//--- histograma de 'Taus'
-	build_HistTau();
-	ofile_trj << "# average_Tau : "<<setw(10)<<setprecision(8)<< avrTau << endl;	// [1]
-	ofile_trj << "# trun_minutes : "<<setw(10)<<setprecision(8)<< (trun/60.) << endl;	// [sec]
-	ofile_trj << "# steps : "<<setw(10)<<setprecision(10)<< nsteps << endl;
+    ofile_trj << "# nro_rebotes : " << nreb << endl;
+    //--- histograma de 'Taus'
+    build_HistTau();
+    ofile_trj << "# average_Tau : "<<setw(10)<<setprecision(8)<< avrTau << endl;    // [1]
+    ofile_trj << "# trun_minutes : "<<setw(10)<<setprecision(8)<< (trun/60.) << endl;   // [sec]
+    ofile_trj << "# steps : "<<setw(10)<<setprecision(10)<< nsteps << endl;
     for(nh=0; nh<nhist_tau; nh++){
         ofile_trj << "#begin_hist_"<< nh << endl;
         for(int i=0; i<nHistTau; i++){
-            ofile_trj << HistTau[i][0] << " ";			// [1] bin centrado
-            ofile_trj << setw(10) << HistTau[i][1] << endl;	// [1] nro de cuentas en este bin
+            ofile_trj << HistTau[i][0] << " ";          // [1] bin centrado
+            ofile_trj << setw(10) << HistTau[i][1] << endl; // [1] nro de cuentas en este bin
         }
         ofile_trj << "#end_hist_"<< nh << "\n\n"; // (*)
     }
@@ -549,9 +544,9 @@ void Output<Stepper>::save2file(){
 
     //--- histograma del theta-en-colision
     build_ThetaColl();
-	ofile_trj << "#####" << endl;	// cadena para separar tipos de dato q grabo
+    ofile_trj << "#####" << endl;   // cadena para separar tipos de dato q grabo
     ofile_trj << "# Histogram on angle between x-y plane and z axis (Theta_Coll)"<< endl;
-	ofile_trj << "#####" << endl;	// cadena para separar tipos de dato q grabo
+    ofile_trj << "#####" << endl;   // cadena para separar tipos de dato q grabo
     for(Int i=0; i<nThColl; i++){
         ofile_trj << HistThColl[i][0] << " "; // [deg] bin centrado
         ofile_trj << setw(10) << HistThColl[i][1] << endl; // [1] nro de cuentas
@@ -560,35 +555,35 @@ void Output<Stepper>::save2file(){
     ofile_trj << "# +++++ NO SCATTERING INFORMATION +++++" << endl;
     #endif //MONIT_SCATTERING
 
-	// cerramos archivo de misc
-	ofile_trj.close();
+    // cerramos archivo de misc
+    ofile_trj.close();
     /* (*): to make it gnuplot-friendly  */
 }
 
 template <class Stepper>
 void Output<Stepper>::tic(){
-	trun = time(NULL);
+    trun = time(NULL);
 }
 
 template <class Stepper>
 void Output<Stepper>::toc(){
-	trun = time(NULL) - trun; // [sec] tiempo de corrida para 1 pla
+    trun = time(NULL) - trun; // [sec] tiempo de corrida para 1 pla
 }
 
 
 
 //------------------------------------------- class PARAMS
 PARAMS::PARAMS(string fname_turb):
-	MODEL_TURB(fname_turb) {
+    MODEL_TURB(fname_turb) {
 }
 
 
 void PARAMS::calc_Bfield(VecDoub_I &y){
     //printf(" >>> calc_Bfield...\n");
-	pos[0] = y[0] *scl.rl;		// [cm] x
-	pos[1] = y[2] *scl.rl;		// [cm] y
-	pos[2] = y[4] *scl.rl;		// [cm] z
-	calc_B(pos);
+    pos[0] = y[0] *scl.rl;      // [cm] x
+    pos[1] = y[2] *scl.rl;      // [cm] y
+    pos[2] = y[4] *scl.rl;      // [cm] z
+    calc_B(pos);
 }
 
 
