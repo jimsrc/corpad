@@ -196,7 +196,7 @@ template <class Stepper>
 void Output<Stepper>::set_savetimes(Doub xhi){
 	if(str_tscale=="linear"){
 		dxout=(x2-x1)/nsave;
-		mu  	 = VecDoub(nsave, 0.0);		// (*) pitch en los tiempos "xsave"
+		mu  	 = VecDoub(nsave, 0.0);		// (*)
 		XSaveGen = VecDoub(nsave, 0.0);
 		for(int i=0; i<nsave; i++){
 			XSaveGen[i] = (i+1)*dxout;
@@ -207,8 +207,8 @@ void Output<Stepper>::set_savetimes(Doub xhi){
 	else if(str_tscale=="mixed"){
 		inid = 1;
 		maxd = int(M_LOG10E*log(xhi));
-		ndec = maxd - inid + 1;
-		mu  	 = VecDoub(nsave*ndec, 0.0);		// (*) pitch en los tiempos "xsave"
+		ndec = maxd - inid + 1;  // number of decades
+		mu  	 = VecDoub(nsave*ndec, 0.0); // (*) 
 		XSaveGen = VecDoub(nsave*ndec, 0.0);
 
 		nd = inid;
@@ -217,7 +217,6 @@ void Output<Stepper>::set_savetimes(Doub xhi){
 			for(int i=0; i<nsave; i++){
 				cc = i+(nd-inid)*nsave;
 				XSaveGen[cc] = pow(10, 1.0*(nd)) + (i+1)*dt;
-				//printf(" XMix(%d) [wc-1]: %g\n", cc, XSaveGen[cc]);
 			}
 		}
 
@@ -225,13 +224,14 @@ void Output<Stepper>::set_savetimes(Doub xhi){
 		for(int i=0; i<nsave; i++){
 			cc = i+(maxd-inid)*nsave;
 			XSaveGen[cc] = pow(10, 1.0*(maxd) ) + (i+1)*dt;
-			//printf(" XMix(%d) [wc-1]: %g\n", cc, XSaveGen[cc]);
 		}
 		// reseteo indice:
 		cc = 0;
 	}
 	else
 		throw_nr(" USAR 'linear' O 'mixed' SOLAMENTE! (Jimmy)");
+/*  (*): pitch en los tiempos "xsave"
+ */
 }
 
 template <class Stepper>
@@ -250,10 +250,11 @@ void Output<Stepper>::init(const Int neqn, const Doub xlo, const Doub xhi) {
 }
 
 template <class Stepper>
-void Output<Stepper>::resize(){	// redimensiona el vector 'xsave' hacia el doble de su longitud, y 
-				// redimensiona el array 'ysave' hacia las dimensiones (nvar,kmax).
-				// Como no preserva los valores, los guarda temporalmente antes de 
-				// redimensionar.Despues de redimensionar,recupera la data temporal.
+void Output<Stepper>::resize(){	
+    /* redimensiona el vector 'xsave' hacia el doble de su longitud, y 
+       redimensiona el array 'ysave' hacia las dimensiones (nvar,kmax).
+   	   Como no preserva los valores, los guarda temporalmente antes de 
+       redimensionar.Despues de redimensionar,recupera la data temporal.*/
 	Int kold=kmax;
 	kmax *= 2;
 	VecDoub tempvec(xsave);	// backup de 'xsave'
@@ -455,6 +456,13 @@ void Output<Stepper>::save2file(){
 	//-------------------- guardo la trayectoria
 	//printf(" COUNT @ save2file: %d\n", count); getchar();
 	ofile_trj.open(fname_trj);
+    ofile_trj<<"#BEGIN TRAJECTORY"<<endl;
+    ofile_trj<<"# velocity : "<< scl.vel << endl; // [cm/s]
+    ofile_trj<<"# scl_omega : "<< scl.wc << endl; // [s^-1]
+    ofile_trj<<"# r_larmor : "<< scl.rl << endl; // [cm]
+    ofile_trj<<"## format of trajectory data below:"<<endl;
+    ofile_trj<<"## t[sec]  x,y,z[AU], mu[1] (pitch), err[1] (relative error of relativistic gamma)" << endl;
+    ofile_trj<<"#begin_traj"<<endl;
 	for(int i=0; i<count; i++){
 		t 	= xsave[i] / scl.wc;			// [seg]
 		x 	= ysave[0][i] * scl.rl/AU_in_cm; 	// [AU]
@@ -463,9 +471,9 @@ void Output<Stepper>::save2file(){
 		vx 	= ysave[1][i];  			// [1] 
 		vy 	= ysave[3][i];  			// [1]
 		vz 	= ysave[5][i];  			// [1]
-		v 	= pow(vx*vx + vy*vy + vz*vz, .5); 	// [1] TODO: CAMBIARLO A 'sqrt'
+		v 	= sqrt(vx*vx + vy*vy + vz*vz); 	// [1]
 		gamma	= calc_gamma(v);
-		err	= gamma/scl.gamma - 1.;			// error relativ del gamma relativista
+		err	= gamma/scl.gamma - 1.;	// error relativ del gamma relativista
 
 		ofile_trj << setiosflags(ios :: showpoint | ios :: uppercase);
 		ofile_trj << setw(5) << setprecision(8) << t << " ";
@@ -475,7 +483,9 @@ void Output<Stepper>::save2file(){
 		ofile_trj << setw(5) << setprecision(8) << mu[i] << " ";
 		ofile_trj << setw(5) << setprecision(8) << err << endl;
 	}
+    ofile_trj<<"#end_traj"<<endl;
 	// cerramos archivo de trayectoria
+    ofile_trj<< "#END OBJECT";
 	ofile_trj.close();
 
 	/**** guardamos otras cosas sobre la historia de la trayectoria ***/
