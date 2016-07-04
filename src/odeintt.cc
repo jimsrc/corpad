@@ -110,11 +110,13 @@ void Odeint<Stepper>::check_scattering(){
 		//printf(" [rank:%d] --> nreb: %d\n", wrank, out.nreb); //getchar();
 		if(out.nreb>=out.nfilTau) 
             out.resizeTau();
+
 		// guardo cosas de la "colisiones" con las irregularidades:
-		out.Tau[out.nreb-1][0] = dtau;	// [1] tiempo-de-colision instantaneo
-		out.Tau[out.nreb-1][1] = sqrt(y[0]*y[0]+y[2]*y[2]);	// [1] psic "perpend" en q ocurre dicha "colision"
-		out.Tau[out.nreb-1][2] = y[4];	// [1] posic "parall"  en q ocurre dicha "colision"
-        out.Tau[out.nreb-1][3] = asin(y[5]/vmod)*180./M_PI;  // [deg] angulo entre plano x-y y z.
+		out.Tau[out.nreb-1][0] = x; //[1] time @ collision
+		out.Tau[out.nreb-1][1] = dtau; //[1] tiempo-de-colision instantaneo
+		out.Tau[out.nreb-1][2] = sqrt(y[0]*y[0]+y[2]*y[2]);	// [1] posic "perpend" en q ocurre dicha "colision"
+		out.Tau[out.nreb-1][3] = y[4]; //[1] posic "parall" en q ocurre dicha "colision"
+        out.Tau[out.nreb-1][4] = acos(par.B[2]/Bmod)*180./M_PI; // [deg] angulo entre plano x-y y z. Siendo 0.0 para B-vector paralelo a versor positivo ^z+.
 		dtau = 0.0;
 	}
 }

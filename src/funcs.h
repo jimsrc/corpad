@@ -63,13 +63,16 @@ class Output {
 		void save2file(void);
         void claim_own(void);
 		bool file_exist(void);
-		void resizeTau(void);
+        #ifdef MONIT_SCATTERING
+		void resizeTau(int it); // resize 'Tau[it]'
 		//esto lo agrego para guardar cosas de la historia de 
 		//las trayectorias:
 		int nfilTau, ncolTau;		// tamanio para 'Tau'
-		int nreb;			// nro de rebotes/scatterings en pitch
-		MatDoub Tau;			// tiempo de camino libre medio paralelo, y su posic x
+        int nreg=5; // nro de regimenes de las plas
+		int nreb[nreg];	// nro de rebotes/scatterings en pitch
+		MatDoub* Tau;	// params de scattering en funcion de t
 		VecDoub mu;
+        #endif // MONIT_SCATTERING
 		void set_Bmodel(PARAMS*);	// para apuntar al modelo q uso en main()
 		void tic(void), toc(void);	// cronometro para c/pla
 		Doub trun;			// tiempo de simulacion de c/pla
@@ -106,11 +109,14 @@ class Output {
         ofstream ofile_own; 
     
     PRIVATE_OR_PUBLIC: // depends on CYTHON macro
+        #ifdef MONIT_SCATTERING
 		//----- histo del 'Tau'
 		MatDoub HistTau;
-		void build_HistTau(void);
+		void build_HistTau(int it);
 		Doub dTau, maxTau, avrTau;
 		Int nHistTau, nTau, dimHistTau;
+        int nhist_tau = 5;
+        #endif //MONIT_SCATTERING
 
         //--- histo del theta_coll
         Int nThColl; // has to be even!
