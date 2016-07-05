@@ -131,7 +131,7 @@ void Output<Stepper>::build(const string str_tscalee, Int nsavee, Doub tmaxHistT
     dense   = nsave > 0 ? true : false;
     //-------------------- archivos de salida 
     sprintf(fname_out, "%s/B%02d_pla%03d", dir_out, j, i);
-    sprintf(fname_trj,  "%s_traj.dat",  fname_out);
+    sprintf(fname_trj,  "%s.dat",  fname_out);
     sprintf(fname_misc, "%s_misc.dat", fname_out);
     sprintf(fname_owned, "%s.owned", fname_out);
 
@@ -149,6 +149,9 @@ void Output<Stepper>::build(const string str_tscalee, Int nsavee, Doub tmaxHistT
         Tau[i]  = MatDoub(nfilTau, ncolTau, 0.0); // (*) tiempos de scattering, y la posic x, etc... en c/ regimen
     }
     // (*): inicializo en ceros
+    if( fmod(1.*XSaveGen.size(), 1.*nreg)!=0.0 )
+        throw_nr("ERROR: nmbr of regimes must be multiple of XSaveGen.size()!");
+    size_reg = XSaveGen.size()/nreg; //nmbr of XSaveGen[] covering each regime.
 
     //-------- histograma del 'Tau'
     nHistTau    = nHist;                // nro de bines
@@ -182,6 +185,38 @@ void Output<Stepper>::build(const string str_tscalee, Int nsavee, Doub tmaxHistT
     //printf(" HistStep: %g\n", HistStep[0][1]);
     #endif //MONIT_STEP
 }
+
+
+#ifdef MONIT_SCATTERING
+template<class Stepper>
+void Output<Stepper>::check_scattering(Doub const x, Doub *y, Doub const hdid, Doub const mu_old){
+    for(int i=0;i<3;i++)
+        pos[i] = y[(2*i)]*scl.rl; // [cm]
+    pm->calc_B(pos);
+    bmod = NORM(pm->B[0],pm->B[1],pm->B[2]);
+    vmod = NORM(y[1],y[3],y[5]);
+    Doub mu_new = y[1]*pm->B[0] + y[3]*pm->B[1] + y[5]*pm->B[2];
+    mu_new /= vmod*bmod;
+    //-------------------------
+    dtau += hdid; // controlo cuanto pasa hasta el prox rebote
+    //-------------------------
+    if(mu_old*mu_new<0.0){
+        int nr = int( (cc-1)/size_reg );//nr=0,1,...,nreg-1
+        nreb[nr]++;
+        if( nreb[nr] >= Tau[nr].nrows() ) 
+            resizeTau(nr);
+
+        // guardo cosas de la "colisiones" con las irregularidades
+        Doub* sctt = Tau[nr][nreb[nr]];
+        sctt[0] = x; //[1] time @ collision
+        sctt[1] = dtau; //[1] tiempo-de-colision instantaneo
+        sctt[2] = sqrt(y[0]*y[0]+y[2]*y[2]); // [1] posic "perpend" en q ocurre dicha "colision"
+        sctt[3] = y[4]; //[1] posic "parall" en q ocurre dicha "colision"
+        sctt[4] = acos(pm->B[2]/bmod)*180./M_PI; // [deg] angulo entre plano x-y y z. Siendo 0.0 para B-vector paralelo a versor positivo ^z+.
+        dtau = 0.0; // reset collision-time
+    }
+}
+#endif //MONIT_SCATTERING
 
 
 template <class Stepper>
@@ -274,19 +309,19 @@ void Output<Stepper>::resize(){
 }
 
 template <class Stepper>
-void Output<Stepper>::resizeTau(int it){
+void Output<Stepper>::resizeTau(int nr){
     /* Redimensiona el vector 'xsave' hacia el doble de su longitud.
      * Como no preserva los valores, los guarda temporalmente antes de 
      * redimensionar.Despues de redimensionar,recupera la data temporal. 
      * TODO: make this an inline function! */
-    nfilTau  = Tau[it].nrows(); // nmbr of rows NOW
+    nfilTau  = Tau[nr].nrows(); // nmbr of rows NOW
     Int nold = nfilTau;
     nfilTau *= 2;
-    MatDoub tempmat(Tau[it]);   // backup de 'Tau[it]'
-    Tau[it].resize(nfilTau, ncolTau);
+    MatDoub tempmat(Tau[nr]);   // backup de 'Tau[nr]'
+    Tau[nr].resize(nfilTau, ncolTau);
     for(Int i=0; i<nold; i++)
         for(Int j=0; j<ncolTau; j++)
-            Tau[it][i][j] = tempmat[i][j];
+            Tau[nr][i][j] = tempmat[i][j];
 }
 
 
@@ -330,14 +365,13 @@ template <class Stepper>
 void Output<Stepper>::save_pitch(){
     for(int i=0;i<3;i++)
         pos[i] = (ysave[(2*i)][count]) *scl.rl; // [cm]
-    //printf(" >>> save_pitch...\n");
     pm->calc_B(pos);
 
     bx=pm->B[0];        by=pm->B[1];        bz=pm->B[2];        // [G]
     vx=ysave[1][count]; vy=ysave[3][count]; vz=ysave[5][count]; // [1]
 
-    bmod = pow(bx*bx + by*by + bz*bz, .5);
-    vmod = pow(vx*vx + vy*vy + vz*vz, .5);
+    bmod = NORM(bx,by,bz);
+    vmod = NORM(vx,vy,vz);
     mu[count] = vx*bx + vy*by + vz*bz;
     mu[count] /= vmod*bmod;
 }
@@ -417,65 +451,75 @@ void Output<Stepper>::build_HistTau(int it){
     /* Se supone q esto se ejecuta DESPUES de q la simulacion
      * termino (todas las colisiones YA ocurrieron). Entonces
      * el 'nreb' es el nro total de colisiones ocurridas en
-     * toda la simulacion. */
+     * toda la simulacion. 
+     *
+     * Input:
+     * - it: "regime" index
+     *
+     * Output:
+     * - HistTau : shape(nHistTau, dimHistTau=2)
+     */
     //maxTau = dTau*nHistTau;
-    Doub tmin, tmax; // time limits for regime 'it'
-    Int ini, end;    // indexes for time limits
-    Int nit = XSaveGen.size()/nreg; // size of regime-block
+    //Doub tmin, tmax; // time limits for regime 'it'
+    //Int ini, end;    // indexes for time limits
+    //Int nit = XSaveGen.size()/nreg; // size of regime-block
 
-    ini = it*nit;
-    end = ini + nit - 1; 
+    //ini = it*nit;
+    //end = ini + nit - 1; 
 
-    tmin = it>0 ? XSaveGen[ini] : 0.0; // [1] (*)
-    tmax = XSaveGen[end];              // [1]
+    //tmin = it>0 ? XSaveGen[ini] : 0.0; // [1] (*)
+    //tmax = XSaveGen[end];              // [1]
     // (*): XSaveGen[0] is not ==0.0, but in the 1st regime, 
     //      we want to account from t=0.
+
+    // reset histogram
+    HistTau = MatDoub(nHistTau, dimHistTau, 0.0); // histog 1-D
 
     // let's find out the min/max \tau values for
     // this regime-block
     Doub taumin = 1.0e31, taumax = 0.0, t;
     for(Int i=0; i<nreb[it]; i++){
-        t = Tau[it][i][0]; // [1] time
-        if(t>tmin & t<tmax){
-            taumin = MIN(taumin, Tau[it][i][1]);
-            taumax = MAX(taumax, Tau[it][i][1]);
-        }
+        //t = Tau[it][i][0]; // [1] time
+        taumin = MIN(taumin, Tau[it][i][1]);
+        taumax = MAX(taumax, Tau[it][i][1]);
     }
 
+    // build domain of histogram
     dTau = (taumax-taumin)/nHistTau; // [1] define bin-width for hist
     for(int i=0; i<nHistTau; i++){
         HistTau[i][0] = taumin + (i+.5)*dTau; // centered bins
     }
 
-    for(int i=0; i<nreb; i++){
-        if(Tau[i][0] <= maxTau){
-            nTau = int(Tau[i][0] / dTau);
-            HistTau[nTau][1] += 1;
-        }
+    // build histogram counts
+    for(int i=0; i<nreb[it]; i++){
+        nTau = int(Tau[it][i][1] / dTau);
+        HistTau[nTau][1]++;
     }
     //--- calculo la media
-    avrTau = 0.0;
-    for(int i=0; i<nreb; i++){
-        avrTau += Tau[i][0];
+    avrTau[it] = 0.0;
+    for(int i=0; i<nreb[it]; i++){
+        avrTau[it] += Tau[it][i][1];
     }
-    avrTau /= nreb;
+    avrTau[it] /= nreb[it];
 }
 
 
 template <class Stepper>
-void Output<Stepper>::build_ThetaColl(int it){
-    /* Warning: 'nThColl' has to be even! */
-    int nth;
-    Doub dth = 180.0/nThColl; // resolucion del histo
+void Output<Stepper>::build_ThetaColl(int nr){
+    /* Warning: 'nThColl' has to be even! 
+     * NOTE: 'nr' is the id of the simulation regime  */
+    HistThColl  = MatDoub(nThColl, 2, 0.0); // reset histogram
+    Doub dth = 180.0/nThColl; // bin width of histogram
 
-    // dominio en th=(-90,90) [deg]
+    // domain in th=(-90,90) [deg]
     for(int i=0; i<nThColl; i++){
         HistThColl[i][0] = -90.0 + (i+.5)*dth; // [deg]
     }
 
-    // Tau[it][:][4] ---> theta de colision
-    for(int i=0; i<nreb[it]; i++){
-        nth =  int(Tau[it][i][4]/dth);
+    // Tau[nr][:][4] ---> collision theta
+    int nth;
+    for(int i=0; i<nreb[nr]; i++){
+        nth =  int(Tau[nr][i][4]/dth);
         nth += nThColl/2; // correction to avoid negative indexes
         HistThColl[nth][1]++;
     }
@@ -489,14 +533,14 @@ void Output<Stepper>::save2file(){
     double err, gamma;
     //-------------------- guardo la trayectoria
     //printf(" COUNT @ save2file: %d\n", count); getchar();
-    ofile_trj.open(fname_trj);
-    ofile_trj<<"#BEGIN TRAJECTORY"<<endl;
-    ofile_trj<<"# velocity : "<< scl.vel << endl; // [cm/s]
-    ofile_trj<<"# scl_omega : "<< scl.wc << endl; // [s^-1]
-    ofile_trj<<"# r_larmor : "<< scl.rl << endl; // [cm]
-    ofile_trj<<"## format of trajectory data below:"<<endl;
-    ofile_trj<<"## t[sec]  x,y,z[AU], mu[1] (pitch), err[1] (relative error of relativistic gamma)" << endl;
-    ofile_trj<<"#begin_traj"<<endl;
+    ofile.open(fname_trj);
+    ofile<<"#BEGIN TRAJECTORY"<<endl;
+    ofile<<"# velocity : "<< scl.vel << endl; // [cm/s]
+    ofile<<"# scl_omega : "<< scl.wc << endl; // [s^-1]
+    ofile<<"# r_larmor : "<< scl.rl << endl; // [cm]
+    ofile<<"## format of trajectory data below:"<<endl;
+    ofile<<"## t[sec]  x,y,z[AU], mu[1] (pitch), err[1] (relative error of relativistic gamma)" << endl;
+    ofile<<"#begin_traj"<<endl;
     for(int i=0; i<count; i++){
         t   = xsave[i] / scl.wc;            // [seg]
         x   = ysave[0][i] * scl.rl/AU_in_cm;    // [AU]
@@ -509,56 +553,62 @@ void Output<Stepper>::save2file(){
         gamma   = calc_gamma(v);
         err = gamma/scl.gamma - 1.; // error relativ del gamma relativista
 
-        ofile_trj << setiosflags(ios :: showpoint | ios :: uppercase);
-        ofile_trj << setw(5) << setprecision(8) << t << " ";
-        ofile_trj << setw(5) << setprecision(8) << x << " ";    
-        ofile_trj << setw(5) << setprecision(8) << y << " ";   
-        ofile_trj << setw(5) << setprecision(8) << z << " ";
-        ofile_trj << setw(5) << setprecision(8) << mu[i] << " ";
-        ofile_trj << setw(5) << setprecision(8) << err << endl;
+        ofile << setiosflags(ios :: showpoint | ios :: uppercase);
+        ofile << setw(5) << setprecision(8) << t << " ";
+        ofile << setw(5) << setprecision(8) << x << " ";    
+        ofile << setw(5) << setprecision(8) << y << " ";   
+        ofile << setw(5) << setprecision(8) << z << " ";
+        ofile << setw(5) << setprecision(8) << mu[i] << " ";
+        ofile << setw(5) << setprecision(8) << err << endl;
     }
-    ofile_trj<<"#end_traj"<<endl;
+    ofile<<"#end_traj"<<endl;
     // finalizamos seccion de trayectoria
-    ofile_trj<< "#END\n\n";
+    ofile<< "#END\n\n";
 
     #ifdef MONIT_SCATTERING
     /**** guardamos otras cosas sobre la historia de la trayectoria ***/
-    //--- nro de rebotes, y colission-time promedio
-    ofile_trj << "#BEGIN SCATTERING"
-    ofile_trj << "## Histogram on measured collision-times 'Tau'" << endl;
-    ofile_trj << "# nro_rebotes : " << nreb << endl;
-    //--- histograma de 'Taus'
-    build_HistTau();
-    ofile_trj << "# average_Tau : "<<setw(10)<<setprecision(8)<< avrTau << endl;    // [1]
-    ofile_trj << "# trun_minutes : "<<setw(10)<<setprecision(8)<< (trun/60.) << endl;   // [sec]
-    ofile_trj << "# steps : "<<setw(10)<<setprecision(10)<< nsteps << endl;
-    for(nh=0; nh<nhist_tau; nh++){
-        ofile_trj << "#begin_hist_"<< nh << endl;
-        for(int i=0; i<nHistTau; i++){
-            ofile_trj << HistTau[i][0] << " ";          // [1] bin centrado
-            ofile_trj << setw(10) << HistTau[i][1] << endl; // [1] nro de cuentas en este bin
+    ofile << "#BEGIN SCATTERING\n";
+    ofile << "## Histograms on measured collision-times 'Tau'" << endl;
+    ofile << "# trun_minutes : "<<setw(10)<<setprecision(8)<< (trun/60.) << endl;   // [sec]
+    ofile << "# steps_total : "<<setw(10)<<setprecision(10)<< nsteps << endl; // total nmbr of steps
+    ofile << "# n_regimes : "<< nreg << endl; //nmbr of regimes
+    for(int nr=0; nr<nreg; nr++){
+        //--- histogramas de 'Tau[nr][:][1]' 
+        ofile<< "#begin_hist_"<< nr << endl;
+        build_HistTau(nr); // build histogram for regime 'nr'
+        //--- nro de rebotes, y colission-time promedio
+        ofile<< "# n_rebotes : "<< nreb[nr] << endl; // [1]
+        ofile<< "# tau_avr : "<< avrTau[nr] << endl; // [1]
+        for(int i=0; i<HistTau.nrows(); i++){
+            ofile << HistTau[i][0] << " ";          // [1] bin centrado
+            ofile << setw(10) << HistTau[i][1] << endl; // [1] nro de cuentas en este bin
         }
-        ofile_trj << "#end_hist_"<< nh << "\n\n"; // (*)
+        ofile << "#end_hist_"<< nr << "\n\n"; // (*)
     }
-    ofile_trj<<"#END"
+    ofile<<"#END\n\n";
 
     //--- histograma del theta-en-colision
-    build_ThetaColl();
-    ofile_trj << "#####" << endl;   // cadena para separar tipos de dato q grabo
-    ofile_trj << "# Histogram on angle between x-y plane and z axis (Theta_Coll)"<< endl;
-    ofile_trj << "#####" << endl;   // cadena para separar tipos de dato q grabo
-    for(Int i=0; i<nThColl; i++){
-        ofile_trj << HistThColl[i][0] << " "; // [deg] bin centrado
-        ofile_trj << setw(10) << HistThColl[i][1] << endl; // [1] nro de cuentas
+    ofile<< "#BEGIN THETA_COLL\n";
+    ofile<< "## Histogram of angle between x-y plane and z axis (Theta_Coll)"<< endl;
+    for(int nr=0; nr<nreg; nr++){
+        build_ThetaColl(nr);
+        ofile<< "#begin_hist_ThetaColl_"<< nr <<endl;
+        for(Int i=0; i<nThColl; i++){
+            ofile << HistThColl[i][0] << " "; // [deg] bin centrado
+            ofile << setw(10) << HistThColl[i][1] << endl; // [1] nro de cuentas
+        }
+        ofile<< "#end_hist_ThetaColl_"<< nr << endl;
     }
+    ofile<<"#END\n\n";
     #else
-    ofile_trj << "# +++++ NO SCATTERING INFORMATION +++++" << endl;
+    ofile << "## +++++ NO SCATTERING INFORMATION +++++" << endl;
     #endif //MONIT_SCATTERING
 
     // cerramos archivo de misc
-    ofile_trj.close();
+    ofile.close();
     /* (*): to make it gnuplot-friendly  */
 }
+
 
 template <class Stepper>
 void Output<Stepper>::tic(){

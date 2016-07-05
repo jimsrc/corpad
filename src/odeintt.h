@@ -29,12 +29,10 @@ struct Odeint {
         PARAMS, int);
     void integrate();
     PARAMS par;
-    //------------------- scattering stuff
-    void save_history(void);
     #ifdef MONIT_SCATTERING
-    void check_scattering(void);
-    #endif //MONIT_SCATTERING 
-    double mu_old, mu_new, Bmod, vmod, dtau;
+    void save_history(void);
+    double mu_old, Bmod, vmod;
+    #endif //MONIT_SCATTERING
     // ------------------ otros
     int wrank;
 

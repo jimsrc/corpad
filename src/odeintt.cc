@@ -51,13 +51,13 @@ void Odeint<Stepper>::integrate() {
     int i=0;
     derivs(par, x, y, dydx);
     if (dense)
-        out.out(-1,x,y,s,h);                // aqui solo guarda x,y
+        out.out(-1,x,y,s,h);         // aqui solo guarda x,y
     else{
         out.save(x,y);
         i++;
         cout << " i " << i << endl;
     }
-    dtau = 0.0;
+    out.dtau = 0.0;  // collision-time (instantaneous)
     for (nstp=0;nstp<MAXSTP;nstp++) {
         save_history();                 //--- scattering stuff
         if ((x+h*1.0001-x2)*(x2-x1) > 0.0)
@@ -65,7 +65,7 @@ void Odeint<Stepper>::integrate() {
         s.step(h, derivs);
 
         #ifdef MONIT_SCATTERING
-        check_scattering();             //--- scattering stuff
+        out.check_scattering(x,&y[0],s.hdid,mu_old); //--- scattering stuff
         #endif //MONIT_SCATTERING
 
         if (s.hdid == h) ++nok; else ++nbad;
@@ -93,35 +93,6 @@ void Odeint<Stepper>::integrate() {
     }
     throw_nr("Too many steps in routine Odeint");
 }
-
-
-#ifdef MONIT_SCATTERING
-template<class Stepper>
-void Odeint<Stepper>::check_scattering(){
-    par.calc_Bfield(y);
-    Bmod = pow(par.B[0]*par.B[0] + par.B[1]*par.B[1] + par.B[2]*par.B[2], .5);
-    vmod = pow(y[1]*y[1] + y[3]*y[3] + y[5]*y[5], .5); 
-    mu_new = y[1]*par.B[0] + y[3]*par.B[1] + y[5]*par.B[2];
-    mu_new /= vmod*Bmod;
-    //-------------------------
-    dtau += s.hdid;         // controlo cuanto pasa hasta el prox rebote
-    //-------------------------
-    if(mu_old*mu_new<0.0){
-        out.nreb++;
-        //printf(" [rank:%d] --> nreb: %d\n", wrank, out.nreb); //getchar();
-        if(out.nreb>=out.nfilTau) 
-            out.resizeTau();
-
-        // guardo cosas de la "colisiones" con las irregularidades:
-        out.Tau[out.nreb-1][0] = x; //[1] time @ collision
-        out.Tau[out.nreb-1][1] = dtau; //[1] tiempo-de-colision instantaneo
-        out.Tau[out.nreb-1][2] = sqrt(y[0]*y[0]+y[2]*y[2]); // [1] posic "perpend" en q ocurre dicha "colision"
-        out.Tau[out.nreb-1][3] = y[4]; //[1] posic "parall" en q ocurre dicha "colision"
-        out.Tau[out.nreb-1][4] = acos(par.B[2]/Bmod)*180./M_PI; // [deg] angulo entre plano x-y y z. Siendo 0.0 para B-vector paralelo a versor positivo ^z+.
-        dtau = 0.0;
-    }
-}
-#endif //MONIT_SCATTERING
 
 
 template<class Stepper>

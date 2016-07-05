@@ -68,10 +68,13 @@ class Output {
         //esto lo agrego para guardar cosas de la historia de 
         //las trayectorias:
         int nfilTau, ncolTau;       // tamanio para 'Tau'
-        int nreg=5; // nro de regimenes de las plas
-        int nreb[nreg]; // nro de rebotes/scatterings en pitch
+        static const int nreg=5; // nro de regimenes de las plas
+        int nreb[nreg]; // nro de rebotes/scatterings en pitch, para c/regimen
+        int size_reg;
         MatDoub* Tau;   // params de scattering en funcion de t
         VecDoub mu;
+        Doub dtau;//collision time (instantaneous)
+        void check_scattering(Doub const x, Doub *y, Doub const hdid, Doub const mu_old);
         #endif // MONIT_SCATTERING
         void set_Bmodel(PARAMS*);   // para apuntar al modelo q uso en main()
         void tic(void), toc(void);  // cronometro para c/pla
@@ -104,7 +107,7 @@ class Output {
         string str_tscale; //tipo de escala temporal para la salida
         Doub decade, dt;
         void set_savetimes(Doub);
-        ofstream ofile_trj;
+        ofstream ofile;
         ofstream ofile_misc;
         ofstream ofile_own; 
     
@@ -113,15 +116,16 @@ class Output {
         //----- histo del 'Tau'
         MatDoub HistTau;
         void build_HistTau(int it);
-        Doub dTau, maxTau, avrTau;
+        Doub dTau, maxTau;
+        Doub avrTau[nreg];
         Int nHistTau, nTau, dimHistTau;
-        int nhist_tau = 5;
+        //int nhist_tau = nreg;
         #endif //MONIT_SCATTERING
 
         //--- histo del theta_coll
         Int nThColl; // has to be even!
         MatDoub HistThColl;
-        void build_ThetaColl(void);
+        void build_ThetaColl(int nr);
 };
 
 
