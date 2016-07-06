@@ -11,7 +11,7 @@ CXX = /usr/local/bin/mpic++
 EXE = ./main.x
 # gprof stuff
 EXE_WPROF=./main_wgprof.x 	# profiling / debugging
-OPT_GP=-O0 #-O3 #-O0 	# for use w/ gprof
+OPT_GP=-g -O0 #-O3 #-O0 	# for use w/ gprof
 
 all: $(OBJECTS_C)
 	${CXX} -o $(EXE)  $^  ${CFLAGS}
@@ -24,7 +24,7 @@ all: $(OBJECTS_C)
 	$(CXX) $(OPT_GP) -c $^ -o $@
 
 gprof_exe: $(OBJECTS_C_GPROF)
-	${CXX} -pg ${OPT_GP} $^ -o $(EXE_WPROF)
+	${CXX} ${OPT_GP} $^ -o $(EXE_WPROF)
 
 clean:
 	rm *.[xo] #*.gcda

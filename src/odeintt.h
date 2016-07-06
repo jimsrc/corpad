@@ -26,7 +26,7 @@ struct Odeint {
         const Doub atol,const Doub rtol,const Doub h1,
         const Doub hminn,Output<Stepper> &outt,
         typename Stepper::Dtype &derivss, 
-        PARAMS, int);
+        PARAMS, Int nHist, Int nThColl_, int);
     void integrate();
     PARAMS par;
     #ifdef MONIT_SCATTERING

@@ -52,10 +52,11 @@ class Output {
         VecDoub xsave;
         MatDoub ysave;
         //void build(string, Int, Doub, Int, char*); 
-        void build(const string, Int, Doub, Int, Int, int, int, char*);
+        void build(const string str_tscalee, Int nsavee, int i, int j, char *dir_out);
         Output(void);
         //Output(string, const Int, char*); // mal implementado
-        void init(const Int, const Doub, const Doub);
+        void init(const Int neqn, const Doub xlo, const Doub xhi, Int nHist, Int nThColl_);
+
         void resize(void);
         void save_dense(Stepper &, const Doub, const Doub);
         void save(const Doub, VecDoub_I &);
@@ -71,10 +72,11 @@ class Output {
         static const int nreg=5; // nro de regimenes de las plas
         int nreb[nreg]; // nro de rebotes/scatterings en pitch, para c/regimen
         int size_reg;
-        MatDoub* Tau;   // params de scattering en funcion de t
+        MatDoub Tau[nreg];   // params de scattering en funcion de t
         VecDoub mu;
         Doub dtau;//collision time (instantaneous)
         void check_scattering(Doub const x, Doub *y, Doub const hdid, Doub const mu_old);
+        void init_regimes(Int nHist, Int nThColl_);
         #endif // MONIT_SCATTERING
         void set_Bmodel(PARAMS*);   // para apuntar al modelo q uso en main()
         void tic(void), toc(void);  // cronometro para c/pla

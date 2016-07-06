@@ -311,11 +311,11 @@ endif
 set shortmess=aoO
 badd +29 main_mpi.cc
 badd +108 funcs.h
-badd +292 funcs.cc
+badd +290 funcs.cc
 badd +323 defs_turb.cc
 badd +25 defs_turb.h
 badd +21 general.h
-badd +241 nr3.h
+badd +183 nr3.h
 badd +1 COMENTARIOS.txt
 badd +29 ~/simulacion/pla_stochastic/composite_turbulence/massive_orbits/makefile
 badd +36 odeintt.h
@@ -417,7 +417,7 @@ setlocal nolist
 setlocal makeprg=
 setlocal matchpairs=(:),{:},[:]
 setlocal modeline
-setlocal nomodifiable
+setlocal modifiable
 setlocal nrformats=octal,hex
 set number
 setlocal number
@@ -457,12 +457,12 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 21 - ((20 * winheight(0) + 27) / 54)
+let s:l = 27 - ((26 * winheight(0) + 27) / 54)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-21
-normal! 01l
+27
+normal! 06l
 tabedit main_mpi.cc
 set splitbelow splitright
 wincmd _ | wincmd |
@@ -475,9 +475,9 @@ wincmd w
 wincmd w
 wincmd t
 set winheight=1 winwidth=1
-exe '1resize ' . ((&lines * 44 + 28) / 57)
+exe '1resize ' . ((&lines * 44 + 28) / 56)
 exe 'vert 1resize ' . ((&columns * 89 + 83) / 167)
-exe '2resize ' . ((&lines * 9 + 28) / 57)
+exe '2resize ' . ((&lines * 8 + 28) / 56)
 exe 'vert 2resize ' . ((&columns * 89 + 83) / 167)
 exe 'vert 3resize ' . ((&columns * 77 + 83) / 167)
 argglobal
@@ -718,11 +718,11 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 162 - ((4 * winheight(0) + 4) / 9)
+let s:l = 160 - ((3 * winheight(0) + 4) / 8)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-162
+160
 normal! 03l
 wincmd w
 argglobal
@@ -841,16 +841,16 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 29 - ((0 * winheight(0) + 27) / 54)
+let s:l = 122 - ((42 * winheight(0) + 26) / 53)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-29
-normal! 0
+122
+normal! 059l
 wincmd w
-exe '1resize ' . ((&lines * 44 + 28) / 57)
+exe '1resize ' . ((&lines * 44 + 28) / 56)
 exe 'vert 1resize ' . ((&columns * 89 + 83) / 167)
-exe '2resize ' . ((&lines * 9 + 28) / 57)
+exe '2resize ' . ((&lines * 8 + 28) / 56)
 exe 'vert 2resize ' . ((&columns * 89 + 83) / 167)
 exe 'vert 3resize ' . ((&columns * 77 + 83) / 167)
 tabedit general.h
@@ -866,9 +866,9 @@ wincmd w
 wincmd t
 set winheight=1 winwidth=1
 exe 'vert 1resize ' . ((&columns * 90 + 83) / 167)
-exe '2resize ' . ((&lines * 24 + 28) / 57)
+exe '2resize ' . ((&lines * 24 + 28) / 56)
 exe 'vert 2resize ' . ((&columns * 76 + 83) / 167)
-exe '3resize ' . ((&lines * 29 + 28) / 57)
+exe '3resize ' . ((&lines * 28 + 28) / 56)
 exe 'vert 3resize ' . ((&columns * 76 + 83) / 167)
 argglobal
 xnoremap <buffer> <silent> \a} `>a}`<i{
@@ -985,7 +985,7 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 35 - ((34 * winheight(0) + 27) / 54)
+let s:l = 35 - ((33 * winheight(0) + 26) / 53)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
@@ -1231,7 +1231,7 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 17 - ((16 * winheight(0) + 14) / 29)
+let s:l = 17 - ((15 * winheight(0) + 14) / 28)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
@@ -1239,19 +1239,15 @@ normal! zt
 normal! 018l
 wincmd w
 exe 'vert 1resize ' . ((&columns * 90 + 83) / 167)
-exe '2resize ' . ((&lines * 24 + 28) / 57)
+exe '2resize ' . ((&lines * 24 + 28) / 56)
 exe 'vert 2resize ' . ((&columns * 76 + 83) / 167)
-exe '3resize ' . ((&lines * 29 + 28) / 57)
+exe '3resize ' . ((&lines * 28 + 28) / 56)
 exe 'vert 3resize ' . ((&columns * 76 + 83) / 167)
 tabedit defs_turb.h
 set splitbelow splitright
 wincmd _ | wincmd |
 vsplit
 1wincmd h
-wincmd _ | wincmd |
-split
-1wincmd k
-wincmd w
 wincmd w
 wincmd _ | wincmd |
 split
@@ -1259,14 +1255,11 @@ split
 wincmd w
 wincmd t
 set winheight=1 winwidth=1
-exe '1resize ' . ((&lines * 29 + 28) / 57)
 exe 'vert 1resize ' . ((&columns * 78 + 83) / 167)
-exe '2resize ' . ((&lines * 24 + 28) / 57)
-exe 'vert 2resize ' . ((&columns * 78 + 83) / 167)
-exe '3resize ' . ((&lines * 36 + 28) / 57)
+exe '2resize ' . ((&lines * 36 + 28) / 56)
+exe 'vert 2resize ' . ((&columns * 88 + 83) / 167)
+exe '3resize ' . ((&lines * 16 + 28) / 56)
 exe 'vert 3resize ' . ((&columns * 88 + 83) / 167)
-exe '4resize ' . ((&lines * 17 + 28) / 57)
-exe 'vert 4resize ' . ((&columns * 88 + 83) / 167)
 argglobal
 xnoremap <buffer> <silent> \a} `>a}`<i{
 xnoremap <buffer> <silent> \a{ `>a}`<i{
@@ -1382,135 +1375,12 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 51 - ((0 * winheight(0) + 14) / 29)
+let s:l = 99 - ((47 * winheight(0) + 26) / 53)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-51
+99
 normal! 08l
-wincmd w
-argglobal
-edit defs_turb.h
-xnoremap <buffer> <silent> \a} `>a}`<i{
-xnoremap <buffer> <silent> \a{ `>a}`<i{
-xnoremap <buffer> <silent> \a) `>a)`<i(
-xnoremap <buffer> <silent> \a( `>a)`<i(
-xnoremap <buffer> <silent> \a' `>a'`<i'
-xnoremap <buffer> <silent> \a] `>a]`<i[
-xnoremap <buffer> <silent> \a[ `>a]`<i[
-xnoremap <buffer> <silent> \a" `>a"`<i"
-xnoremap <buffer> <silent> \a` `>a``<i`
-setlocal keymap=
-setlocal noarabic
-setlocal noautoindent
-setlocal balloonexpr=
-setlocal nobinary
-setlocal bufhidden=
-setlocal buflisted
-setlocal buftype=
-setlocal cindent
-setlocal cinkeys=0{,0},0),:,0#,!^F,o,O,e
-setlocal cinoptions=
-setlocal cinwords=if,else,while,do,for,switch
-setlocal colorcolumn=
-setlocal comments=sO:*\ -,mO:*\ \ ,exO:*/,s1:/*,mb:*,ex:*/,://
-setlocal commentstring=/*%s*/
-setlocal complete=.,w,b,u,t,i
-setlocal concealcursor=
-setlocal conceallevel=0
-setlocal completefunc=
-setlocal nocopyindent
-setlocal cryptmethod=
-setlocal nocursorbind
-setlocal nocursorcolumn
-set cursorline
-setlocal cursorline
-setlocal define=
-setlocal dictionary=
-setlocal nodiff
-setlocal equalprg=
-setlocal errorformat=
-setlocal expandtab
-if &filetype != 'cpp'
-setlocal filetype=cpp
-endif
-setlocal foldcolumn=0
-setlocal foldenable
-setlocal foldexpr=0
-setlocal foldignore=#
-setlocal foldlevel=0
-setlocal foldmarker={{{,}}}
-set foldmethod=indent
-setlocal foldmethod=manual
-set foldminlines=10
-setlocal foldminlines=1
-setlocal foldnestmax=20
-setlocal foldtext=foldtext()
-setlocal formatexpr=
-setlocal formatoptions=croql
-setlocal formatlistpat=^\\s*\\d\\+[\\]:.)}\\t\ ]\\s*
-setlocal grepprg=
-setlocal iminsert=2
-setlocal imsearch=2
-setlocal include=
-setlocal includeexpr=
-setlocal indentexpr=
-setlocal indentkeys=0{,0},:,0#,!^F,o,O,e
-setlocal noinfercase
-setlocal iskeyword=@,48-57,_,192-255
-setlocal keywordprg=
-setlocal nolinebreak
-setlocal nolisp
-setlocal nolist
-setlocal makeprg=
-setlocal matchpairs=(:),{:},[:]
-setlocal modeline
-setlocal modifiable
-setlocal nrformats=octal,hex
-set number
-setlocal number
-setlocal numberwidth=4
-setlocal omnifunc=ccomplete#Complete
-setlocal path=
-setlocal nopreserveindent
-setlocal nopreviewwindow
-setlocal quoteescape=\\
-setlocal noreadonly
-setlocal norelativenumber
-setlocal norightleft
-setlocal rightleftcmd=search
-setlocal noscrollbind
-setlocal shiftwidth=4
-setlocal noshortname
-setlocal nosmartindent
-setlocal softtabstop=4
-setlocal nospell
-setlocal spellcapcheck=[.?!]\\_[\\])'\"\	\ ]\\+
-setlocal spellfile=
-setlocal spelllang=en
-setlocal statusline=%!airline#statusline(2)
-setlocal suffixesadd=
-setlocal swapfile
-setlocal synmaxcol=3000
-if &syntax != 'cpp'
-setlocal syntax=cpp
-endif
-setlocal tabstop=4
-setlocal tags=
-setlocal textwidth=0
-setlocal thesaurus=
-setlocal undofile
-setlocal nowinfixheight
-setlocal nowinfixwidth
-setlocal wrap
-setlocal wrapmargin=0
-silent! normal! zE
-let s:l = 25 - ((7 * winheight(0) + 12) / 24)
-if s:l < 1 | let s:l = 1 | endif
-exe s:l
-normal! zt
-25
-normal! 020l
 wincmd w
 argglobal
 edit defs_turb.cc
@@ -1611,7 +1481,7 @@ setlocal nospell
 setlocal spellcapcheck=[.?!]\\_[\\])'\"\	\ ]\\+
 setlocal spellfile=
 setlocal spelllang=en
-setlocal statusline=%!airline#statusline(3)
+setlocal statusline=%!airline#statusline(2)
 setlocal suffixesadd=
 setlocal swapfile
 setlocal synmaxcol=3000
@@ -1734,7 +1604,7 @@ setlocal nospell
 setlocal spellcapcheck=[.?!]\\_[\\])'\"\	\ ]\\+
 setlocal spellfile=
 setlocal spelllang=en
-setlocal statusline=%!airline#statusline(4)
+setlocal statusline=%!airline#statusline(3)
 setlocal suffixesadd=
 setlocal swapfile
 setlocal synmaxcol=3000
@@ -1751,21 +1621,18 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 169 - ((1 * winheight(0) + 8) / 17)
+let s:l = 169 - ((1 * winheight(0) + 8) / 16)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
 169
 normal! 0
 wincmd w
-exe '1resize ' . ((&lines * 29 + 28) / 57)
 exe 'vert 1resize ' . ((&columns * 78 + 83) / 167)
-exe '2resize ' . ((&lines * 24 + 28) / 57)
-exe 'vert 2resize ' . ((&columns * 78 + 83) / 167)
-exe '3resize ' . ((&lines * 36 + 28) / 57)
+exe '2resize ' . ((&lines * 36 + 28) / 56)
+exe 'vert 2resize ' . ((&columns * 88 + 83) / 167)
+exe '3resize ' . ((&lines * 16 + 28) / 56)
 exe 'vert 3resize ' . ((&columns * 88 + 83) / 167)
-exe '4resize ' . ((&lines * 17 + 28) / 57)
-exe 'vert 4resize ' . ((&columns * 88 + 83) / 167)
 tabedit funcs.h
 set splitbelow splitright
 wincmd _ | wincmd |
@@ -1782,9 +1649,9 @@ wincmd w
 wincmd t
 set winheight=1 winwidth=1
 exe 'vert 1resize ' . ((&columns * 56 + 83) / 167)
-exe '2resize ' . ((&lines * 31 + 28) / 57)
+exe '2resize ' . ((&lines * 31 + 28) / 56)
 exe 'vert 2resize ' . ((&columns * 82 + 83) / 167)
-exe '3resize ' . ((&lines * 22 + 28) / 57)
+exe '3resize ' . ((&lines * 22 + 28) / 56)
 exe 'vert 3resize ' . ((&columns * 82 + 83) / 167)
 exe 'vert 4resize ' . ((&columns * 27 + 83) / 167)
 argglobal
@@ -1902,12 +1769,12 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 101 - ((25 * winheight(0) + 27) / 54)
+let s:l = 58 - ((16 * winheight(0) + 27) / 54)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-101
-normal! 018l
+58
+normal! 08l
 wincmd w
 argglobal
 edit funcs.cc
@@ -2025,12 +1892,12 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 214 - ((25 * winheight(0) + 15) / 31)
+let s:l = 487 - ((24 * winheight(0) + 15) / 31)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-214
-normal! 032l
+487
+normal! 026l
 wincmd w
 argglobal
 edit funcs.cc
@@ -2148,12 +2015,12 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 152 - ((9 * winheight(0) + 11) / 22)
+let s:l = 207 - ((9 * winheight(0) + 11) / 22)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-152
-normal! 04l
+207
+normal! 038l
 wincmd w
 argglobal
 enew
@@ -2273,9 +2140,9 @@ setlocal nowrap
 setlocal wrapmargin=0
 wincmd w
 exe 'vert 1resize ' . ((&columns * 56 + 83) / 167)
-exe '2resize ' . ((&lines * 31 + 28) / 57)
+exe '2resize ' . ((&lines * 31 + 28) / 56)
 exe 'vert 2resize ' . ((&columns * 82 + 83) / 167)
-exe '3resize ' . ((&lines * 22 + 28) / 57)
+exe '3resize ' . ((&lines * 22 + 28) / 56)
 exe 'vert 3resize ' . ((&columns * 82 + 83) / 167)
 exe 'vert 4resize ' . ((&columns * 27 + 83) / 167)
 tabedit funcs.cc
@@ -2283,10 +2150,6 @@ set splitbelow splitright
 wincmd _ | wincmd |
 vsplit
 1wincmd h
-wincmd _ | wincmd |
-split
-1wincmd k
-wincmd w
 wincmd w
 wincmd _ | wincmd |
 split
@@ -2294,14 +2157,11 @@ split
 wincmd w
 wincmd t
 set winheight=1 winwidth=1
-exe '1resize ' . ((&lines * 26 + 28) / 57)
 exe 'vert 1resize ' . ((&columns * 80 + 83) / 167)
-exe '2resize ' . ((&lines * 27 + 28) / 57)
-exe 'vert 2resize ' . ((&columns * 80 + 83) / 167)
-exe '3resize ' . ((&lines * 21 + 28) / 57)
+exe '2resize ' . ((&lines * 32 + 28) / 56)
+exe 'vert 2resize ' . ((&columns * 86 + 83) / 167)
+exe '3resize ' . ((&lines * 20 + 28) / 56)
 exe 'vert 3resize ' . ((&columns * 86 + 83) / 167)
-exe '4resize ' . ((&lines * 32 + 28) / 57)
-exe 'vert 4resize ' . ((&columns * 86 + 83) / 167)
 argglobal
 xnoremap <buffer> <silent> \a} `>a}`<i{
 xnoremap <buffer> <silent> \a{ `>a}`<i{
@@ -2417,257 +2277,11 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 519 - ((15 * winheight(0) + 13) / 26)
+let s:l = 593 - ((30 * winheight(0) + 26) / 53)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-519
-normal! 040l
-wincmd w
-argglobal
-edit funcs.cc
-xnoremap <buffer> <silent> \a} `>a}`<i{
-xnoremap <buffer> <silent> \a{ `>a}`<i{
-xnoremap <buffer> <silent> \a) `>a)`<i(
-xnoremap <buffer> <silent> \a( `>a)`<i(
-xnoremap <buffer> <silent> \a' `>a'`<i'
-xnoremap <buffer> <silent> \a] `>a]`<i[
-xnoremap <buffer> <silent> \a[ `>a]`<i[
-xnoremap <buffer> <silent> \a" `>a"`<i"
-xnoremap <buffer> <silent> \a` `>a``<i`
-setlocal keymap=
-setlocal noarabic
-setlocal noautoindent
-setlocal balloonexpr=
-setlocal nobinary
-setlocal bufhidden=
-setlocal buflisted
-setlocal buftype=
-setlocal cindent
-setlocal cinkeys=0{,0},0),:,0#,!^F,o,O,e
-setlocal cinoptions=
-setlocal cinwords=if,else,while,do,for,switch
-setlocal colorcolumn=
-setlocal comments=sO:*\ -,mO:*\ \ ,exO:*/,s1:/*,mb:*,ex:*/,://
-setlocal commentstring=/*%s*/
-setlocal complete=.,w,b,u,t,i
-setlocal concealcursor=
-setlocal conceallevel=0
-setlocal completefunc=
-setlocal nocopyindent
-setlocal cryptmethod=
-setlocal nocursorbind
-setlocal nocursorcolumn
-set cursorline
-setlocal cursorline
-setlocal define=
-setlocal dictionary=
-setlocal nodiff
-setlocal equalprg=
-setlocal errorformat=
-setlocal expandtab
-if &filetype != 'cpp'
-setlocal filetype=cpp
-endif
-setlocal foldcolumn=0
-setlocal foldenable
-setlocal foldexpr=0
-setlocal foldignore=#
-setlocal foldlevel=0
-setlocal foldmarker={{{,}}}
-set foldmethod=indent
-setlocal foldmethod=manual
-set foldminlines=10
-setlocal foldminlines=1
-setlocal foldnestmax=20
-setlocal foldtext=foldtext()
-setlocal formatexpr=
-setlocal formatoptions=croql
-setlocal formatlistpat=^\\s*\\d\\+[\\]:.)}\\t\ ]\\s*
-setlocal grepprg=
-setlocal iminsert=2
-setlocal imsearch=2
-setlocal include=
-setlocal includeexpr=
-setlocal indentexpr=
-setlocal indentkeys=0{,0},:,0#,!^F,o,O,e
-setlocal noinfercase
-setlocal iskeyword=@,48-57,_,192-255
-setlocal keywordprg=
-setlocal nolinebreak
-setlocal nolisp
-setlocal nolist
-setlocal makeprg=
-setlocal matchpairs=(:),{:},[:]
-setlocal modeline
-setlocal modifiable
-setlocal nrformats=octal,hex
-set number
-setlocal number
-setlocal numberwidth=4
-setlocal omnifunc=ccomplete#Complete
-setlocal path=
-setlocal nopreserveindent
-setlocal nopreviewwindow
-setlocal quoteescape=\\
-setlocal noreadonly
-setlocal norelativenumber
-setlocal norightleft
-setlocal rightleftcmd=search
-setlocal noscrollbind
-setlocal shiftwidth=4
-setlocal noshortname
-setlocal nosmartindent
-setlocal softtabstop=4
-setlocal nospell
-setlocal spellcapcheck=[.?!]\\_[\\])'\"\	\ ]\\+
-setlocal spellfile=
-setlocal spelllang=en
-setlocal statusline=%!airline#statusline(2)
-setlocal suffixesadd=
-setlocal swapfile
-setlocal synmaxcol=3000
-if &syntax != 'cpp'
-setlocal syntax=cpp
-endif
-setlocal tabstop=4
-setlocal tags=
-setlocal textwidth=0
-setlocal thesaurus=
-setlocal undofile
-setlocal nowinfixheight
-setlocal nowinfixwidth
-setlocal wrap
-setlocal wrapmargin=0
-silent! normal! zE
-let s:l = 630 - ((12 * winheight(0) + 13) / 27)
-if s:l < 1 | let s:l = 1 | endif
-exe s:l
-normal! zt
-630
-normal! 0
-wincmd w
-argglobal
-edit funcs.cc
-xnoremap <buffer> <silent> \a} `>a}`<i{
-xnoremap <buffer> <silent> \a{ `>a}`<i{
-xnoremap <buffer> <silent> \a) `>a)`<i(
-xnoremap <buffer> <silent> \a( `>a)`<i(
-xnoremap <buffer> <silent> \a' `>a'`<i'
-xnoremap <buffer> <silent> \a] `>a]`<i[
-xnoremap <buffer> <silent> \a[ `>a]`<i[
-xnoremap <buffer> <silent> \a" `>a"`<i"
-xnoremap <buffer> <silent> \a` `>a``<i`
-setlocal keymap=
-setlocal noarabic
-setlocal noautoindent
-setlocal balloonexpr=
-setlocal nobinary
-setlocal bufhidden=
-setlocal buflisted
-setlocal buftype=
-setlocal cindent
-setlocal cinkeys=0{,0},0),:,0#,!^F,o,O,e
-setlocal cinoptions=
-setlocal cinwords=if,else,while,do,for,switch
-setlocal colorcolumn=
-setlocal comments=sO:*\ -,mO:*\ \ ,exO:*/,s1:/*,mb:*,ex:*/,://
-setlocal commentstring=/*%s*/
-setlocal complete=.,w,b,u,t,i
-setlocal concealcursor=
-setlocal conceallevel=0
-setlocal completefunc=
-setlocal nocopyindent
-setlocal cryptmethod=
-setlocal nocursorbind
-setlocal nocursorcolumn
-set cursorline
-setlocal cursorline
-setlocal define=
-setlocal dictionary=
-setlocal nodiff
-setlocal equalprg=
-setlocal errorformat=
-setlocal expandtab
-if &filetype != 'cpp'
-setlocal filetype=cpp
-endif
-setlocal foldcolumn=0
-setlocal foldenable
-setlocal foldexpr=0
-setlocal foldignore=#
-setlocal foldlevel=0
-setlocal foldmarker={{{,}}}
-set foldmethod=indent
-setlocal foldmethod=manual
-set foldminlines=10
-setlocal foldminlines=1
-setlocal foldnestmax=20
-setlocal foldtext=foldtext()
-setlocal formatexpr=
-setlocal formatoptions=croql
-setlocal formatlistpat=^\\s*\\d\\+[\\]:.)}\\t\ ]\\s*
-setlocal grepprg=
-setlocal iminsert=2
-setlocal imsearch=2
-setlocal include=
-setlocal includeexpr=
-setlocal indentexpr=
-setlocal indentkeys=0{,0},:,0#,!^F,o,O,e
-setlocal noinfercase
-setlocal iskeyword=@,48-57,_,192-255
-setlocal keywordprg=
-setlocal nolinebreak
-setlocal nolisp
-setlocal nolist
-setlocal makeprg=
-setlocal matchpairs=(:),{:},[:]
-setlocal modeline
-setlocal modifiable
-setlocal nrformats=octal,hex
-set number
-setlocal number
-setlocal numberwidth=4
-setlocal omnifunc=ccomplete#Complete
-setlocal path=
-setlocal nopreserveindent
-setlocal nopreviewwindow
-setlocal quoteescape=\\
-setlocal noreadonly
-setlocal norelativenumber
-setlocal norightleft
-setlocal rightleftcmd=search
-setlocal noscrollbind
-setlocal shiftwidth=4
-setlocal noshortname
-setlocal nosmartindent
-setlocal softtabstop=4
-setlocal nospell
-setlocal spellcapcheck=[.?!]\\_[\\])'\"\	\ ]\\+
-setlocal spellfile=
-setlocal spelllang=en
-setlocal statusline=%!airline#statusline(3)
-setlocal suffixesadd=
-setlocal swapfile
-setlocal synmaxcol=3000
-if &syntax != 'cpp'
-setlocal syntax=cpp
-endif
-setlocal tabstop=4
-setlocal tags=
-setlocal textwidth=0
-setlocal thesaurus=
-setlocal undofile
-setlocal nowinfixheight
-setlocal nowinfixwidth
-setlocal wrap
-setlocal wrapmargin=0
-silent! normal! zE
-let s:l = 406 - ((14 * winheight(0) + 10) / 21)
-if s:l < 1 | let s:l = 1 | endif
-exe s:l
-normal! zt
-406
+593
 normal! 017l
 wincmd w
 argglobal
@@ -2769,7 +2383,7 @@ setlocal nospell
 setlocal spellcapcheck=[.?!]\\_[\\])'\"\	\ ]\\+
 setlocal spellfile=
 setlocal spelllang=en
-setlocal statusline=%!airline#statusline(4)
+setlocal statusline=%!airline#statusline(2)
 setlocal suffixesadd=
 setlocal swapfile
 setlocal synmaxcol=3000
@@ -2786,22 +2400,142 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 195 - ((13 * winheight(0) + 16) / 32)
+let s:l = 483 - ((27 * winheight(0) + 16) / 32)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-195
-normal! 04l
+483
+normal! 045l
 wincmd w
-4wincmd w
-exe '1resize ' . ((&lines * 26 + 28) / 57)
+argglobal
+edit funcs.cc
+xnoremap <buffer> <silent> \a} `>a}`<i{
+xnoremap <buffer> <silent> \a{ `>a}`<i{
+xnoremap <buffer> <silent> \a) `>a)`<i(
+xnoremap <buffer> <silent> \a( `>a)`<i(
+xnoremap <buffer> <silent> \a' `>a'`<i'
+xnoremap <buffer> <silent> \a] `>a]`<i[
+xnoremap <buffer> <silent> \a[ `>a]`<i[
+xnoremap <buffer> <silent> \a" `>a"`<i"
+xnoremap <buffer> <silent> \a` `>a``<i`
+setlocal keymap=
+setlocal noarabic
+setlocal noautoindent
+setlocal balloonexpr=
+setlocal nobinary
+setlocal bufhidden=
+setlocal buflisted
+setlocal buftype=
+setlocal cindent
+setlocal cinkeys=0{,0},0),:,0#,!^F,o,O,e
+setlocal cinoptions=
+setlocal cinwords=if,else,while,do,for,switch
+setlocal colorcolumn=
+setlocal comments=sO:*\ -,mO:*\ \ ,exO:*/,s1:/*,mb:*,ex:*/,://
+setlocal commentstring=/*%s*/
+setlocal complete=.,w,b,u,t,i
+setlocal concealcursor=
+setlocal conceallevel=0
+setlocal completefunc=
+setlocal nocopyindent
+setlocal cryptmethod=
+setlocal nocursorbind
+setlocal nocursorcolumn
+set cursorline
+setlocal cursorline
+setlocal define=
+setlocal dictionary=
+setlocal nodiff
+setlocal equalprg=
+setlocal errorformat=
+setlocal expandtab
+if &filetype != 'cpp'
+setlocal filetype=cpp
+endif
+setlocal foldcolumn=0
+setlocal foldenable
+setlocal foldexpr=0
+setlocal foldignore=#
+setlocal foldlevel=0
+setlocal foldmarker={{{,}}}
+set foldmethod=indent
+setlocal foldmethod=manual
+set foldminlines=10
+setlocal foldminlines=1
+setlocal foldnestmax=20
+setlocal foldtext=foldtext()
+setlocal formatexpr=
+setlocal formatoptions=croql
+setlocal formatlistpat=^\\s*\\d\\+[\\]:.)}\\t\ ]\\s*
+setlocal grepprg=
+setlocal iminsert=2
+setlocal imsearch=2
+setlocal include=
+setlocal includeexpr=
+setlocal indentexpr=
+setlocal indentkeys=0{,0},:,0#,!^F,o,O,e
+setlocal noinfercase
+setlocal iskeyword=@,48-57,_,192-255
+setlocal keywordprg=
+setlocal nolinebreak
+setlocal nolisp
+setlocal nolist
+setlocal makeprg=
+setlocal matchpairs=(:),{:},[:]
+setlocal modeline
+setlocal modifiable
+setlocal nrformats=octal,hex
+set number
+setlocal number
+setlocal numberwidth=4
+setlocal omnifunc=ccomplete#Complete
+setlocal path=
+setlocal nopreserveindent
+setlocal nopreviewwindow
+setlocal quoteescape=\\
+setlocal noreadonly
+setlocal norelativenumber
+setlocal norightleft
+setlocal rightleftcmd=search
+setlocal noscrollbind
+setlocal shiftwidth=4
+setlocal noshortname
+setlocal nosmartindent
+setlocal softtabstop=4
+setlocal nospell
+setlocal spellcapcheck=[.?!]\\_[\\])'\"\	\ ]\\+
+setlocal spellfile=
+setlocal spelllang=en
+setlocal statusline=%!airline#statusline(3)
+setlocal suffixesadd=
+setlocal swapfile
+setlocal synmaxcol=3000
+if &syntax != 'cpp'
+setlocal syntax=cpp
+endif
+setlocal tabstop=4
+setlocal tags=
+setlocal textwidth=0
+setlocal thesaurus=
+setlocal undofile
+setlocal nowinfixheight
+setlocal nowinfixwidth
+setlocal wrap
+setlocal wrapmargin=0
+silent! normal! zE
+let s:l = 277 - ((3 * winheight(0) + 10) / 20)
+if s:l < 1 | let s:l = 1 | endif
+exe s:l
+normal! zt
+277
+normal! 0
+wincmd w
+2wincmd w
 exe 'vert 1resize ' . ((&columns * 80 + 83) / 167)
-exe '2resize ' . ((&lines * 27 + 28) / 57)
-exe 'vert 2resize ' . ((&columns * 80 + 83) / 167)
-exe '3resize ' . ((&lines * 21 + 28) / 57)
+exe '2resize ' . ((&lines * 32 + 28) / 56)
+exe 'vert 2resize ' . ((&columns * 86 + 83) / 167)
+exe '3resize ' . ((&lines * 20 + 28) / 56)
 exe 'vert 3resize ' . ((&columns * 86 + 83) / 167)
-exe '4resize ' . ((&lines * 32 + 28) / 57)
-exe 'vert 4resize ' . ((&columns * 86 + 83) / 167)
 tabedit odeintt.h
 set splitbelow splitright
 wincmd _ | wincmd |
@@ -2815,9 +2549,9 @@ wincmd w
 wincmd t
 set winheight=1 winwidth=1
 exe 'vert 1resize ' . ((&columns * 80 + 83) / 167)
-exe '2resize ' . ((&lines * 52 + 28) / 57)
+exe '2resize ' . ((&lines * 51 + 28) / 56)
 exe 'vert 2resize ' . ((&columns * 86 + 83) / 167)
-exe '3resize ' . ((&lines * 1 + 28) / 57)
+exe '3resize ' . ((&lines * 1 + 28) / 56)
 exe 'vert 3resize ' . ((&columns * 86 + 83) / 167)
 argglobal
 xnoremap <buffer> <silent> \a} `>a}`<i{
@@ -2934,11 +2668,11 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 32 - ((31 * winheight(0) + 27) / 54)
+let s:l = 29 - ((25 * winheight(0) + 26) / 53)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-32
+29
 normal! 04l
 wincmd w
 argglobal
@@ -3057,12 +2791,12 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 103 - ((38 * winheight(0) + 26) / 52)
+let s:l = 11 - ((10 * winheight(0) + 25) / 51)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-103
-normal! 04l
+11
+normal! 029l
 wincmd w
 argglobal
 edit odeintt.cc
@@ -3180,18 +2914,18 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 67 - ((0 * winheight(0) + 0) / 1)
+let s:l = 69 - ((0 * winheight(0) + 0) / 1)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-67
+69
 normal! 030l
 wincmd w
-4wincmd w
+2wincmd w
 exe 'vert 1resize ' . ((&columns * 80 + 83) / 167)
-exe '2resize ' . ((&lines * 52 + 28) / 57)
+exe '2resize ' . ((&lines * 51 + 28) / 56)
 exe 'vert 2resize ' . ((&columns * 86 + 83) / 167)
-exe '3resize ' . ((&lines * 1 + 28) / 57)
+exe '3resize ' . ((&lines * 1 + 28) / 56)
 exe 'vert 3resize ' . ((&columns * 86 + 83) / 167)
 tabedit stepperbs.h
 set splitbelow splitright
@@ -3206,9 +2940,9 @@ wincmd w
 wincmd t
 set winheight=1 winwidth=1
 exe 'vert 1resize ' . ((&columns * 79 + 83) / 167)
-exe '2resize ' . ((&lines * 13 + 28) / 57)
+exe '2resize ' . ((&lines * 13 + 28) / 56)
 exe 'vert 2resize ' . ((&columns * 87 + 83) / 167)
-exe '3resize ' . ((&lines * 40 + 28) / 57)
+exe '3resize ' . ((&lines * 39 + 28) / 56)
 exe 'vert 3resize ' . ((&columns * 87 + 83) / 167)
 argglobal
 xnoremap <buffer> <silent> \a} `>a}`<i{
@@ -3325,7 +3059,7 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 5 - ((4 * winheight(0) + 27) / 54)
+let s:l = 5 - ((4 * winheight(0) + 26) / 53)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
@@ -3571,18 +3305,18 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 15 - ((14 * winheight(0) + 20) / 40)
+let s:l = 15 - ((14 * winheight(0) + 19) / 39)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
 15
 normal! 0
 wincmd w
-4wincmd w
+2wincmd w
 exe 'vert 1resize ' . ((&columns * 79 + 83) / 167)
-exe '2resize ' . ((&lines * 13 + 28) / 57)
+exe '2resize ' . ((&lines * 13 + 28) / 56)
 exe 'vert 2resize ' . ((&columns * 87 + 83) / 167)
-exe '3resize ' . ((&lines * 40 + 28) / 57)
+exe '3resize ' . ((&lines * 39 + 28) / 56)
 exe 'vert 3resize ' . ((&columns * 87 + 83) / 167)
 tabedit COMENTARIOS.txt
 set splitbelow splitright
@@ -3709,7 +3443,7 @@ exe s:l
 normal! zt
 18
 normal! 026l
-4wincmd w
+2wincmd w
 tabedit ~/simulacion/pla_stochastic/composite_turbulence/massive_orbits/makefile
 set splitbelow splitright
 wincmd _ | wincmd |
@@ -3723,9 +3457,9 @@ wincmd w
 wincmd t
 set winheight=1 winwidth=1
 exe 'vert 1resize ' . ((&columns * 99 + 83) / 167)
-exe '2resize ' . ((&lines * 19 + 28) / 57)
+exe '2resize ' . ((&lines * 19 + 28) / 56)
 exe 'vert 2resize ' . ((&columns * 67 + 83) / 167)
-exe '3resize ' . ((&lines * 34 + 28) / 57)
+exe '3resize ' . ((&lines * 34 + 28) / 56)
 exe 'vert 3resize ' . ((&columns * 67 + 83) / 167)
 argglobal
 xnoremap <buffer> <silent> \a} `>a}`<i{
@@ -4095,11 +3829,11 @@ normal! zt
 6
 normal! 03l
 wincmd w
-4wincmd w
+2wincmd w
 exe 'vert 1resize ' . ((&columns * 99 + 83) / 167)
-exe '2resize ' . ((&lines * 19 + 28) / 57)
+exe '2resize ' . ((&lines * 19 + 28) / 56)
 exe 'vert 2resize ' . ((&columns * 67 + 83) / 167)
-exe '3resize ' . ((&lines * 34 + 28) / 57)
+exe '3resize ' . ((&lines * 34 + 28) / 56)
 exe 'vert 3resize ' . ((&columns * 67 + 83) / 167)
 tabnext 6
 if exists('s:wipebuf')

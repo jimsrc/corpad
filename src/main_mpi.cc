@@ -116,7 +116,7 @@ int main(int argc, char* argv[]){
 		printf("\n [rank:%d] **************** NEXT Bfield realization j:%d/%d ****************", w_rank, j, n_Brealiz);
         i = 0;  // reinicio el conteo de plas
         while(i<n_ori){
-			outbs.build(str_timescale, NPOINTS, tmaxHistTau, nHistTau, nThColl, i, j, dir_out);	// reseteo objeto "Output" para c/pla
+			outbs.build(str_timescale, NPOINTS, i, j, dir_out);	// reseteo objeto "Output" para c/pla
 
 			exist_file	= outbs.file_exist();		// le pregunto con "outbs" xq el es quien maneja los nombres finales de los archivos de salida
 			imin		= w_rank*Nplas_rank;		// i-minimo para c/procesador
@@ -132,7 +132,7 @@ int main(int argc, char* argv[]){
 				printf(" [rank:%d] corriendo: %s\n", w_rank, outbs.fname_out);
 				init_orientation(i, array_ori, ystart);		// values for initial y-values
 
-				Odeint<StepperBS<rhs> > bsode(ystart,x1,x2,atol,rtol,h1,hmin,outbs,d,par,w_rank);	// inicializo el integrador para c/pla
+				Odeint<StepperBS<rhs> > bsode(ystart,x1,x2,atol,rtol,h1,hmin,outbs,d,par,nHistTau,nThColl,w_rank);	// inicializo el integrador para c/pla
 
                 #ifdef KILL_HANDLER
                 bsode._thisptr = &bsode; // 'bsode' address 

@@ -7,7 +7,8 @@
 template<class Stepper>
 Odeint<Stepper>::Odeint(VecDoub_IO &ystartt, const Doub xx1, const Doub xx2,
     const Doub atol, const Doub rtol, const Doub h1, const Doub hminn,
-    Output<Stepper> &outt,typename Stepper::Dtype &derivss, PARAMS parr, int wrankk) : 
+    Output<Stepper> &outt,typename Stepper::Dtype &derivss, PARAMS parr,
+    Int nHist, Int nThColl_, int wrankk) : 
     nvar(ystartt.size()),
     y(nvar),yold(nvar),dydx(nvar),ystart(ystartt),x(xx1),nok(0),nbad(0),
     x1(xx1),x2(xx2),hmin(hminn),dense(outt.dense),out(outt),derivs(derivss),
@@ -16,7 +17,8 @@ Odeint<Stepper>::Odeint(VecDoub_IO &ystartt, const Doub xx1, const Doub xx2,
     EPS=numeric_limits<Doub>::epsilon();
     h=SIGN(h1,x2-x1);
     for (Int i=0;i<nvar;i++) y[i]=ystart[i];
-    out.init(s.neqn, x1, x2);
+    out.init(s.neqn, x1, x2, nHist, nThColl_);
+    //out.init(const Int neqn, const Doub xlo, const Doub xhi, Int nHist, Int nThColl_) {
 }
 
 /*
