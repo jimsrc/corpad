@@ -726,9 +726,18 @@ typedef __pyx_t_5numpy_int_t __pyx_t_7Bparker_7Bparker_Int;
  * ctypedef np.int_t       Int
  * ctypedef np.float32_t   Float32             # <<<<<<<<<<<<<<
  * ctypedef np.ndarray     NDarray
- * 
+ * ctypedef double         Doub
  */
 typedef __pyx_t_5numpy_float32_t __pyx_t_7Bparker_7Bparker_Float32;
+
+/* "Bparker/Bparker.pyx":20
+ * ctypedef np.float32_t   Float32
+ * ctypedef np.ndarray     NDarray
+ * ctypedef double         Doub             # <<<<<<<<<<<<<<
+ * 
+ * # agregamos la clase wrapper
+ */
+typedef double __pyx_t_7Bparker_7Bparker_Doub;
 #if CYTHON_CCOMPLEX
   #ifdef __cplusplus
     typedef ::std::complex< float > __pyx_t_float_complex;
@@ -796,8 +805,8 @@ struct __pyx_opt_args_7Bparker_7Bparker_15ArrayWrapper_2d_set_data;
  * ctypedef np.int_t       Int
  * ctypedef np.float32_t   Float32
  * ctypedef np.ndarray     NDarray             # <<<<<<<<<<<<<<
+ * ctypedef double         Doub
  * 
- * # agregamos la clase wrapper
  */
 typedef PyArrayObject *__pyx_t_7Bparker_7Bparker_NDarray;
 
@@ -966,6 +975,21 @@ static void __Pyx_RaiseBufferIndexError(int axis);
 #define __Pyx_BufPtrCContig1d(type, buf, i0, s0) ((type)buf + i0)
 static CYTHON_INLINE int __Pyx_ArgTypeTest(PyObject *obj, PyTypeObject *type, int none_allowed,
     const char *name, int exact);
+
+#ifndef __PYX_FORCE_INIT_THREADS
+  #define __PYX_FORCE_INIT_THREADS 0
+#endif
+
+#define __Pyx_PyNumber_Power2(a, b) PyNumber_Power(a, b, Py_None)
+
+static void __Pyx_RaiseArgtupleInvalid(const char* func_name, int exact,
+    Py_ssize_t num_min, Py_ssize_t num_max, Py_ssize_t num_found);
+
+static void __Pyx_RaiseDoubleKeywordsError(const char* func_name, PyObject* kw_name);
+
+static int __Pyx_ParseOptionalKeywords(PyObject *kwds, PyObject **argnames[], \
+    PyObject *kwds2, PyObject *values[], Py_ssize_t num_pos_args, \
+    const char* function_name);
 
 #if CYTHON_COMPILING_IN_CPYTHON
 static CYTHON_INLINE PyObject* __Pyx_PyObject_GetAttrStr(PyObject* obj, PyObject* attr_name) {
@@ -1300,6 +1324,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *, cha
 static PyTypeObject *__pyx_ptype_7Bparker_7Bparker_ArrayWrapper = 0;
 static PyTypeObject *__pyx_ptype_7Bparker_7Bparker_ArrayWrapper_2d = 0;
 static PyObject *__pyx_f_7Bparker_7Bparker_return_B(PyArrayObject *, int __pyx_skip_dispatch); /*proto*/
+static double __pyx_f_7Bparker_7Bparker_calc_Rlarmor(__pyx_t_7Bparker_7Bparker_Doub, __pyx_t_7Bparker_7Bparker_Doub, int __pyx_skip_dispatch); /*proto*/
 static __Pyx_TypeInfo __Pyx_TypeInfo_nn___pyx_t_5numpy_float32_t = { "float32_t", NULL, sizeof(__pyx_t_5numpy_float32_t), { 0 }, 0, 'R', 0, 0 };
 #define __Pyx_MODULE_NAME "Bparker.Bparker"
 int __pyx_module_is_main_Bparker__Bparker = 0;
@@ -1313,6 +1338,7 @@ static void __pyx_pf_7Bparker_7Bparker_12ArrayWrapper_2__dealloc__(struct __pyx_
 static PyObject *__pyx_pf_7Bparker_7Bparker_15ArrayWrapper_2d___array__(struct __pyx_obj_7Bparker_7Bparker_ArrayWrapper_2d *__pyx_v_self); /* proto */
 static void __pyx_pf_7Bparker_7Bparker_15ArrayWrapper_2d_2__dealloc__(struct __pyx_obj_7Bparker_7Bparker_ArrayWrapper_2d *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf_7Bparker_7Bparker_return_B(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_xyz); /* proto */
+static PyObject *__pyx_pf_7Bparker_7Bparker_2calc_Rlarmor(CYTHON_UNUSED PyObject *__pyx_self, __pyx_t_7Bparker_7Bparker_Doub __pyx_v_rigidity, __pyx_t_7Bparker_7Bparker_Doub __pyx_v_Bo); /* proto */
 static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, Py_buffer *__pyx_v_info, int __pyx_v_flags); /* proto */
 static void __pyx_pf_5numpy_7ndarray_2__releasebuffer__(PyArrayObject *__pyx_v_self, Py_buffer *__pyx_v_info); /* proto */
 static PyObject *__pyx_tp_new_7Bparker_7Bparker_ArrayWrapper(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
@@ -1331,6 +1357,7 @@ static char __pyx_k_h[] = "h";
 static char __pyx_k_i[] = "i";
 static char __pyx_k_l[] = "l";
 static char __pyx_k_q[] = "q";
+static char __pyx_k_Bo[] = "Bo";
 static char __pyx_k_Zd[] = "Zd";
 static char __pyx_k_Zf[] = "Zf";
 static char __pyx_k_Zg[] = "Zg";
@@ -1343,6 +1370,7 @@ static char __pyx_k_numpy[] = "numpy";
 static char __pyx_k_print[] = "print";
 static char __pyx_k_range[] = "range";
 static char __pyx_k_import[] = "__import__";
+static char __pyx_k_rigidity[] = "rigidity";
 static char __pyx_k_ValueError[] = "ValueError";
 static char __pyx_k_pyx_vtable[] = "__pyx_vtable__";
 static char __pyx_k_RuntimeError[] = "RuntimeError";
@@ -1355,6 +1383,7 @@ static char __pyx_k_Format_string_allocated_too_shor[] = "Format string allocate
 static char __pyx_k_Non_native_byte_order_not_suppor[] = "Non-native byte order not supported";
 static char __pyx_k_ndarray_is_not_Fortran_contiguou[] = "ndarray is not Fortran contiguous";
 static char __pyx_k_Format_string_allocated_too_shor_2[] = "Format string allocated too short.";
+static PyObject *__pyx_n_s_Bo;
 static PyObject *__pyx_kp_u_Format_string_allocated_too_shor;
 static PyObject *__pyx_kp_u_Format_string_allocated_too_shor_2;
 static PyObject *__pyx_kp_u_Non_native_byte_order_not_suppor;
@@ -1374,8 +1403,12 @@ static PyObject *__pyx_n_s_numpy;
 static PyObject *__pyx_n_s_print;
 static PyObject *__pyx_n_s_pyx_vtable;
 static PyObject *__pyx_n_s_range;
+static PyObject *__pyx_n_s_rigidity;
 static PyObject *__pyx_n_s_test;
 static PyObject *__pyx_kp_u_unknown_dtype_code_in_numpy_pxd;
+static PyObject *__pyx_float_1_;
+static PyObject *__pyx_float_0_5;
+static PyObject *__pyx_int_2;
 static PyObject *__pyx_tuple_;
 static PyObject *__pyx_tuple__2;
 static PyObject *__pyx_tuple__3;
@@ -1920,7 +1953,7 @@ static void __pyx_pf_7Bparker_7Bparker_15ArrayWrapper_2d_2__dealloc__(struct __p
   __Pyx_RefNannyFinishContext();
 }
 
-/* "Bparker/Bparker.pyx":29
+/* "Bparker/Bparker.pyx":30
  * 
  * 
  * cpdef return_B(np.ndarray[np.float32_t, ndim=1, mode='c'] xyz):             # <<<<<<<<<<<<<<
@@ -1954,11 +1987,11 @@ static PyObject *__pyx_f_7Bparker_7Bparker_return_B(PyArrayObject *__pyx_v_xyz, 
   __pyx_pybuffernd_xyz.rcbuffer = &__pyx_pybuffer_xyz;
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_xyz.rcbuffer->pybuffer, (PyObject*)__pyx_v_xyz, &__Pyx_TypeInfo_nn___pyx_t_5numpy_float32_t, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 29; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_xyz.rcbuffer->pybuffer, (PyObject*)__pyx_v_xyz, &__Pyx_TypeInfo_nn___pyx_t_5numpy_float32_t, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 30; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
   __pyx_pybuffernd_xyz.diminfo[0].strides = __pyx_pybuffernd_xyz.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_xyz.diminfo[0].shape = __pyx_pybuffernd_xyz.rcbuffer->pybuffer.shape[0];
 
-  /* "Bparker/Bparker.pyx":36
+  /* "Bparker/Bparker.pyx":37
  *            tuple of Br, Bth, Bph # [Gauss]
  *     """
  *     AUincm = 1.5e13             # <<<<<<<<<<<<<<
@@ -1967,7 +2000,7 @@ static PyObject *__pyx_f_7Bparker_7Bparker_return_B(PyArrayObject *__pyx_v_xyz, 
  */
   __pyx_v_AUincm = 1.5e13;
 
-  /* "Bparker/Bparker.pyx":40
+  /* "Bparker/Bparker.pyx":41
  *         double pos[3], B[3]
  * 
  *     pos[0] = xyz[0]*AUincm  # [cm] r, helioradius             # <<<<<<<<<<<<<<
@@ -1982,11 +2015,11 @@ static PyObject *__pyx_f_7Bparker_7Bparker_return_B(PyArrayObject *__pyx_v_xyz, 
   } else if (unlikely(__pyx_t_1 >= __pyx_pybuffernd_xyz.diminfo[0].shape)) __pyx_t_2 = 0;
   if (unlikely(__pyx_t_2 != -1)) {
     __Pyx_RaiseBufferIndexError(__pyx_t_2);
-    {__pyx_filename = __pyx_f[1]; __pyx_lineno = 40; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    {__pyx_filename = __pyx_f[1]; __pyx_lineno = 41; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
   (__pyx_v_pos[0]) = ((*__Pyx_BufPtrCContig1d(__pyx_t_5numpy_float32_t *, __pyx_pybuffernd_xyz.rcbuffer->pybuffer.buf, __pyx_t_1, __pyx_pybuffernd_xyz.diminfo[0].strides)) * __pyx_v_AUincm);
 
-  /* "Bparker/Bparker.pyx":41
+  /* "Bparker/Bparker.pyx":42
  * 
  *     pos[0] = xyz[0]*AUincm  # [cm] r, helioradius
  *     pos[1] = xyz[1]*M_PI/180.  # [rad] th, co-latitude             # <<<<<<<<<<<<<<
@@ -2001,11 +2034,11 @@ static PyObject *__pyx_f_7Bparker_7Bparker_return_B(PyArrayObject *__pyx_v_xyz, 
   } else if (unlikely(__pyx_t_3 >= __pyx_pybuffernd_xyz.diminfo[0].shape)) __pyx_t_2 = 0;
   if (unlikely(__pyx_t_2 != -1)) {
     __Pyx_RaiseBufferIndexError(__pyx_t_2);
-    {__pyx_filename = __pyx_f[1]; __pyx_lineno = 41; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    {__pyx_filename = __pyx_f[1]; __pyx_lineno = 42; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
   (__pyx_v_pos[1]) = (((*__Pyx_BufPtrCContig1d(__pyx_t_5numpy_float32_t *, __pyx_pybuffernd_xyz.rcbuffer->pybuffer.buf, __pyx_t_3, __pyx_pybuffernd_xyz.diminfo[0].strides)) * M_PI) / 180.);
 
-  /* "Bparker/Bparker.pyx":43
+  /* "Bparker/Bparker.pyx":44
  *     pos[1] = xyz[1]*M_PI/180.  # [rad] th, co-latitude
  *     #pos[2] = xyz[2]*AUincm  # [] phi --> B tiene simetria azimutal
  *     calc_B(pos, B)             # <<<<<<<<<<<<<<
@@ -2014,20 +2047,20 @@ static PyObject *__pyx_f_7Bparker_7Bparker_return_B(PyArrayObject *__pyx_v_xyz, 
  */
   calc_B(__pyx_v_pos, __pyx_v_B);
 
-  /* "Bparker/Bparker.pyx":44
+  /* "Bparker/Bparker.pyx":45
  *     #pos[2] = xyz[2]*AUincm  # [] phi --> B tiene simetria azimutal
  *     calc_B(pos, B)
  *     print B[0], B[1], B[2] # Bx, By, Bz [Gauss]             # <<<<<<<<<<<<<<
  *     return B[0], B[1], B[2]
  * 
  */
-  __pyx_t_4 = PyFloat_FromDouble((__pyx_v_B[0])); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 44; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_4 = PyFloat_FromDouble((__pyx_v_B[0])); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 45; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_5 = PyFloat_FromDouble((__pyx_v_B[1])); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 44; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_5 = PyFloat_FromDouble((__pyx_v_B[1])); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 45; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_6 = PyFloat_FromDouble((__pyx_v_B[2])); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 44; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_6 = PyFloat_FromDouble((__pyx_v_B[2])); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 45; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_6);
-  __pyx_t_7 = PyTuple_New(3); if (unlikely(!__pyx_t_7)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 44; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_7 = PyTuple_New(3); if (unlikely(!__pyx_t_7)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 45; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_7);
   __Pyx_GIVEREF(__pyx_t_4);
   PyTuple_SET_ITEM(__pyx_t_7, 0, __pyx_t_4);
@@ -2038,23 +2071,24 @@ static PyObject *__pyx_f_7Bparker_7Bparker_return_B(PyArrayObject *__pyx_v_xyz, 
   __pyx_t_4 = 0;
   __pyx_t_5 = 0;
   __pyx_t_6 = 0;
-  if (__Pyx_Print(0, __pyx_t_7, 1) < 0) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 44; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (__Pyx_Print(0, __pyx_t_7, 1) < 0) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 45; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-  /* "Bparker/Bparker.pyx":45
+  /* "Bparker/Bparker.pyx":46
  *     calc_B(pos, B)
  *     print B[0], B[1], B[2] # Bx, By, Bz [Gauss]
  *     return B[0], B[1], B[2]             # <<<<<<<<<<<<<<
  * 
+ * #cdef void calc_Rlarmor(Doub Ek, Doub Bo, Doub *Rl):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_7 = PyFloat_FromDouble((__pyx_v_B[0])); if (unlikely(!__pyx_t_7)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 45; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_7 = PyFloat_FromDouble((__pyx_v_B[0])); if (unlikely(!__pyx_t_7)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 46; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_7);
-  __pyx_t_6 = PyFloat_FromDouble((__pyx_v_B[1])); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 45; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_6 = PyFloat_FromDouble((__pyx_v_B[1])); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 46; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_6);
-  __pyx_t_5 = PyFloat_FromDouble((__pyx_v_B[2])); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 45; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_5 = PyFloat_FromDouble((__pyx_v_B[2])); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 46; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_4 = PyTuple_New(3); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 45; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_4 = PyTuple_New(3); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 46; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_GIVEREF(__pyx_t_7);
   PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_7);
@@ -2069,7 +2103,7 @@ static PyObject *__pyx_f_7Bparker_7Bparker_return_B(PyArrayObject *__pyx_v_xyz, 
   __pyx_t_4 = 0;
   goto __pyx_L0;
 
-  /* "Bparker/Bparker.pyx":29
+  /* "Bparker/Bparker.pyx":30
  * 
  * 
  * cpdef return_B(np.ndarray[np.float32_t, ndim=1, mode='c'] xyz):             # <<<<<<<<<<<<<<
@@ -2108,7 +2142,7 @@ static PyObject *__pyx_pw_7Bparker_7Bparker_1return_B(PyObject *__pyx_self, PyOb
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("return_B (wrapper)", 0);
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_xyz), __pyx_ptype_5numpy_ndarray, 1, "xyz", 0))) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 29; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_xyz), __pyx_ptype_5numpy_ndarray, 1, "xyz", 0))) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 30; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_r = __pyx_pf_7Bparker_7Bparker_return_B(__pyx_self, ((PyArrayObject *)__pyx_v_xyz));
 
   /* function exit code */
@@ -2136,11 +2170,11 @@ static PyObject *__pyx_pf_7Bparker_7Bparker_return_B(CYTHON_UNUSED PyObject *__p
   __pyx_pybuffernd_xyz.rcbuffer = &__pyx_pybuffer_xyz;
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_xyz.rcbuffer->pybuffer, (PyObject*)__pyx_v_xyz, &__Pyx_TypeInfo_nn___pyx_t_5numpy_float32_t, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 29; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_xyz.rcbuffer->pybuffer, (PyObject*)__pyx_v_xyz, &__Pyx_TypeInfo_nn___pyx_t_5numpy_float32_t, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 30; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
   __pyx_pybuffernd_xyz.diminfo[0].strides = __pyx_pybuffernd_xyz.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_xyz.diminfo[0].shape = __pyx_pybuffernd_xyz.rcbuffer->pybuffer.shape[0];
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_f_7Bparker_7Bparker_return_B(__pyx_v_xyz, 0); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 29; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __pyx_f_7Bparker_7Bparker_return_B(__pyx_v_xyz, 0); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 30; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -2159,6 +2193,295 @@ static PyObject *__pyx_pf_7Bparker_7Bparker_return_B(CYTHON_UNUSED PyObject *__p
   __pyx_L0:;
   __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_xyz.rcbuffer->pybuffer);
   __pyx_L2:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "Bparker/Bparker.pyx":50
+ * #cdef void calc_Rlarmor(Doub Ek, Doub Bo, Doub *Rl):
+ * #cpdef double calc_Rlarmor(Doub Ek, Doub Bo):
+ * cpdef double calc_Rlarmor(Doub rigidity, Doub Bo):             # <<<<<<<<<<<<<<
+ *     """
+ *     input:
+ */
+
+static PyObject *__pyx_pw_7Bparker_7Bparker_3calc_Rlarmor(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static double __pyx_f_7Bparker_7Bparker_calc_Rlarmor(__pyx_t_7Bparker_7Bparker_Doub __pyx_v_rigidity, __pyx_t_7Bparker_7Bparker_Doub __pyx_v_Bo, CYTHON_UNUSED int __pyx_skip_dispatch) {
+  double __pyx_v_q;
+  double __pyx_v_mo;
+  double __pyx_v_c;
+  CYTHON_UNUSED double __pyx_v_AU_in_cm;
+  double __pyx_v_E_reposo;
+  double __pyx_v_beta;
+  double __pyx_v_gamma;
+  double __pyx_v_omg;
+  double __pyx_v_v;
+  double __pyx_r;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  PyObject *__pyx_t_2 = NULL;
+  double __pyx_t_3;
+  __pyx_t_7Bparker_7Bparker_Doub __pyx_t_4;
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
+  __Pyx_RefNannySetupContext("calc_Rlarmor", 0);
+
+  /* "Bparker/Bparker.pyx":60
+ *     """
+ *     cdef:
+ *         double q = (4.8032*1e-10) # [statC] carga PROTON             # <<<<<<<<<<<<<<
+ *         double mo = 1.6726e-24 # [gr] masa PROTON
+ *         double c = 3e10            # [cm/s] light speed
+ */
+  __pyx_v_q = (4.8032 * 1e-10);
+
+  /* "Bparker/Bparker.pyx":61
+ *     cdef:
+ *         double q = (4.8032*1e-10) # [statC] carga PROTON
+ *         double mo = 1.6726e-24 # [gr] masa PROTON             # <<<<<<<<<<<<<<
+ *         double c = 3e10            # [cm/s] light speed
+ *         double AU_in_cm = 1.5e13     # [cm]
+ */
+  __pyx_v_mo = 1.6726e-24;
+
+  /* "Bparker/Bparker.pyx":62
+ *         double q = (4.8032*1e-10) # [statC] carga PROTON
+ *         double mo = 1.6726e-24 # [gr] masa PROTON
+ *         double c = 3e10            # [cm/s] light speed             # <<<<<<<<<<<<<<
+ *         double AU_in_cm = 1.5e13     # [cm]
+ *         double E_reposo=938272013.0  # [eV] PROTON
+ */
+  __pyx_v_c = 3e10;
+
+  /* "Bparker/Bparker.pyx":63
+ *         double mo = 1.6726e-24 # [gr] masa PROTON
+ *         double c = 3e10            # [cm/s] light speed
+ *         double AU_in_cm = 1.5e13     # [cm]             # <<<<<<<<<<<<<<
+ *         double E_reposo=938272013.0  # [eV] PROTON
+ *         double beta, gamma, omg, v
+ */
+  __pyx_v_AU_in_cm = 1.5e13;
+
+  /* "Bparker/Bparker.pyx":64
+ *         double c = 3e10            # [cm/s] light speed
+ *         double AU_in_cm = 1.5e13     # [cm]
+ *         double E_reposo=938272013.0  # [eV] PROTON             # <<<<<<<<<<<<<<
+ *         double beta, gamma, omg, v
+ * 
+ */
+  __pyx_v_E_reposo = 938272013.0;
+
+  /* "Bparker/Bparker.pyx":69
+ *     #rigidity = sqrt(Ek*Ek + 2.*Ek*E_reposo);
+ *     #------------------------CALCULO DE GAMMA Y BETA
+ *     gamma = pow(pow(rigidity/E_reposo,2) + 1. , 0.5)             # <<<<<<<<<<<<<<
+ *     beta = pow(1. - 1/(gamma*gamma) , 0.5)
+ *     #------------------------------CALCULO CICLOTRON
+ */
+  if (unlikely(__pyx_v_E_reposo == 0)) {
+    #ifdef WITH_THREAD
+    PyGILState_STATE __pyx_gilstate_save = PyGILState_Ensure();
+    #endif
+    PyErr_SetString(PyExc_ZeroDivisionError, "float division");
+    #ifdef WITH_THREAD
+    PyGILState_Release(__pyx_gilstate_save);
+    #endif
+    {__pyx_filename = __pyx_f[1]; __pyx_lineno = 69; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  }
+  __pyx_t_1 = PyFloat_FromDouble((__pyx_v_rigidity / __pyx_v_E_reposo)); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 69; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_2 = __Pyx_PyNumber_Power2(__pyx_t_1, __pyx_int_2); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 69; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_2);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_t_1 = PyNumber_Add(__pyx_t_2, __pyx_float_1_); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 69; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __pyx_t_2 = __Pyx_PyNumber_Power2(__pyx_t_1, __pyx_float_0_5); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 69; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_2);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_t_3 = __pyx_PyFloat_AsDouble(__pyx_t_2); if (unlikely((__pyx_t_3 == (double)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 69; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __pyx_v_gamma = __pyx_t_3;
+
+  /* "Bparker/Bparker.pyx":70
+ *     #------------------------CALCULO DE GAMMA Y BETA
+ *     gamma = pow(pow(rigidity/E_reposo,2) + 1. , 0.5)
+ *     beta = pow(1. - 1/(gamma*gamma) , 0.5)             # <<<<<<<<<<<<<<
+ *     #------------------------------CALCULO CICLOTRON
+ *     omg = q * Bo / (gamma * mo * c)     # [s^-1]
+ */
+  __pyx_t_3 = (__pyx_v_gamma * __pyx_v_gamma);
+  if (unlikely(__pyx_t_3 == 0)) {
+    #ifdef WITH_THREAD
+    PyGILState_STATE __pyx_gilstate_save = PyGILState_Ensure();
+    #endif
+    PyErr_SetString(PyExc_ZeroDivisionError, "float division");
+    #ifdef WITH_THREAD
+    PyGILState_Release(__pyx_gilstate_save);
+    #endif
+    {__pyx_filename = __pyx_f[1]; __pyx_lineno = 70; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  }
+  __pyx_t_2 = PyFloat_FromDouble((1. - (1.0 / __pyx_t_3))); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 70; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_1 = __Pyx_PyNumber_Power2(__pyx_t_2, __pyx_float_0_5); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 70; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __pyx_t_3 = __pyx_PyFloat_AsDouble(__pyx_t_1); if (unlikely((__pyx_t_3 == (double)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 70; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_v_beta = __pyx_t_3;
+
+  /* "Bparker/Bparker.pyx":72
+ *     beta = pow(1. - 1/(gamma*gamma) , 0.5)
+ *     #------------------------------CALCULO CICLOTRON
+ *     omg = q * Bo / (gamma * mo * c)     # [s^-1]             # <<<<<<<<<<<<<<
+ *     #---------------------------CALCULO RADIO LARMOR
+ *     v   = beta * c              # [cm/s]
+ */
+  __pyx_t_4 = (__pyx_v_q * __pyx_v_Bo);
+  __pyx_t_3 = ((__pyx_v_gamma * __pyx_v_mo) * __pyx_v_c);
+  if (unlikely(__pyx_t_3 == 0)) {
+    #ifdef WITH_THREAD
+    PyGILState_STATE __pyx_gilstate_save = PyGILState_Ensure();
+    #endif
+    PyErr_SetString(PyExc_ZeroDivisionError, "float division");
+    #ifdef WITH_THREAD
+    PyGILState_Release(__pyx_gilstate_save);
+    #endif
+    {__pyx_filename = __pyx_f[1]; __pyx_lineno = 72; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  }
+  __pyx_v_omg = (__pyx_t_4 / __pyx_t_3);
+
+  /* "Bparker/Bparker.pyx":74
+ *     omg = q * Bo / (gamma * mo * c)     # [s^-1]
+ *     #---------------------------CALCULO RADIO LARMOR
+ *     v   = beta * c              # [cm/s]             # <<<<<<<<<<<<<<
+ *     #Rl[0]  = (v / omg) /AU_in_cm  # [AU]
+ *     return (v / omg) # [cm]
+ */
+  __pyx_v_v = (__pyx_v_beta * __pyx_v_c);
+
+  /* "Bparker/Bparker.pyx":76
+ *     v   = beta * c              # [cm/s]
+ *     #Rl[0]  = (v / omg) /AU_in_cm  # [AU]
+ *     return (v / omg) # [cm]             # <<<<<<<<<<<<<<
+ */
+  if (unlikely(__pyx_v_omg == 0)) {
+    #ifdef WITH_THREAD
+    PyGILState_STATE __pyx_gilstate_save = PyGILState_Ensure();
+    #endif
+    PyErr_SetString(PyExc_ZeroDivisionError, "float division");
+    #ifdef WITH_THREAD
+    PyGILState_Release(__pyx_gilstate_save);
+    #endif
+    {__pyx_filename = __pyx_f[1]; __pyx_lineno = 76; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  }
+  __pyx_r = (__pyx_v_v / __pyx_v_omg);
+  goto __pyx_L0;
+
+  /* "Bparker/Bparker.pyx":50
+ * #cdef void calc_Rlarmor(Doub Ek, Doub Bo, Doub *Rl):
+ * #cpdef double calc_Rlarmor(Doub Ek, Doub Bo):
+ * cpdef double calc_Rlarmor(Doub rigidity, Doub Bo):             # <<<<<<<<<<<<<<
+ *     """
+ *     input:
+ */
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_XDECREF(__pyx_t_2);
+  __Pyx_WriteUnraisable("Bparker.Bparker.calc_Rlarmor", __pyx_clineno, __pyx_lineno, __pyx_filename, 0, 0);
+  __pyx_r = 0;
+  __pyx_L0:;
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* Python wrapper */
+static PyObject *__pyx_pw_7Bparker_7Bparker_3calc_Rlarmor(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static char __pyx_doc_7Bparker_7Bparker_2calc_Rlarmor[] = "\n    input:\n    Ek      : [eV] kinetic energy\n    rigi..  : [V] rigidity\n    Bo      : [G] magnetic field in Gauss\n    output:\n    Rl  : [cm] larmor radii\n    ";
+static PyObject *__pyx_pw_7Bparker_7Bparker_3calc_Rlarmor(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+  __pyx_t_7Bparker_7Bparker_Doub __pyx_v_rigidity;
+  __pyx_t_7Bparker_7Bparker_Doub __pyx_v_Bo;
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("calc_Rlarmor (wrapper)", 0);
+  {
+    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_rigidity,&__pyx_n_s_Bo,0};
+    PyObject* values[2] = {0,0};
+    if (unlikely(__pyx_kwds)) {
+      Py_ssize_t kw_args;
+      const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
+      switch (pos_args) {
+        case  2: values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
+        case  1: values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
+        case  0: break;
+        default: goto __pyx_L5_argtuple_error;
+      }
+      kw_args = PyDict_Size(__pyx_kwds);
+      switch (pos_args) {
+        case  0:
+        if (likely((values[0] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_rigidity)) != 0)) kw_args--;
+        else goto __pyx_L5_argtuple_error;
+        case  1:
+        if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_Bo)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("calc_Rlarmor", 1, 2, 2, 1); {__pyx_filename = __pyx_f[1]; __pyx_lineno = 50; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+        }
+      }
+      if (unlikely(kw_args > 0)) {
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "calc_Rlarmor") < 0)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 50; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+      }
+    } else if (PyTuple_GET_SIZE(__pyx_args) != 2) {
+      goto __pyx_L5_argtuple_error;
+    } else {
+      values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
+      values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
+    }
+    __pyx_v_rigidity = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_rigidity == (double)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 50; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+    __pyx_v_Bo = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_Bo == (double)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 50; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+  }
+  goto __pyx_L4_argument_unpacking_done;
+  __pyx_L5_argtuple_error:;
+  __Pyx_RaiseArgtupleInvalid("calc_Rlarmor", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[1]; __pyx_lineno = 50; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+  __pyx_L3_error:;
+  __Pyx_AddTraceback("Bparker.Bparker.calc_Rlarmor", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_RefNannyFinishContext();
+  return NULL;
+  __pyx_L4_argument_unpacking_done:;
+  __pyx_r = __pyx_pf_7Bparker_7Bparker_2calc_Rlarmor(__pyx_self, __pyx_v_rigidity, __pyx_v_Bo);
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_7Bparker_7Bparker_2calc_Rlarmor(CYTHON_UNUSED PyObject *__pyx_self, __pyx_t_7Bparker_7Bparker_Doub __pyx_v_rigidity, __pyx_t_7Bparker_7Bparker_Doub __pyx_v_Bo) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
+  __Pyx_RefNannySetupContext("calc_Rlarmor", 0);
+  __Pyx_XDECREF(__pyx_r);
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_f_7Bparker_7Bparker_calc_Rlarmor(__pyx_v_rigidity, __pyx_v_Bo, 0)); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 50; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_r = __pyx_t_1;
+  __pyx_t_1 = 0;
+  goto __pyx_L0;
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_AddTraceback("Bparker.Bparker.calc_Rlarmor", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
@@ -4357,6 +4680,7 @@ static PyTypeObject __pyx_type_7Bparker_7Bparker_ArrayWrapper_2d = {
 
 static PyMethodDef __pyx_methods[] = {
   {"return_B", (PyCFunction)__pyx_pw_7Bparker_7Bparker_1return_B, METH_O, __pyx_doc_7Bparker_7Bparker_return_B},
+  {"calc_Rlarmor", (PyCFunction)__pyx_pw_7Bparker_7Bparker_3calc_Rlarmor, METH_VARARGS|METH_KEYWORDS, __pyx_doc_7Bparker_7Bparker_2calc_Rlarmor},
   {0, 0, 0, 0}
 };
 
@@ -4379,6 +4703,7 @@ static struct PyModuleDef __pyx_moduledef = {
 #endif
 
 static __Pyx_StringTabEntry __pyx_string_tab[] = {
+  {&__pyx_n_s_Bo, __pyx_k_Bo, sizeof(__pyx_k_Bo), 0, 0, 1, 1},
   {&__pyx_kp_u_Format_string_allocated_too_shor, __pyx_k_Format_string_allocated_too_shor, sizeof(__pyx_k_Format_string_allocated_too_shor), 0, 1, 0, 0},
   {&__pyx_kp_u_Format_string_allocated_too_shor_2, __pyx_k_Format_string_allocated_too_shor_2, sizeof(__pyx_k_Format_string_allocated_too_shor_2), 0, 1, 0, 0},
   {&__pyx_kp_u_Non_native_byte_order_not_suppor, __pyx_k_Non_native_byte_order_not_suppor, sizeof(__pyx_k_Non_native_byte_order_not_suppor), 0, 1, 0, 0},
@@ -4398,6 +4723,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_print, __pyx_k_print, sizeof(__pyx_k_print), 0, 0, 1, 1},
   {&__pyx_n_s_pyx_vtable, __pyx_k_pyx_vtable, sizeof(__pyx_k_pyx_vtable), 0, 0, 1, 1},
   {&__pyx_n_s_range, __pyx_k_range, sizeof(__pyx_k_range), 0, 0, 1, 1},
+  {&__pyx_n_s_rigidity, __pyx_k_rigidity, sizeof(__pyx_k_rigidity), 0, 0, 1, 1},
   {&__pyx_n_s_test, __pyx_k_test, sizeof(__pyx_k_test), 0, 0, 1, 1},
   {&__pyx_kp_u_unknown_dtype_code_in_numpy_pxd, __pyx_k_unknown_dtype_code_in_numpy_pxd, sizeof(__pyx_k_unknown_dtype_code_in_numpy_pxd), 0, 1, 0, 0},
   {0, 0, 0, 0, 0, 0, 0}
@@ -4489,6 +4815,9 @@ static int __Pyx_InitCachedConstants(void) {
 
 static int __Pyx_InitGlobals(void) {
   if (__Pyx_InitStrings(__pyx_string_tab) < 0) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 1; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
+  __pyx_float_1_ = PyFloat_FromDouble(1.); if (unlikely(!__pyx_float_1_)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 1; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_float_0_5 = PyFloat_FromDouble(0.5); if (unlikely(!__pyx_float_0_5)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 1; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_int_2 = PyInt_FromLong(2); if (unlikely(!__pyx_int_2)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 1; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   return 0;
   __pyx_L1_error:;
   return -1;
@@ -5351,6 +5680,145 @@ static CYTHON_INLINE int __Pyx_ArgTypeTest(PyObject *obj, PyTypeObject *type, in
     }
     __Pyx_RaiseArgumentTypeInvalid(name, obj, type);
     return 0;
+}
+
+static void __Pyx_RaiseArgtupleInvalid(
+    const char* func_name,
+    int exact,
+    Py_ssize_t num_min,
+    Py_ssize_t num_max,
+    Py_ssize_t num_found)
+{
+    Py_ssize_t num_expected;
+    const char *more_or_less;
+    if (num_found < num_min) {
+        num_expected = num_min;
+        more_or_less = "at least";
+    } else {
+        num_expected = num_max;
+        more_or_less = "at most";
+    }
+    if (exact) {
+        more_or_less = "exactly";
+    }
+    PyErr_Format(PyExc_TypeError,
+                 "%.200s() takes %.8s %" CYTHON_FORMAT_SSIZE_T "d positional argument%.1s (%" CYTHON_FORMAT_SSIZE_T "d given)",
+                 func_name, more_or_less, num_expected,
+                 (num_expected == 1) ? "" : "s", num_found);
+}
+
+static void __Pyx_RaiseDoubleKeywordsError(
+    const char* func_name,
+    PyObject* kw_name)
+{
+    PyErr_Format(PyExc_TypeError,
+        #if PY_MAJOR_VERSION >= 3
+        "%s() got multiple values for keyword argument '%U'", func_name, kw_name);
+        #else
+        "%s() got multiple values for keyword argument '%s'", func_name,
+        PyString_AsString(kw_name));
+        #endif
+}
+
+static int __Pyx_ParseOptionalKeywords(
+    PyObject *kwds,
+    PyObject **argnames[],
+    PyObject *kwds2,
+    PyObject *values[],
+    Py_ssize_t num_pos_args,
+    const char* function_name)
+{
+    PyObject *key = 0, *value = 0;
+    Py_ssize_t pos = 0;
+    PyObject*** name;
+    PyObject*** first_kw_arg = argnames + num_pos_args;
+    while (PyDict_Next(kwds, &pos, &key, &value)) {
+        name = first_kw_arg;
+        while (*name && (**name != key)) name++;
+        if (*name) {
+            values[name-argnames] = value;
+            continue;
+        }
+        name = first_kw_arg;
+        #if PY_MAJOR_VERSION < 3
+        if (likely(PyString_CheckExact(key)) || likely(PyString_Check(key))) {
+            while (*name) {
+                if ((CYTHON_COMPILING_IN_PYPY || PyString_GET_SIZE(**name) == PyString_GET_SIZE(key))
+                        && _PyString_Eq(**name, key)) {
+                    values[name-argnames] = value;
+                    break;
+                }
+                name++;
+            }
+            if (*name) continue;
+            else {
+                PyObject*** argname = argnames;
+                while (argname != first_kw_arg) {
+                    if ((**argname == key) || (
+                            (CYTHON_COMPILING_IN_PYPY || PyString_GET_SIZE(**argname) == PyString_GET_SIZE(key))
+                             && _PyString_Eq(**argname, key))) {
+                        goto arg_passed_twice;
+                    }
+                    argname++;
+                }
+            }
+        } else
+        #endif
+        if (likely(PyUnicode_Check(key))) {
+            while (*name) {
+                int cmp = (**name == key) ? 0 :
+                #if !CYTHON_COMPILING_IN_PYPY && PY_MAJOR_VERSION >= 3
+                    (PyUnicode_GET_SIZE(**name) != PyUnicode_GET_SIZE(key)) ? 1 :
+                #endif
+                    PyUnicode_Compare(**name, key);
+                if (cmp < 0 && unlikely(PyErr_Occurred())) goto bad;
+                if (cmp == 0) {
+                    values[name-argnames] = value;
+                    break;
+                }
+                name++;
+            }
+            if (*name) continue;
+            else {
+                PyObject*** argname = argnames;
+                while (argname != first_kw_arg) {
+                    int cmp = (**argname == key) ? 0 :
+                    #if !CYTHON_COMPILING_IN_PYPY && PY_MAJOR_VERSION >= 3
+                        (PyUnicode_GET_SIZE(**argname) != PyUnicode_GET_SIZE(key)) ? 1 :
+                    #endif
+                        PyUnicode_Compare(**argname, key);
+                    if (cmp < 0 && unlikely(PyErr_Occurred())) goto bad;
+                    if (cmp == 0) goto arg_passed_twice;
+                    argname++;
+                }
+            }
+        } else
+            goto invalid_keyword_type;
+        if (kwds2) {
+            if (unlikely(PyDict_SetItem(kwds2, key, value))) goto bad;
+        } else {
+            goto invalid_keyword;
+        }
+    }
+    return 0;
+arg_passed_twice:
+    __Pyx_RaiseDoubleKeywordsError(function_name, key);
+    goto bad;
+invalid_keyword_type:
+    PyErr_Format(PyExc_TypeError,
+        "%.200s() keywords must be strings", function_name);
+    goto bad;
+invalid_keyword:
+    PyErr_Format(PyExc_TypeError,
+    #if PY_MAJOR_VERSION < 3
+        "%.200s() got an unexpected keyword argument '%.200s'",
+        function_name, PyString_AsString(key));
+    #else
+        "%s() got an unexpected keyword argument '%U'",
+        function_name, key);
+    #endif
+bad:
+    return -1;
 }
 
 static PyObject *__Pyx_GetBuiltinName(PyObject *name) {
