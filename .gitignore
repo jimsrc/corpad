@@ -6,6 +6,10 @@
 # vim sessions
 .*.vim
 
+# input files that change very often
+inputs/plas.in
+inputs/turb.in
+
 #--- me gustan los comentarios!
 !*COMENTARIOS.txt
 
