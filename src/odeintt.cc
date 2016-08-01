@@ -21,14 +21,6 @@ Odeint<Stepper>::Odeint(VecDoub_IO &ystartt, const Doub xx1, const Doub xx2,
     //out.init(const Int neqn, const Doub xlo, const Doub xhi, Int nHist, Int nThColl_) {
 }
 
-/*
-template<class Stepper>
-void Odeint<Stepper>::integrate(Doub xx2) {
-    x2 = xx2;
-    integrate();
-}
-*/
-
 
 #ifdef KILL_HANDLER
 template<class Stepper>
@@ -99,13 +91,11 @@ void Odeint<Stepper>::integrate() {
 
 template<class Stepper>
 void Odeint<Stepper>::save_history(){
-    /*for(int i=0; i<nvar; i++)
-        yold[i] = y[i];     // guardo valores antes de integrar la ODE*/
-    par.calc_Bfield(y);
-    Bmod = pow(par.B[0]*par.B[0] + par.B[1]*par.B[1] + par.B[2]*par.B[2], .5);  // [G]
-    vmod = pow(y[1]*y[1] + y[3]*y[3] + y[5]*y[5], .5);
-    mu_old = y[1]*par.B[0] + y[3]*par.B[1] + y[5]*par.B[2];
-    mu_old /= vmod*Bmod;
+    Doub xyz[3] = {y[0],y[2],y[4]};
+    par.calc_B(xyz);
+    Bmod = NORM(par.B[0], par.B[1], par.B[2]); // [1]
+    vmod = NORM(y[1], y[3], y[5]); // [1]
+    mu_old = (y[1]*par.B[0] + y[3]*par.B[1] + y[5]*par.B[2])/(vmod*Bmod);
 }
 
 

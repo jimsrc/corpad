@@ -2,13 +2,11 @@
 #define ODEINT_H
 #include "nr3.h"
 #include "funcs.h"
-//#include "stepperbs.h"
-//extern class PARAMS;
 
-//---
+
 template<class Stepper>
 struct Odeint {
-    static const Int MAXSTP=(150*50000); //MAXSTP=27*50000;
+    static const Int MAXSTP=SIM_MAXSTP;
     Doub EPS;
     Int nok;
     Int nbad;

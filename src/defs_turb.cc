@@ -8,10 +8,6 @@
 #include "funcs.h"
 
 
-// declaration of definition in general.cc
-//extern ESCALAS scl;
-
-
 //=========================================================================
 
 /*---------------------DEFs para "rann0" ---------------*/
@@ -42,7 +38,6 @@ void FASES::build(Int nm_slab, Int nm_2d, PARAMS_SEM *sem){ // constructor
     cout << " ...construyendo FASES." << endl;
     Nm_slab = nm_slab;
     Nm_2d   = nm_2d;
-    //n_modos = n;
     phi_s   = new double[Nm_slab];
     a_s     = new double[Nm_slab];
     b_s     = new double[Nm_slab];
@@ -62,20 +57,16 @@ void FASES::construir_fases_random(PARAMS_SEM sem){
     for(int i=0;i<3;i++) rann0(sem.slab[i]);
     for(int i=0;i<2;i++) rann0(sem.two[i]);
     //------------------------------
-    
+    // fases para SLAB
     for(int i=0; i<Nm_slab; i++){
-        // fases para SLAB
         phi_s[i]    = 2.*M_PI* rann0(sem.slab[0]);
         a_s[i]      = 2.*M_PI* rann0(sem.slab[1]);
         b_s[i]      = 2.*M_PI* rann0(sem.slab[2]);
     }
-
+    // fases para 2D
     for(int i=0; i<Nm_2d; i++){
-        //cout << " ----> semtwo1: "<< sem.two[1] << endl;
-        // fases para 2D
         phi_2d[i]   = 2.*M_PI* rann0(sem.two[0]);
         b_2d[i]     = 2.*M_PI* rann0(sem.two[1]);
-        //printf(" b2d(%d): %f\n", i, b_2d[i]);
     }
 }
 
@@ -99,22 +90,22 @@ PARAMS_TURB::PARAMS_TURB(string fname_input){
 
 
 void PARAMS_TURB::report(void){
-    cerr << " REPORTE DE OBJETO PARAMS_TURB:-----------------------------" << endl;
-    cerr << " Nm_slab:      " << Nm_slab        << endl;
-    cerr << " Nm_2d:      " << Nm_2d          << endl;
-    cerr << " lmin_s [AU]:  " << lmin_s / AU_in_cm  << endl;
-    cerr << " lmax_s [AU]:  " << lmax_s / AU_in_cm  << endl;
-    cerr << " lmin_2d [AU]:  " << lmin_2d / AU_in_cm  << endl;
-    cerr << " lmax_2d [AU]:  " << lmax_2d / AU_in_cm  << endl;
-    cerr << " Lc_slab [AU]:     " << Lc_slab / AU_in_cm         << endl;
-    cerr << " Lc_2d   [AU]:     " << Lc_2d / AU_in_cm       << endl;
-    cerr << " Bo [nT]:      " << Bo / nT_in_G       << endl;
-    cerr << " sigma_Bo_ratio [1]:   " << sigma_Bo_ratio         << endl;
-    cerr << " percent_slab [%]: " << 100.*percent_slab      << endl;
-    cerr << " percent_2d [%]:   " << 100.*percent_2d        << endl;
-    cerr << " gS [1]: " << gS << endl;
-    cerr << " g2D [1]: " << g2D << endl;
-    cerr << " -----------------------------------------------------------" << endl;
+    cerr << " REPORTE DE OBJETO PARAMS_TURB:------------------" << endl;
+    cerr << " Nm_slab : " << Nm_slab        << endl;
+    cerr << " Nm_2d   : " << Nm_2d          << endl;
+    cerr << " lmin_s  : " << lmin_s << endl;
+    cerr << " lmax_s  : " << lmax_s << endl;
+    cerr << " lmin_2d : " << lmin_2d << endl;
+    cerr << " lmax_2d : " << lmax_2d << endl;
+    cerr << " Lc_slab : " << Lc_slab << endl;
+    cerr << " Lc_2d   : " << Lc_2d << endl;
+    //cerr << " Bo [nT]:      " << Bo << endl;
+    cerr << " sigma_Bo_ratio [1] : " << sigma_Bo_ratio << endl;
+    cerr << " percent_slab [%]   : " << 100.*percent_slab << endl;
+    cerr << " percent_2d [%]     : " << 100.*percent_2d << endl;
+    cerr << " gS [1]  : " << gS << endl;
+    cerr << " g2D [1] : " << g2D << endl;
+    cerr << " -----------------------------------------------" << endl;
 }
 
 
@@ -129,7 +120,6 @@ void PARAMS_TURB::build(string fname_input){
  * Nm_slab          [1]
  * Nm_2d            [1]
  * sigma_Bo_ratio   [1]
- * Bo               [G]
  * percent_slab     [1] fraction
  * percent_2d       [1] fraction
  * lmin_s,  lmax_s  [cm] escalas de turb slab
@@ -158,40 +148,32 @@ void PARAMS_TURB::build_spectra(){
 
 void PARAMS_TURB::read_params(string fname_input){
     string dummy;
+    Doub xi;
     ifstream filein(fname_input.c_str());
     if (!filein.good()) {
         cout << " problema al abrir " << fname_input << endl;
         exit(1);
     }
-
     // parametros del modelo
-    filein >> Nm_slab     >> dummy; // [1] (entero) nro modos Slab
-    filein >> Nm_2d       >> dummy; // [1] (entero) nro modos 2D
-    filein >> lmin_s  >> dummy; // [AU] escala max Slab
-    filein >> lmax_s  >> dummy; // [AU] escala min Slab
-    filein >> lmin_2d >> dummy; // [AU] escala min 2D
-    filein >> lmax_2d >> dummy; // [AU] escala max 2D
-    filein >> Lc_slab     >> dummy; // [AU] longitud de correlacion Lc, SLAB 
-    filein >> Lc_2d       >> dummy; // [AU] longitud de correlacion Lc, 2D
-    filein >> Bo          >> dummy; // [G] campo medio Bo
+    filein >> Nm_slab >> dummy; // [1] (entero) nro modos Slab
+    filein >> Nm_2d   >> dummy; // [1] (entero) nro modos 2D
+    filein >> lmin_s  >> dummy; // [Rl] escala max Slab
+    filein >> lmax_s  >> dummy; // [Rl] escala min Slab
+    filein >> lmin_2d >> dummy; // [Rl] escala min 2D
+    filein >> lmax_2d >> dummy; // [Rl] escala max 2D
+    filein >> Lc_slab >> dummy; // [Rl] longitud de correlacion Lc, SLAB 
+    filein >> xi      >> dummy; // [fraction] ratio Lc_slab/Lc_2d
+    filein >> percent_slab >> dummy; // [fraccion] sigma_SLAB^2=percent_slab*sigma^2
     filein >> sigma_Bo_ratio >> dummy; // [1] sigma^2 = (sigma_Bo_ratio) * Bo^2 
-    filein >> percent_slab   >> dummy; // [fraccion] sigma_SLAB^2 = percent_slab * sigma^2
-    filein >> percent_2d     >> dummy; // [fraccion] sigma_2D^2 = percent_2D * sigma^2a
-
     // semillas
     filein >> sem.slab[0]       >> dummy;
     filein >> sem.slab[1]       >> dummy;
     filein >> sem.slab[2]       >> dummy;
     filein >> sem.two[0]        >> dummy;
     filein >> sem.two[1]        >> dummy;
-    // correcc a unidades fisicas
-    Lc_slab     *= AU_in_cm;        // [cm]
-    Lc_2d       *= AU_in_cm;        // [cm]
-    lmax_s      *= AU_in_cm;        // [cm]
-    lmin_s      *= AU_in_cm;        // [cm]
-    lmax_2d     *= AU_in_cm;        // [cm]
-    lmin_2d     *= AU_in_cm;        // [cm]
-
+    // deduce some remaining quantities:
+    Lc_2d = xi*Lc_slab; //[Rl] longitud de correlacion Lc, 2D
+    percent_2d = 1.0-percent_slab; //[fraccion] sigma_2D^2  =percent_2D*sigma^2
 }
 
 
@@ -207,30 +189,29 @@ void PARAMS_TURB::build_k_and_dk(){
     Doub kmin, kmax;
 
     //--- wavevectors slab
-    kmin = (2. * M_PI) / lmax_s;     // [cm^-1]
-    kmax = (2. * M_PI) / lmin_s;     // [cm^-1]
+    kmin = (2. * M_PI) / lmax_s;     // [1]
+    kmax = (2. * M_PI) / lmin_s;     // [1]
     for(int i=0; i<Nm_slab; i++){
-        k_s[i]  = kmin * pow(kmax/kmin, 1.*i/(Nm_slab-1.));       // [cm^-1]
-        dk_s[i] = k_s[i] * (pow(kmax/kmin, 1./(Nm_slab-1)) - 1.); // [cm^-1]
+        k_s[i]  = kmin * pow(kmax/kmin, 1.*i/(Nm_slab-1.));       // [1]
+        dk_s[i] = k_s[i] * (pow(kmax/kmin, 1./(Nm_slab-1)) - 1.); // [1]
     }
 
     //--- wavevectors 2d
-    kmin = (2. * M_PI) / lmax_2d;     // [cm^-1]
-    kmax = (2. * M_PI) / lmin_2d;     // [cm^-1]
+    kmin = (2. * M_PI) / lmax_2d;     // [1]
+    kmax = (2. * M_PI) / lmin_2d;     // [1]
     for(int i=0; i<Nm_2d; i++){
-        k_2d[i]  = kmin * pow(kmax/kmin, 1.*i/(Nm_2d-1.));       // [cm^-1]
-        dk_2d[i] = k_2d[i] * (pow(kmax/kmin, 1./(Nm_2d-1)) - 1.);   // [cm^-1]
+        k_2d[i]  = kmin * pow(kmax/kmin, 1.*i/(Nm_2d-1.));       // [1]
+        dk_2d[i] = k_2d[i] * (pow(kmax/kmin, 1./(Nm_2d-1)) - 1.);// [1]
     }
 }
 
 
 void PARAMS_TURB::build_Bk_SLAB(){
-    Int i;
     Doub DENOMINADOR=0.0, FACTOR;
-    for(i=0; i<Nm_slab; i++){
+    for(int i=0; i<Nm_slab; i++){
         DENOMINADOR += dk_s[i] / (1. + pow(k_s[i]*Lc_slab, gS));
     }
-    for(i=0; i<Nm_slab; i++){
+    for(int i=0; i<Nm_slab; i++){
         FACTOR = dk_s[i] / (1. + pow(k_s[i]*Lc_slab, gS)) / DENOMINADOR;
         Bk_SLAB[i] = sigma_S * pow(FACTOR, 0.5);            // [G]
     }
@@ -238,13 +219,12 @@ void PARAMS_TURB::build_Bk_SLAB(){
 
 
 void PARAMS_TURB::build_Bk_2D(){
-    Int i;
     Doub DENOMINADOR=0.0, FACTOR, dV;
-    for(i=0; i<Nm_2d; i++){
+    for(int i=0; i<Nm_2d; i++){
         dV = 2.*M_PI*k_2d[i]*dk_2d[i];
         DENOMINADOR += dV / (1. + pow(k_2d[i]*Lc_2d, g2D));
     }
-    for(i=0; i<Nm_2d; i++){
+    for(int i=0; i<Nm_2d; i++){
         dV = 2.*M_PI*k_2d[i]*dk_2d[i];
         FACTOR = dV / (1. + pow(k_2d[i]*Lc_2d, g2D)) / DENOMINADOR;
         Bk_2D[i] = sigma_2D * pow(FACTOR, 0.5);             // [G]
@@ -382,10 +362,8 @@ void MODEL_TURB::calc_dB(const Doub *pos){
     if(p_turb.percent_2d > 0.0)   // solo calculo si vale la pena
         calc_dB_2D(pos);
 
-    for(int i=0; i<2; i++){       // solo las componentes "x, y" son turbulentas
+    for(int i=0; i<2; i++){ // solo las componentes "x,y" son turbulentas
         dB[i]   = dB_SLAB[i] + dB_2D[i];    // [G]
-        //printf(" dB_2D[%d]:   %g\n", i, dB_2D[i]);
-        //printf(" dB_SLAB[%d]: %g\n", i, dB_SLAB[i]); getchar();
     }
 }
 
@@ -395,7 +373,7 @@ void MODEL_TURB::calc_B(const Doub *pos){
     calc_dB(pos);
     B[0] = dB[0];               // [G] Bx
     B[1] = dB[1];               // [G] By
-    B[2] = dB[2] + p_turb.Bo;   // [G] Bz
+    B[2] = dB[2] + 1.0;//p_turb.Bo;   // [G] Bz
 }
 
 #endif // DEFS_TURB_CC
