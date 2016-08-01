@@ -1,32 +1,12 @@
 #ifndef FUNCS_CC
 #define FUNCS_CC
-
 #include "control.h"
 #include "funcs.h"
 #include "general.h"
 
 using namespace std;
 
-
-// declaration of definition in general.cc
-//extern ESCALAS scl;
-
-
 /*----- FUNCIONES NORMALES -----*/
-
-// recibe una velocidad adimensionalizada
-// TODO: convertir esto en inline o macro!
-/*double calc_gamma(double v){
-    double beta, gamma;
-    beta = v*scl.vel / clight;
-    #ifdef BETA_CHECK
-    if (beta>=1.0)
-        printf(" beta>=1.0!!, beta: %g, v: %g\n", beta, v);
-    #endif
-    gamma = pow(1. - beta*beta, -.5);
-    return gamma;
-}*/
-
 
 /* lee parametros input en main() */
 void read_params(string fname, Doub &FRAC_GYROPERIOD, 
@@ -515,9 +495,7 @@ void Output<Stepper>::save2file(){
     //-------------------- guardo la trayectoria
     ofile.open(fname_trj);
     ofile<<"#BEGIN TRAJECTORY"<<endl;
-    ofile<<"# velocity : "<< scl.vel << endl; // [cm/s]
-    ofile<<"# scl_omega : "<< scl.wc << endl; // [s^-1]
-    ofile<<"# r_larmor : "<< scl.rl << endl; // [cm]
+    //ofile<<"# Lc_slab : "<< pm->p_turb.Lc_slab; // [R_larmor].
     ofile<<"## format of trajectory data below:"<<endl;
     ofile<<"## t[sec]  x,y,z[AU], mu[1] (pitch), err[1] (relative error of relativistic gamma)" << endl;
     ofile<<"#begin_traj"<<endl;
@@ -526,7 +504,6 @@ void Output<Stepper>::save2file(){
         x  = ysave[0][i]; y  = ysave[2][i]; z  = ysave[4][i]; // [1]
         vx = ysave[1][i]; vy = ysave[3][i]; vz = ysave[5][i]; // [1]
         v  = NORM(vx,vy,vz);  // [1]
-        //gamma   = calc_gamma(v);
         err = v-1.0; // velocity-relative-error (v_initial=1.0)
 
         ofile << setiosflags(ios :: showpoint | ios :: uppercase);

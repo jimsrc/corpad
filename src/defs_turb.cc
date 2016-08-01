@@ -178,10 +178,8 @@ void PARAMS_TURB::read_params(string fname_input){
 
 
 void PARAMS_TURB::build_sigmas(){
-    Doub sigma;
-    sigma    = sqrt(sigma_Bo_ratio) * Bo;  // [G]
-    sigma_S  = sqrt(percent_slab) * sigma; // [G]
-    sigma_2D = sqrt(percent_2d) * sigma;   // [G]
+    sigma_S  = sqrt(percent_slab*sigma_Bo_ratio); // [G]
+    sigma_2D = sqrt(percent_2d  *sigma_Bo_ratio);   // [G]
 }
 
 

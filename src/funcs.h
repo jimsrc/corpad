@@ -131,7 +131,7 @@ class Output {
 /*----- FUNCIONES NORMALES -----*/
 
 double calc_gamma(double v);
-void read_params(string fname, Doub &RIGIDITY, Doub &FRAC_GYROPERIOD, 
+void read_params(string fname, Doub &FRAC_GYROPERIOD, 
         Doub &NMAX_GYROPERIODS, Int &NPOINTS, Doub &ATOL, Doub &RTOL, 
         Int &n_Brealiz, string& str_timescale, Doub& tmaxHistTau, Int& nHist, Int& nThColl);
 void init_orientation(int i, Doub **array_ori, VecDoub &y);
