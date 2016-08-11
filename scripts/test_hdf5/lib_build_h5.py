@@ -48,12 +48,11 @@ ntot_pla = 122
 def build_h5_ii(ntot_B, ntot_pla, dir_src, dir_dst, fname_out_base):
     nskip_misc = 10 #5 # lineas para obviar en los misc-files
     assert isdir(dir_dst) or isdir(dir_src), \
-            " ---> paths don't exist! :\n --> %s\n --> %s" % (dir_dst, dir_src)
+        " ---> paths don't exist! :\n --> %s\n --> %s" % (dir_dst, dir_src)
     flist = glob(dir_src+'/B*traj*.dat')
     assert len(flist)>0, " ---> NO hay trayectorias! :("
     with open(flist[0], 'r') as ftemp:
         nt = len(ftemp.readlines()) # number of times
-
 
     flist = glob(dir_src+'/B*misc*.dat')
     with open(flist[0], 'r') as ftemp:
@@ -62,7 +61,6 @@ def build_h5_ii(ntot_B, ntot_pla, dir_src, dir_dst, fname_out_base):
     fname_out = '%s/%s' % (dir_dst, fname_out_base) #'%s/test.h5' % dir_dst
     fo        = h5(fname_out, 'w')
     nok, nbad = 0, 0
-
     for iB in range(ntot_B):
         o_x, o_y, o_z = nans((nt,ntot_pla)), nans((nt,ntot_pla)), nans((nt,ntot_pla))
         o_mu, o_err = nans((nt, ntot_pla)), nans((nt, ntot_pla))
@@ -77,7 +75,7 @@ def build_h5_ii(ntot_B, ntot_pla, dir_src, dir_dst, fname_out_base):
             else: 
                 name_ = name
             misc[name_] = nans(ntot_pla)
- 	misc['modification-time'] = np.empty(ntot_pla, dtype='S80')
+        misc['modification-time'] = np.empty(ntot_pla, dtype='S80')
 
         for ipla in range(ntot_pla):
             fname_traj = '%s/B%02d_pla%03d_traj.dat' % (dir_src, iB, ipla)
@@ -114,9 +112,7 @@ def build_h5_ii(ntot_B, ntot_pla, dir_src, dir_dst, fname_out_base):
                 # save modification time
                 command  = 'date -r ' + fname_traj + ' -u +%d-%m-%Y\ %H:%M:%S'
                 mod_time = check_output(command, shell=True)
-                #fo[path+'/modification-time'] = mod_time[:-1] # -1 come el '\n'
-		misc['modification-time'][ipla] = mod_time[:-1] # -1 come el '\n'
-
+                misc['modification-time'][ipla] = mod_time[:-1] # -1 come el '\n'
                 nok += 1
                 print " --> " + fname_traj
 
@@ -208,6 +204,59 @@ def build_h5(ntot_B, ntot_pla, dir_src, dir_dst, fname_out_base):
     print " ---> generated: " + fname_out
 
     return (fname_out, nok, nbad)
+
+
+class build_hdf5(dir_src, dir_dst, fname_out_base):
+    def __init__():
+        assert isdir(dir_dst) or isdir(dir_src), \
+            " ---> paths don't exist! :\n --> %s\n --> %s"%(dir_dst, dir_src)
+        self.dir_src = dir_src
+        self.dir_dst = dir_dst
+        self.fname_out_base = fname_out_base
+        flist = glob(dir_src+'/B*traj*.dat')
+        assert len(flist)>0, " ---> NO hay trayectorias! :("
+        self.psim = {}
+
+    def extract_block(self, block_name='TRAJECTORY', fname_traj):
+        lines = []
+        Read  = False
+        for line in open(fname_traj,'r'):
+            if line.startswith('#BEGIN '+block_name):
+                Read = True; continue
+            if Read and line.startswith('#END'):
+                Read = False; continue
+            if flag:
+                lines += [line]
+        return lines
+
+    def get_traj(self, fname_traj):
+        block = self.extract_block('TRAJECTORY', fname_traj)
+        #--- read trajectory
+        i = 0
+        for line in block:
+            if not line.startswith('#'):
+                #t[i],x[i],y[i],z[i],mu[i],err[i]=map(float,line.split(' '))
+                num_trj += [ map(float,line.split(' ')) ]
+        trj = np.array(num_trj)
+        return trj
+
+    def get_trajs(self):
+        nB = len(glob(self.dir_src+'/B*_traj000.dat'))
+        nP = len(glob(self.dir_src+'/B00_traj*.dat'))
+        flist = glob(dir_src+'/B*traj*.dat')
+        #TODO: hacer un 'assert' para chekear q:
+        # - en todas las realizac B, haya la misma cantidad
+        #   particulas.
+        # - para cada ID de pla, haya la misma cantidad de 
+        #   realizaciones B.
+        fname_out = self.dir_dst+'/'+self.fname_out_base
+        fo = h5(fname_out,'w')
+        for iB in range(nB):
+            flist = glob(self.dir_src+'B%02d_traj*.dat'%iB)
+            for fname_traj in flist:
+                t,x,y,z,mu,err = self.get_traj(fname_traj)
+
+            
 
 
 #EOF
