@@ -140,6 +140,7 @@ void Output<Stepper>::init_regimes(Int nHist, Int nThColl_){
     nfilTau = 500;// tamanio inicial
     ncolTau = 5;  // 5 columnas: 1 para el tiempo, 1 para el scattering-tau, 2 para las posic parall/perp, y 1 para el angulo entre el plano x-y y z.
     //Tau = (MatDoub*) malloc(nreg*sizeof(MatDoub));
+    //TODO: REMOVE REGIMES!!! (bad idea)
     for(int i=0; i<nreg; i++){
         nreb[i] = 0; // (*) nro de rebotes en c/regimen
         Tau[i]  = MatDoub(nfilTau, ncolTau, 0.0); // (*) tiempos de scattering, y la posic x, etc... en c/ regimen
@@ -525,6 +526,7 @@ void Output<Stepper>::save2file(){
     ofile << "# trun_minutes : "<<setw(10)<<setprecision(8)<< (trun/60.) << endl;   // [sec]
     ofile << "# steps_total : "<<setw(10)<<setprecision(10)<< nsteps << endl; // total nmbr of steps
     ofile << "# n_regimes : "<< nreg << endl; //nmbr of regimes
+    //TODO: REMOVE REGIMES!! (bad idea)
     for(int nr=0; nr<nreg; nr++){
         //--- histogramas de 'Tau[nr][:][1]' 
         ofile<< "#begin_hist_"<< nr << endl;

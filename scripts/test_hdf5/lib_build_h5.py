@@ -206,18 +206,20 @@ def build_h5(ntot_B, ntot_pla, dir_src, dir_dst, fname_out_base):
     return (fname_out, nok, nbad)
 
 
-class build_hdf5(dir_src, dir_dst, fname_out_base):
-    def __init__():
+class build_hdf5(object):
+    def __init__(self, dir_src, dir_dst, fname_out_base):
         assert isdir(dir_dst) or isdir(dir_src), \
-            " ---> paths don't exist! :\n --> %s\n --> %s"%(dir_dst, dir_src)
+            " ---> paths don't exist! :\n --> %s\n"%dir_dst+\
+            " --> %s"%dir_src
         self.dir_src = dir_src
         self.dir_dst = dir_dst
         self.fname_out_base = fname_out_base
-        flist = glob(dir_src+'/B*traj*.dat')
+        flist = glob(dir_src+'/B*_pla*.dat')
         assert len(flist)>0, " ---> NO hay trayectorias! :("
+        print " --> we have %d trajectories."%len(flist)
         self.psim = {}
 
-    def extract_block(self, block_name='TRAJECTORY', fname_traj):
+    def extract_block(self, fname_traj, block_name='TRAJECTORY'):
         lines = []
         Read  = False
         for line in open(fname_traj,'r'):
@@ -225,14 +227,14 @@ class build_hdf5(dir_src, dir_dst, fname_out_base):
                 Read = True; continue
             if Read and line.startswith('#END'):
                 Read = False; continue
-            if flag:
+            if Read:
                 lines += [line]
         return lines
 
-    def get_traj(self, fname_traj):
-        block = self.extract_block('TRAJECTORY', fname_traj)
+    def get_one_traj(self, fname_traj):
+        block = self.extract_block(fname_traj, 'TRAJECTORY')
         #--- read trajectory
-        i = 0
+        i=0; num_trj=[];
         for line in block:
             if not line.startswith('#'):
                 #t[i],x[i],y[i],z[i],mu[i],err[i]=map(float,line.split(' '))
@@ -241,22 +243,42 @@ class build_hdf5(dir_src, dir_dst, fname_out_base):
         return trj
 
     def get_trajs(self):
-        nB = len(glob(self.dir_src+'/B*_traj000.dat'))
-        nP = len(glob(self.dir_src+'/B00_traj*.dat'))
-        flist = glob(dir_src+'/B*traj*.dat')
+        nB = len(glob(self.dir_src+'/B*_pla000.dat'))
+        nP = len(glob(self.dir_src+'/B00_pla*.dat'))
+        assert nB*nP>0, "\n ---> NO .dat FILES!!\n"#small check
+        flist = glob(self.dir_src+'/B*_pla*.dat')
         #TODO: hacer un 'assert' para chekear q:
         # - en todas las realizac B, haya la misma cantidad
         #   particulas.
         # - para cada ID de pla, haya la misma cantidad de 
         #   realizaciones B.
+
+        nt=self.get_one_traj(self.dir_src+'/B00_pla000.dat').T[0].size
         fname_out = self.dir_dst+'/'+self.fname_out_base
         fo = h5(fname_out,'w')
         for iB in range(nB):
-            flist = glob(self.dir_src+'B%02d_traj*.dat'%iB)
-            for fname_traj in flist:
-                t,x,y,z,mu,err = self.get_traj(fname_traj)
+            #flist = glob(self.dir_src+'B%02d_pla*.dat'%iB)
+            t,x,y,z,mu,err=nans((6,nt,nP))
+            #for fname_traj in flist:
+            for iP in range(nP):
+                fname_traj=self.dir_src+'/B%02d_pla%03d.dat'%(iB,iP)
+                t[:,iP] ,x[:,iP], y[:,iP], z[:,iP], mu[:,iP] ,\
+                err[:,iP] = self.get_one_traj(fname_traj).T
+            path = 'B%02d' % iB
+            fo[path+'/x'] = x
+            fo[path+'/y'] = y
+            fo[path+'/z'] = z
+            fo[path+'/mu'] = mu
+            fo[path+'/err'] = err
 
-            
-
-
+        
+        fo['time']  = t[:,0] # take a sample because all are the same
+        fo['ntot_B'] = nB # total nmbr of B realizations
+        fo['ntot_pla'] = nP # total nmbr of plas
+        fo['ntimes'] = nt
+        #fo['ntau'] = ntau
+        print " ---> generated: " + fo.filename
+        fo.close() 
+        print "\n dir_src: " + self.dir_src
+        print " dir_dst: " + self.dir_dst + '\n'
 #EOF
