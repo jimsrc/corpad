@@ -257,9 +257,8 @@ class build_hdf5(object):
         fname_out = self.dir_dst+'/'+self.fname_out_base
         fo = h5(fname_out,'w')
         for iB in range(nB):
-            #flist = glob(self.dir_src+'B%02d_pla*.dat'%iB)
+            print " --> B%02d"%iB
             t,x,y,z,mu,err=nans((6,nt,nP))
-            #for fname_traj in flist:
             for iP in range(nP):
                 fname_traj=self.dir_src+'/B%02d_pla%03d.dat'%(iB,iP)
                 t[:,iP] ,x[:,iP], y[:,iP], z[:,iP], mu[:,iP] ,\
@@ -270,7 +269,6 @@ class build_hdf5(object):
             fo[path+'/z'] = z
             fo[path+'/mu'] = mu
             fo[path+'/err'] = err
-
         
         fo['time']  = t[:,0] # take a sample because all are the same
         fo['ntot_B'] = nB # total nmbr of B realizations
