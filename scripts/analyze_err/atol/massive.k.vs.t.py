@@ -4,40 +4,43 @@
 - genera ASCII .dat de los perfiles de k(t)
 - *no* genera figuras
 """
-from calc_k_vs_t import k_vs_t
+from calc_k_vs_t import mfp_vs_t
 import os
 from os.path import isdir, isfile
+import argparse
 
-Ek	 = 1e9 #1e6 #1e9 #6e5	# [eV]
-Bo   = 5e-5
-atol = 1e-6
+# retrieve args
+parser = argparse.ArgumentParser()
+parser.add_argument(
+    '-i', '--dir_src', 
+    type=str, 
+    default='out', 
+    help='source dir, relative to repo root'
+)
+parser.add_argument(
+    '-l', '--label', 
+    type=str,
+    default='__dummy__',
+    help='basename for .h5 output file'
+)
+parser.add_argument(
+    '-o', '--dir_dst', 
+    type=str, 
+    default='post/vs_r', 
+    help='output dir, relative to repo root'
+)
+pa = parser.parse_args()
 
-#atol = 1e-6
-PLAS = os.environ['PLAS']
-#dir_data = '%s/output/output_Ek.1e9eV_atol.1e-6_nB.50' % PLAS
-#dir_data = '%s/output/output_Ek.1e9eV_atol.1e-6_nB.50_npla.122' % PLAS
-dir_data = '%s/out/r.0.30_NmS.128_Nm2d.256' % PLAS
-#dir_data = '%s/output/Ek.%1.1eeV_rtol.%1.0e' % (PLAS, Ek, rtol)
-#dir_out  = '%s/post/atol/Ek.%1.1eeV_atol.%1.0e_npla.122' % (PLAS, Ek, atol)
-dir_out = '%s/post/vs_r' % PLAS
+PLAS    = os.environ['PLAS']
+dir_src = PLAS+'/'+pa.dir_src #'%s/out/r.0.30_NmS.128_Nm2d.256' % PLAS
+dir_out = PLAS+'/'+pa.dir_dst #'%s/post/vs_r' % PLAS
 if not(isdir(dir_out)):
     os.mkdir(dir_out)
-"""
-Nm		= 128
-perc_slab	= 0.2 #0.02 #0.05 #0.10 # 0.00, 0.20, 0.40, 0.60, 1.00
-sig		= 1e0
-Lc_2d		= 1e-3
-Lc_slab		= 1e-2
-dir_data	= '%s/output' % PLAS +\
-'/Ek.%1.1eeV/Nm%03d/slab%1.2f/sig.%1.1e' % (Ek, Nm, perc_slab, sig) +\
-'/Lc2D.%1.1e_LcSlab.%1.1e' % (Lc_2d, Lc_slab)
-dir_out  = '%s/post/rtol/Ek.%1.1eeV_rtol.%1.0e' % (PLAS, Ek, rtol)
-"""
-assert isdir(dir_data) and isdir(dir_out), \
-    " NO EXISTEN??: \n"+ dir_data + '\n' + dir_out
 
-kt = k_vs_t(Ek, dir_data)
-#kt.calc_k_versus_t_ii(Bo, dir_out)
-kt.calc_k_profile(Bo, dir_out, moreinfo=True)
+assert isdir(dir_src) and isdir(dir_out), \
+    " NO EXISTEN??: \n"+ dir_src + '\n' + dir_out
+
+mt = mfp_vs_t(dir_src)
+mt.calc_mfp_profile(dir_out, pa.label, moreinfo=True)
 
 #EOF

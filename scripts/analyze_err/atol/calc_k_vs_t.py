@@ -129,290 +129,101 @@ class diff_mgr:
         s.out   = sqr_dsplmts(DATA, time)
 
 
-class k_vs_t:
-    def __init__(s, Ek, dir_data):
-        s.Ek        = Ek
-        s.dir_data  = dir_data
-
-        dir_info    = '%s/info' % dir_data
+class mfp_vs_t:
+    def __init__(s, dir_src):
+        s.dir_src   = dir_src
+        dir_info    = '%s/info' % dir_src
         s.fname_orient = '%s/orientations.in' % dir_info
         s.fname_plas  = '%s/plas.in' % dir_info
         s.fname_turb  = '%s/turb.in' % dir_info
         s.NPLAS       = count_lines_in_file(s.fname_orient)
 
-
-
         # simulation parameters
         s.par = {
-        'nplas': s.NPLAS,
-        'nB': int(value(s.fname_plas, 'nro_Bfield_realizations')),
-        'rigidity': value(s.fname_plas, 'rigidity'),
-        'Nm_s': int(value(s.fname_turb, 'Nm_slab')),
-        'Nm_2d': int(value(s.fname_turb, 'Nm_2d')),
-        'Bo': value(s.fname_turb, 'Bunif'),
-        'sig': value(s.fname_turb, 'sigma_Bo_ratio'),
-        'perc_2d': value(s.fname_turb, 'percent_2d'),
-        'perc_slab': value(s.fname_turb, 'percent_slab'),
-        'Lc_2d': value(s.fname_turb, 'Lc_2d'),
+        'nplas'  : s.NPLAS,
+        'nB'     : int(value(s.fname_plas, 'nB')),
+        #'rigidity': value(s.fname_plas, 'rigidity'),
+        'Nm_s'   : int(value(s.fname_turb, 'Nm_slab')),
+        'Nm_2d'  : int(value(s.fname_turb, 'Nm_2d')),
+        #'Bo': value(s.fname_turb, 'Bunif'),
+        'sig'    : value(s.fname_turb, 'sigma_Bo_ratio'),
+        #'perc_2d': value(s.fname_turb, 'percent_2d'),
+        'perc_slab': value(s.fname_turb, 'ratio_slab'),
         'Lc_slab': value(s.fname_turb, 'Lc_slab'),
-        'lmin_s': value(s.fname_turb, 'lmin_s'),
+        #'xi'     : value(s.fname_turb, 'xi'),
+        #'Lc_slab': value(s.fname_turb, 'Lc_slab'),
+        'lmin_s' : value(s.fname_turb, 'lmin_s'),
         'lmin_2d': value(s.fname_turb, 'lmin_2d'),
-        'lmax_s': value(s.fname_turb, 'lmax_s'),
+        'lmax_s' : value(s.fname_turb, 'lmax_s'),
         'lmax_2d': value(s.fname_turb, 'lmax_2d'),
         }
-        """
-        print " ------> Ek [eV]: %g" % Ek
-        calc_k_versus_t(dir_data, Ek, Sig, NPLAS, NBs, nfil, ncol, Bo, 
-                Lc_2d, Lc_slab, Nm, perc_slab)
-        """
+        #s.par.update({
+        #'Lc_2d' : s.par['Lc_slab']*s.par['xi'],
+        #})
 
-    def calc_k_versus_t(s, Bo, dir_out):
-        fname_out = '%s/k_vs_t_Ek.%1.1eeV' % (dir_out, s.Ek) +\
-        '_Nm%03d' % s.par['Nm'] +\
-        '_slab%1.2f' % s.par['perc_slab'] +\
-        '_sig.%1.1e' % s.par['sig'] +\
-        '_Lc2d.%1.1e' % s.par['Lc_2d'] +\
-        '_LcSlab.%1.1e.dat' % s.par['Lc_slab']
-
-        # orden del nro max de giroperiodos
-        order_tmax = int(log10(value(s.fname_plas, 'nmax_gyroperiods')))
-        # nro de filas x archivo (nro de puntos q le pedi a la simulacion)
-        nfil    = int(order_tmax*value(s.fname_plas, 'npoints') + 1)
-        ncol    = 6         # nro de columnas x archivo: (t, x, y, z, mu, err-gamma)
-
-        #---------------------
-        # nok   : nro de files q existe Y tienen data
-        # nbad  : nro de files q solicite y no existen
-        # time  : grilla temporal
-        DATA, time, nok, nbad = load_trajectories(
-            s.par['nB'], s.par['nplas'], nfil, ncol, s.dir_data
-        )
-
-        print " nro de plas: ", s.par['nplas']
-        print " nro de B-realizations: ", s.par['nB']
-        print " nro de ptos por trayectoria: %d\n" % nfil
-        print " nro de archivos q existe c/data: %d/%d " % (nok, nok+nbad)
-        print " nro de archivos q pedi y NO existen: %d/%d " % (nbad, nok+nbad)
-        #---------------------
-        every   = 1         # no en c/tiempo, sino cada 'every'
-        t_dim, x2, y2, z2 = sqr_deviations(DATA, time, every)
-
-        AUinkm  = 1.5e8
-        AUincm  = AUinkm*1e5    # [cm]
-        r2  = x2 + y2
-        r2  = r2*AUincm**2      # [cm^2]
-        x2  = x2*AUincm**2      # [cm^2]
-        y2  = y2*AUincm**2      # [cm^2]
-        z2  = z2*AUincm**2      # [cm^2]
-        wc  = calc_omega(Bo, s.Ek) #4.781066E-01 #4.325188E-01 #Ek=1e8eV  #4.735689E-01 # Ek=1e7eV #4.781066E-01 # Ek=1e6eV
-        print " wc[s-1]: ", wc
-        t_adim  = t_dim*wc             # [1]
-        #-------------------
-        kxx = x2/(2.*t_dim)     # [cm2/s]
-        kyy = y2/(2.*t_dim)     # [cm2/s]
-        kzz = z2/(2.*t_dim)     # [cm2/s]
-
-        s.profile = {
-        't_dim': t_dim,
-        't_adim': t_adim, 
-        'x2': x2, 'y2': y2, 'z2': z2,
-        'kxx': kxx, 'kyy': kyy, 'kzz': kzz
-        }
-
-        #-- guarda data kxx(t)
-        data_out    = array([t_adim, t_dim, kxx, kyy, kzz]).T
-        data_out    = data_out[1:]  # el 1er tiempo no lo guardo xq es division por zero 1/2t
-        print " ---> guardando: %s\n" % fname_out
-        savetxt(fname_out, data_out, fmt='%12.2f')
-
-
-    def calc_k_versus_t_ii(s, Bo, dir_out, outformat='hdf5'):
-        fname_out = '%s/k_vs_t_Ek.%1.1eeV' % (dir_out, s.Ek) +\
-        '_Nm%03d' % s.par['Nm'] +\
-        '_slab%1.2f' % s.par['perc_slab'] +\
-        '_sig.%1.1e' % s.par['sig'] +\
-        '_Lc2d.%1.1e' % s.par['Lc_2d'] +\
-        '_LcSlab.%1.1e' % s.par['Lc_slab'] 
-        if outformat=='ascii':
-            fname_out += '.dat'
-        elif outformat=='hdf5':
-            fname_out += '.h5'
-        else:
-            print " --> what out format? "
-            raise SystemExit
-
-
-        # orden del nro max de giroperiodos
-        order_tmax = int(log10(value(s.fname_plas, 'nmax_gyroperiods')))
-        # nro de filas x archivo (nro de puntos q le pedi a la simulacion)
-        nfil    = int(order_tmax*value(s.fname_plas, 'npoints') + 1)
-        ncol    = 6 # nro de columnas x archivo: (t, x, y, z, mu, err-gamma)
-
-        #---------------------
-        # nok   : nro de files q existe Y tienen data
-        # nbad  : nro de files q solicite y no existen
-        # time  : grilla temporal
-        #DATA, time, nok, nbad 
-        tj = load_trajectories_from_h5(
-            s.par['nB'], s.par['nplas'], s.dir_data
-        )
-        DATA = tj['DATA']
-        time = tj['time']
-        nok, nbad = tj['nwdata'], tj['n_noexist']
-        s.data = tj['data']
-        #s.DATA = DATA
-
-        #s.o = [DATA, time, nok, nbad]
-        print " nro de plas: ", s.par['nplas']
-        print " nro de B-realizations: ", s.par['nB']
-        print " nro de ptos por trayectoria: %d\n" % nfil
-        print " nro de archivos q existe c/data: %d/%d " % (nok, nok+nbad)
-        print " nro de archivos q pedi y NO existen: %d/%d " % (nbad, nok+nbad)
-        #---------------------
-        every   = 1         # no en c/tiempo, sino cada 'every'
-        #t_dim, x2, y2, z2 = sqr_deviations(DATA, time, every)
-        SQR     = sqr_deviations_ii(DATA, time, every)
-        #t       = SQR['t_dim']
-        x2      = SQR['x2_mean']
-        y2      = SQR['y2_mean']
-        z2      = SQR['z2_mean']
+    def calc_mfp_profile(s, dir_out, label, moreinfo=False):
+        fname_out = dir_out+'/'+label+'.h5'
+        s.fname_inp = s.dir_src+'/out.h5'
+        fi   = h5(s.fname_inp,'r')
+        assert fi['ntot_pla'].value==s.NPLAS, \
+            ' > problem with self.NPLAS!'
+        print " > calculating mfp ..."
+        SQR  = sqr_deviations_ii(s.fname_inp, moreinfo)
+        # tiempos 
+        t       = SQR['time'] #SQR['t_dim']     # [seg]
+        # promedios sobre realizaciones
+        x2_avr  = SQR['x2_mean']
+        y2_avr  = SQR['y2_mean']
+        z2_avr  = SQR['z2_mean']
+        # desv standard correspondientes
         x2_std  = SQR['x2_std']
         y2_std  = SQR['y2_std']
         z2_std  = SQR['z2_std']
-
-        AUinkm  = 1.5e8
-        AUincm  = AUinkm*1e5    # [cm]
-        r2  = x2 + y2
-        r2  = r2*AUincm**2      # [cm^2]
-        x2  = x2*AUincm**2      # [cm^2]
-        y2  = y2*AUincm**2      # [cm^2]
-        z2  = z2*AUincm**2      # [cm^2]
-        wc  = calc_omega(Bo, s.Ek) #4.781066E-01 #4.325188E-01 #Ek=1e8eV  #4.735689E-01 # Ek=1e7eV #4.781066E-01 # Ek=1e6eV
-        print " wc[s-1]: ", wc
-        t_adim  = t_dim*wc             # [1]
-        #-------------------
-        kxx = x2/(2.*t_dim)     # [cm2/s]
-        kyy = y2/(2.*t_dim)     # [cm2/s]
-        kzz = z2/(2.*t_dim)     # [cm2/s]
-        kxx_std = (x2_std*AUinkm**2)/(2.*t_dim)
-        kyy_std = (y2_std*AUinkm**2)/(2.*t_dim)
-        kzz_std = (z2_std*AUinkm**2)/(2.*t_dim)
-
-        s.profile = {
-        't_dim': t_dim,
-        't_adim': t_adim, 
-        'x2': x2, 'y2': y2, 'z2': z2,
-        'kxx': kxx, 'kyy': kyy, 'kzz': kzz,
-        'kxx_std': kxx_std,
-        'kyy_std': kyy_std,
-        'kzz_std': kzz_std
-        }
-
-        if outformat=='ascii':
-            #-- guarda data kxx(t)
-            data_out    = array(
-                [t_adim, t_dim,             # tiempo real y adimensional
-                kxx, kyy, kzz,              # valores medios de k(t)
-                kxx_std, kyy_std, kzz_std   # errores de k(t)
-                ]
-            ).T
-            data_out    = data_out[1:]  # el 1er tiempo no lo guardo xq es division por zero 1/2t
-            print " ---> guardando: %s\n" % fname_out
-            savetxt(fname_out, data_out, fmt='%12.2f')
-
-        elif outformat=='hdf5':
-            print " ---> saving: "+fname_out
-            fo = h5(fname_out, 'w')
-            fo['t_dim']    = t_dim
-            fo['t_adim']   = t_adim
-            fo['kxx']      = kxx
-            fo['kyy']      = kyy
-            fo['kzz']      = kzz
-            fo['kxx_std']  = kxx_std
-            fo['kyy_std']  = kyy_std
-            fo['kzz_std']  = kzz_std
-            fo.close()
-
-        else:
-            print " ---> need to specify output format "
-            raise SystemExit
-
-
-    def calc_k_profile(s, Bo, dir_out, moreinfo=False):
-        fname_out = '%s/k_vs_t_Ek.%1.1eeV' % (dir_out, s.Ek) +\
-        '_NmS%03d' % s.par['Nm_s'] +\
-        '_Nm2d%03d' % s.par['Nm_2d'] +\
-        '_slab%1.2f' % s.par['perc_slab'] +\
-        '_sig.%1.1e' % s.par['sig'] +\
-        '_Lc2d.%1.1e' % s.par['Lc_2d'] +\
-        '_LcSlab.%1.1e.h5' % s.par['Lc_slab'] 
-
-        s.fname_inp = s.dir_data+'/out.h5'
-        SQR       = sqr_deviations_ii(s.fname_inp, moreinfo)
-
-        AUinkm  = 1.5e8
-        AUincm  = AUinkm*1e5            # [cm]
-        wc  = calc_omega(Bo, s.Ek)      # [seg^-1]
-        print " wc[s-1]: ", wc
-        # tiempos 
-        tdim      = SQR['t_dim']        # [seg]
-        tadim     = tdim*wc             # [1]
-        # promedios sobre realizaciones
-        x2_avr  = SQR['x2_mean']*AUincm**2 # [cm2]
-        y2_avr  = SQR['y2_mean']*AUincm**2 # [cm2]
-        z2_avr  = SQR['z2_mean']*AUincm**2 # [cm2]
-        # desv standard correspondientes
-        x2_std  = SQR['x2_std']*AUincm**2  # [cm2]
-        y2_std  = SQR['y2_std']*AUincm**2  # [cm2]
-        z2_std  = SQR['z2_std']*AUincm**2  # [cm2]
         # *otra* desv standard correspondientes
         #x2_std2 = SQR['x2_std2']*AUincm**2  # [cm2]
         #y2_std2 = SQR['y2_std2']*AUincm**2  # [cm2]
         #z2_std2 = SQR['z2_std2']*AUincm**2  # [cm2]
 
-        nt      = tdim.size 
-        #-------------------
-        kxx      = x2_avr/(2.*tdim)     # [cm2/s]
-        kyy      = y2_avr/(2.*tdim)     # [cm2/s]
-        kzz      = z2_avr/(2.*tdim)     # [cm2/s]
-        kxx_std  = x2_std/(2.*tdim)
-        kyy_std  = y2_std/(2.*tdim)
-        kzz_std  = z2_std/(2.*tdim)
-        #kxx_std2 = x2_std2/(2.*tdim)
-        #kyy_std2 = y2_std2/(2.*tdim)
-        #kzz_std2 = z2_std2/(2.*tdim)
+        nt       = t.size 
+        kxx      = x2_avr/(2.*t)    # [1]
+        kyy      = y2_avr/(2.*t)    # [1]
+        kzz      = z2_avr/(2.*t)    # [1]
+        kxx_std  = x2_std/(2.*t)    # [1]
+        kyy_std  = y2_std/(2.*t)    # [1]
+        kzz_std  = z2_std/(2.*t)    # [1]
 
+        Lc_slab = s.par['Lc_slab']  # [1]
         s.profile = {
-        't_dim': tdim,                      # [seg]
-        't_adim': tadim,                    # [1]
-        #'x2': x2_avr,                       # [cm]
-        #'y2': y2_avr,                       # [cm]
-        #'z2': z2_avr,                       # [cm]
-        #'x2_std': x2_std,                   # [AU]
-        #'y2_std': y2_std,                   # [AU]
-        #'z2_std': z2_std,                   # [AU]
-        'kxx': kxx, 'kyy': kyy, 'kzz': kzz, # [cm2/s]
-        'kxx_std': kxx_std,                 # [cm2/s]
-        'kyy_std': kyy_std,                 # [cm2/s]
-        'kzz_std': kzz_std,                 # [cm2/s]
-        #'kxx_std2': kxx_std2,                 # [cm2/s]
-        #'kyy_std2': kyy_std2,                 # [cm2/s]
-        #'kzz_std2': kzz_std2,                 # [cm2/s]
-        'nB'   : SQR['nB'],
-        'npla' : SQR['npla'],
+        'time'   : t,               # [1]
+        'lxx'    : 3.*kxx/Lc_slab,     # [1]
+        'lyy'    : 3.*kyy/Lc_slab,     # [1]
+        'lzz'    : 3.*kzz/Lc_slab,     # [1]
+        'lxx_std': 3.*kxx_std/Lc_slab, # [1]
+        'lyy_std': 3.*kyy_std/Lc_slab, # [1]
+        'lzz_std': 3.*kzz_std/Lc_slab, # [1]
+        #'kxx_std2': kxx_std2,      # [cm2/s]
+        #'kyy_std2': kyy_std2,      # [cm2/s]
+        #'kzz_std2': kzz_std2,      # [cm2/s]
+        'nB'     : SQR['nB'],
+        'npla'   : SQR['npla'],
         }
         if moreinfo:
             s.profile.update({
-                'x2': SQR['x2']*AUincm**2,
-                'y2': SQR['y2']*AUincm**2,
-                'z2': SQR['z2']*AUincm**2,
+            'x2': SQR['x2'],
+            'y2': SQR['y2'],
+            'z2': SQR['z2'],
             })
 
-        print " ---> saving: "+fname_out
+        print " ---> saving: "+fname_out+'\n'
         fo = h5(fname_out, 'w')
         for name in s.profile.keys():
             fo[name] = s.profile[name]
         fo.close()
+        print " > placing a link to output-file in: "+s.dir_src
+        os.system('ln -sf {fname_out} {symlink}'.format(
+            fname_out=fname_out,
+            symlink=s.dir_src+'/post.h5')
+        )
 
 
 

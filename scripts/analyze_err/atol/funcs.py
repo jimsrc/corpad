@@ -12,11 +12,15 @@ from numpy import (
 def value(fname, value_name):
     cc = read_contents(fname)
     n = len(cc)
+    assert n>0, " > NO CONTENTS!!"
     for i in range(n):
         if value_name==cc[i][1]:
             return float(cc[i][0])
 
-    return nan
+    print " --> WRONG NAME (%s) IN"%value_name+\
+        " INPUT FILE (%s)!!"%fname
+    raise SystemExit
+
 
 def read_contents(fname):
     f = open(fname, 'r')
@@ -316,18 +320,18 @@ def sqr_deviations_ii(fname_inp, moreinfo=False):
     nB, npla = f['ntot_B'].value, f['ntot_pla'].value
     nt       = f['ntimes'].value
 
-    x2_avr, y2_avr, z2_avr  = zeros(nt), zeros(nt), zeros(nt)
-    x2_std, y2_std, z2_std  = zeros(nt), zeros(nt), zeros(nt)
+    x2_avr, y2_avr, z2_avr  = zeros((3,nt))
+    x2_std, y2_std, z2_std  = zeros((3,nt))
 
-    x2, y2, z2 = nans((nB,nt)), nans((nB,nt)), nans((nB,nt))
-    x2std, y2std, z2std = nans((nB,nt)), nans((nB,nt)), nans((nB,nt))
+    x2, y2, z2 = nans((3,nB,nt))
+    x2std, y2std, z2std = nans((3,nB,nt))
 
     print " calculando <x2>(t), <y2(t)>... y sus errores"
     for iB in range(nB):
         path = 'B%02d'%iB
-        x = f[path+'/x'][...] # [AU] (nt, npla)
-        y = f[path+'/y'][...] # [AU] (nt, npla)
-        z = f[path+'/z'][...] # [AU] (nt, npla)
+        x = f[path+'/x'][...] # [1] (nt, npla)
+        y = f[path+'/y'][...] # [1] (nt, npla)
+        z = f[path+'/z'][...] # [1] (nt, npla)
         x2[iB,:] = (x*x).mean(axis=1) # promedio sobre particulas
         y2[iB,:] = (y*y).mean(axis=1) # promedio sobre particulas
         z2[iB,:] = (z*z).mean(axis=1) # promedio sobre particulas
@@ -348,11 +352,11 @@ def sqr_deviations_ii(fname_inp, moreinfo=False):
     y2_std2 = y2std.mean(axis=0)
     z2_std2 = z2std.mean(axis=0)
 
-    tsec = f['time'][...] # [seg] times of trajectory points
+    time = f['time'][...] # [1] times of trajectory points
     o = {
-    't_dim'     : tsec,     # [seg]
-    'x2_mean'   : x2_avr,   # [AU]
-    'y2_mean'   : y2_avr,   # [AU]
+    'time'      : time,     # [1]
+    'x2_mean'   : x2_avr,   # [1]
+    'y2_mean'   : y2_avr,   # [1]
     'z2_mean'   : z2_avr,   # ..
     'x2_std'    : x2_std,   # ..
     'y2_std'    : y2_std,   # ..
@@ -365,8 +369,8 @@ def sqr_deviations_ii(fname_inp, moreinfo=False):
     }
     if moreinfo:
         o.update({
-            'x2': x2, 'y2': y2, 'z2': z2,
-            'x2std': x2std, 'y2std':y2std, 'z2std':z2std,
+        'x2'   : x2,    'y2'   : y2,   'z2'   : z2,
+        'x2std': x2std, 'y2std':y2std, 'z2std':z2std,
         })
     return o
 
