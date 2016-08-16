@@ -1,13 +1,10 @@
 #!/bin/bash
 EXE=../CRs.diff.x #../CRs.diff_wgprof.x  #../CRs.diff.x 
 MPIRUN=/usr/local/bin/mpirun
-INP_TURB="../inputs/INPUT_TURB.ALONE.inp"
+INP_TURB="../inputs/turb.in"
 #INP_ORI="../inputs/orientations_isotropic_Nth16_Nph8.in"
 INP_ORI="../inputs/orientations_small.in" # 2nd half of ...Nth16_Nph8.in
-INP_GRAL="../inputs/INPUT_GRAL.xx1.inp"
-#INP_TURB="$PLAS/inputs/patron/turb.in"
-#INP_ORI="$PLAS/inputs/patron/orientations.in"
-#INP_GRAL="$PLAS/inputs/patron/plas.in"
+INP_GRAL="../inputs/plas.in"
 INPUTS="$INP_TURB $INP_ORI $INP_GRAL"
 OUTPUT_DIR="../out/xx"
 NPROCS="-np 3"

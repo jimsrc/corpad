@@ -241,6 +241,7 @@ void Output<Stepper>::init(const Int neqn, const Doub xlo, const Doub xhi, Int n
     HistTau    = MatDoub(nHist_Tau, 2, 0.0);//(*) hist 1D
     HistThColl = MatDoub(nHist_ThColl, 2, 0.0);//(*) hist 1D
     nsteps     = 0;
+    nreb       = 0;
     // (*): inicializo en ceros
     #endif // MONIT_SCATTERING
 }
@@ -523,7 +524,7 @@ void Output<Stepper>::save2file(){
     //--- histograma del theta-en-colision
     ofile<<"#BEGIN THETA_COLL\n";
     ofile<<"## Histogram of angle between backscattering orientation and positive z-axis ^z+"<< endl;
-    ofile<<"# avr_thcoll"<< avrThColl << endl;
+    ofile<<"# avr_thcoll : "<< avrThColl << endl;
     build_ThetaColl();
     ofile<< "#begin_hist"<<endl;
     for(Int i=0; i<HistThColl.nrows(); i++){

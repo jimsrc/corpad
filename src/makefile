@@ -5,7 +5,9 @@ SHELL=/bin/bash
 SOURCE_C = main_mpi.cc general.cc defs_turb.cc funcs.cc odeintt.cc stepperbs.cc
 OBJECTS_C = $(patsubst %.cc, %.o, $(SOURCE_C))
 OBJECTS_C_GPROF = $(patsubst %.cc, %_gp.o, $(SOURCE_C))
+OBJECTS_C_DEBUG = $(patsubst %.cc, %_bg.o, $(SOURCE_C))
 CFLAGS = -O3 -Wlogical-op #-fprofile-use #-fprofile-generate
+CFLAGS_DEBUG = -O0 -g
 CXX = /usr/local/bin/mpic++
 #EXE = ../CRs.diff.x
 EXE = ./main.x
@@ -17,8 +19,16 @@ all: $(OBJECTS_C)
 	${CXX} -o $(EXE)  $^  ${CFLAGS}
 	ls -lhtr $(EXE)
 
+debug: $(OBJECTS_C_DEBUG) 
+	##### DEBUG MODE #####
+	${CXX} -o ${EXE} $^ ${CFLAGS_DEBUG}
+	ls -lhtr $(EXE)
+
 %.o: %.cc
 	${CXX} ${CFLAGS} -c $^ 
+
+%_bg.o: %.cc
+	$(CXX) $(CFLAGS_DEBUG) -c $^ -o $@
 
 %_gp.o: %.cc
 	$(CXX) $(OPT_GP) -c $^ -o $@
