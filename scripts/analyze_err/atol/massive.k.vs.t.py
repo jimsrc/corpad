@@ -41,6 +41,7 @@ assert isdir(dir_src) and isdir(dir_out), \
     " NO EXISTEN??: \n"+ dir_src + '\n' + dir_out
 
 mt = mfp_vs_t(dir_src)
-mt.calc_mfp_profile(dir_out, pa.label, moreinfo=True)
+mt.calc_mfp_profile(moreinfo=True)
+mt.save2file(dir_out, pa.label)
 
 #EOF

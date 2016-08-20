@@ -101,8 +101,7 @@ class mfp_vs_t(object):
         #'perc_2d': value(s.fname_turb, 'percent_2d'),
         'perc_slab': value(s.fname_turb, 'ratio_slab'),
         'Lc_slab': value(s.fname_turb, 'Lc_slab'),
-        #'xi'     : value(s.fname_turb, 'xi'),
-        #'Lc_slab': value(s.fname_turb, 'Lc_slab'),
+        'xi'     : value(s.fname_turb, 'xi'),
         'lmin_s' : value(s.fname_turb, 'lmin_s'),
         'lmin_2d': value(s.fname_turb, 'lmin_2d'),
         'lmax_s' : value(s.fname_turb, 'lmax_s'),
@@ -112,8 +111,11 @@ class mfp_vs_t(object):
         #'Lc_2d' : s.par['Lc_slab']*s.par['xi'],
         #})
 
-    def calc_mfp_profile(s, dir_out, label, moreinfo=False):
-        fname_out = dir_out+'/'+label+'.h5'
+    def calc_mfp_profile(s, moreinfo=False):
+        """
+        build 'self.profile' dict that contains
+        statistics on the particles trajectories
+        """
         s.fname_inp = s.dir_src+'/out.h5'
         fi   = h5(s.fname_inp,'r')
         assert fi['ntot_pla'].value==s.NPLAS, \
@@ -165,11 +167,18 @@ class mfp_vs_t(object):
             'z2': SQR['z2'],
             })
 
+    def save2file(s, dir_out, label):
+        fname_out = dir_out+'/'+label+'.h5'
         print " ---> saving: "+fname_out+'\n'
         fo = h5(fname_out, 'w')
+        #--- time profiles
         for name in s.profile.keys():
             fo[name] = s.profile[name]
+        #--- simulation parameters
+        for pname, pval in s.par.iteritems():
+            fo['psim/'+pname] = pval
         fo.close()
+
         print " > placing a link to output-file in: "+s.dir_src
         os.system('ln -sf {fname_out} {symlink}'.format(
             fname_out=fname_out,
