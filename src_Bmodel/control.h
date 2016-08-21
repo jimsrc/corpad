@@ -1,11 +1,11 @@
 #ifndef CONTROL
 #define CONTROL
 
-//#define CYTHON     1 // stuff for cython handling
-#define KILL_HANDLER 1 // removes current *.owned files
+#define CYTHON     1 // stuff for cython handling
+//#define KILL_HANDLER 1 // removes current *.owned files
 #define MONIT_SCATTERING 1 // monitorea scattering de plas
 #define MONIT_STEP 1 // monitorea el step
-#define BETA_CHECK 1 // checkea q siempre beta<1
+//#define BETA_CHECK 1 // checkea q siempre beta<1
 #define NVAR    (6)
 
 //--------------------------------------CTES UNIVERSALES
