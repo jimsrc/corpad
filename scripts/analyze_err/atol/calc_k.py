@@ -100,7 +100,6 @@ class kdiff:
         self.t_decr_kperp = t_decr
         self.kperp = 0.5*(self.k['kxx_fit'] + self.k['kyy_fit'])
 
-
     def plot_kperp(self):
         # we need this parameter to make a
         # reasonable plot
@@ -183,7 +182,6 @@ class kdiff:
         fig1.savefig(fname_fig_perp, format='png', dpi=135, bbox_inches='tight')
         close(fig1)
 
-
     def fit_kparall(self, t_decr):
         t   = self.inp['t_dim']
         kzz = self.inp['kzz']
@@ -202,7 +200,6 @@ class kdiff:
 
         self.t_decr_kparall = t_decr
         self.kparall = self.k['kzz_fit']
-
 
     def plot_kparall(self):
         # we need this parameter to make a

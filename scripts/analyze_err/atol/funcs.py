@@ -8,7 +8,203 @@ from numpy import (
     savetxt, loadtxt, mean, median, std,
     nanmean, nanmedian
 )
+from os.path import isfile, isdir
 #
+
+class mfp_mgr(object):
+    """
+    - read the processed .h5 file 'fname_inp'
+    - append calculated parameters into the file
+    - generate figures of mfp(t)
+    """
+    def __init__(self, dir_fig, dir_src, fname_inp, olabel):
+        self.olabel  = olabel
+        self.dir_fig = dir_fig
+        self.dir_src = dir_src
+        self.fname_inp = dir_src+'/'+fname_inp
+        assert isfile(self.fname_inp), \
+            ' ---> doesn\'t exist: '+self.fname_inp+\
+            '\n Aborting...'
+        self.f = h5(self.fname_inp,'r')
+        self.psim = {} # dict of sim-parameters
+        for nm, v in self.f['psim'].iteritems():
+            self.psim[nm] = v.value
+
+        self.t  = self.f['time'][...]
+        self.nB = self.f['nB'].value
+        self.nP = self.f['npla'].value
+
+    def fit_perp(self, t_decr, seed_b, seed_m):
+        t   = self.t
+        lxx = self.f['lxx'][...]
+        lyy = self.f['lyy'][...]
+        # select data for fitting
+        cc = t>t_decr
+        
+        seed_xo  = 0.0
+        px  = make_fit_lxx(
+                [t[cc], lxx[cc]], 
+                [seed_b, seed_m, seed_xo]
+              )
+        py  = make_fit_lxx(
+                [t[cc], lyy[cc]], 
+                [seed_b, seed_m, seed_xo]
+              )
+        self.l = {
+        'lxx_fit'    : px[0],
+        'lxx_fit_p1' : px[1],
+        'lxx_fit_p2' : px[2],
+        'lyy_fit'    : py[0],
+        'lyy_fit_p1' : py[1],
+        'lyy_fit_p2' : py[2],
+        }
+        self.t_decr_kperp = t_decr
+        self.lperp = 0.5*(self.l['lxx_fit'] + self.l['lyy_fit'])
+        print self.lperp
+
+    def plot_perp(self):
+        assert hasattr(self, 't_decr_kperp'), \
+            "\n ----> antes de plotear, hay q fitear kperp!!\n"
+
+        # colors for kxx & kyy
+        ckxx, ckyy = 'red', 'blue'
+
+        t    = self.t
+        cc   = t>self.t_decr_kperp
+
+        lxx  = self.f['lxx'][...]
+        lyy  = self.f['lyy'][...]
+        lxx_std = self.f['lxx_std']
+        lyy_std = self.f['lyy_std']
+        l    = self.l
+        nB   = self.nB
+        # build fitted curves
+        fitted_lxx = fun_hyperbola(l['lxx_fit'], l['lxx_fit_p1'], l['lxx_fit_p2'], t[cc])
+        fitted_lyy = fun_hyperbola(l['lyy_fit'], l['lyy_fit_p1'], l['lyy_fit_p2'], t[cc])
+        fig1 = figure(1, figsize=(6, 4))
+        ax1  = fig1.add_subplot(111)
+        # plot *all* simulation data
+        opt = {'c': 'none', 'alpha':.3, 's':9}
+        ax1.scatter(t[~cc], lxx[~cc], edgecolor='red', **opt)
+        ax1.scatter(t[~cc], lyy[~cc], edgecolor='blue', **opt)
+        # plot *only* fitted data
+        opt = {'edgecolor': 'none', 'alpha': 0.4, 's': 9}
+        ax1.scatter(t[cc], lxx[cc], c=ckxx, label='lxx', **opt)
+        ax1.scatter(t[cc], lyy[cc], c=ckyy, label='lyy', **opt)
+        # plot fitted curves
+        ax1.plot(t[cc], fitted_lxx, c=ckxx)
+        ax1.plot(t[cc], fitted_lyy, c=ckyy)
+
+        # errores kxx
+        inf = lxx - lxx_std/np.sqrt(nB)
+        sup = lxx + lxx_std/np.sqrt(nB)
+        ax1.fill_between(t[cc], inf[cc], sup[cc], facecolor=ckxx, alpha=0.5)
+
+        # errores kyy
+        inf = lyy - lyy_std/np.sqrt(nB)
+        sup = lyy + lyy_std/np.sqrt(nB)
+        ax1.fill_between(t[cc], inf[cc], sup[cc], facecolor=ckyy, alpha=0.5)
+
+        # legend
+        ax1.legend()
+
+        FIT_RESULTS = 'fit: y=b+m/(x-xo)' +\
+        '\nlxx: %1.1e   lyy:%1.1e'%(l['lxx_fit'],l['lyy_fit']) +\
+        '\nlperp: %1.2e' % self.lperp
+        RloLc = 1.0/self.psim['Lc_slab']  # [1]
+        SIMULAT_PARAMS  = '$R_L/Lc$:{RloLc:1.1e}    perc_slab:{perc_slab:1.2f}'.format(RloLc=RloLc, **self.psim) +\
+        '\nNmS, Nm2d: {Nm_s}/{Nm_2d}    $(\sigma/Bo)^2$:{sig:1.1e}'.format(**self.psim) +\
+        '\n$L_c^{{2D}}/L_c^{{Slab}}$:{xi:1.1e}'.format(**self.psim)
+
+        TITLE   = '%s\n%s' % (SIMULAT_PARAMS, FIT_RESULTS)
+
+        ax1.set_title(TITLE)
+        ax1.set_xlabel('$\Omega t$')
+        ax1.set_ylabel('$\lambda_{{perp}}/L_C^{slab}$')
+        ax1.grid()
+
+        #fname_fig = self.dir_fig+'/'+self.fname_inp[:-3]+'.png'
+        print self.dir_src
+        fname_fig = self.dir_fig+'/'+self.olabel+'_perp.png'
+        print " --> saving: "+fname_fig 
+        fig1.savefig(fname_fig, format='png', dpi=135, bbox_inches='tight')
+        close(fig1)
+
+
+    def fit_parall(self, t_decr, seed_b, seed_m):
+        t   = self.t
+        lzz = self.f['lzz'][...]
+        # select data for fitting
+        cc = t>t_decr
+
+        #----------------------------------- fit k_parall
+        #cc = t>5000
+        cc  = t>t_decr
+        seed_xo  = 0.0
+        pz  = make_fit_lxx([t[cc], lzz[cc]], [seed_b, seed_m, seed_xo])
+
+        self.l['lzz_fit']    = pz[0]
+        self.l['lzz_fit_p1'] = pz[1]
+        self.l['lzz_fit_p2'] = pz[2]
+
+        self.t_decr_kparall = t_decr
+        self.lparall = self.l['lzz_fit']
+
+    def plot_parall(self):
+        assert hasattr(self, 't_decr_kparall'), \
+            "\n ----> antes de plotear, hay q fitear kperp!!\n"
+
+        t    = self.t
+        cc   = t>self.t_decr_kparall
+
+        lzz  = self.f['lzz'][...]
+        lzz_std = self.f['lzz_std']
+        l    = self.l
+        nB   = self.nB
+        # build fitted curves
+        fitted_lzz = fun_hyperbola(l['lzz_fit'], l['lzz_fit_p1'], l['lzz_fit_p2'], t[cc])
+
+        fig1 = figure(1, figsize=(6, 4))
+        ax1  = fig1.add_subplot(111)
+        # plot *all* simulation data
+        ax1.scatter(t, lzz, edgecolor='none', c='black', alpha=.3)
+        # plot *only* fitted data
+        ax1.scatter(t[cc], lzz[cc], edgecolor='none', c='black', label='kzz')
+        # plot fitted curves
+        ax1.plot(t[cc], fitted_lzz, c='green', lw=3, alpha=.6)
+
+        # errores lzz
+        inf = lzz - lzz_std/np.sqrt(nB)
+        sup = lzz + lzz_std/np.sqrt(nB)
+        ax1.fill_between(t[cc], inf[cc], sup[cc], facecolor='gray', alpha=0.5)
+
+        # legend
+        ax1.legend()
+
+        FIT_RESULTS = 'fit: y=b+m/(x-xo)' +\
+        '\nlzz: %1.1e'%(l['lzz_fit']) +\
+        '\nlparall: %1.2e' % self.lparall
+        RloLc = 1.0/self.psim['Lc_slab']  # [1]
+        SIMULAT_PARAMS  = '$R_L/Lc$:{RloLc:1.1e}    perc_slab:{perc_slab:1.2f}'.format(RloLc=RloLc, **self.psim) +\
+        '\nNmS, Nm2d: {Nm_s}/{Nm_2d}    $(\sigma/Bo)^2$:{sig:1.1e}'.format(**self.psim) +\
+        '\n$L_c^{{2D}}/L_c^{{Slab}}$:{xi:1.1e}'.format(**self.psim)
+
+        TITLE   = '%s\n%s' % (SIMULAT_PARAMS, FIT_RESULTS)
+
+        ax1.set_title(TITLE)
+        ax1.set_xlabel('$\Omega t$')
+        ax1.set_ylabel('$\lambda_{{\parallel}}/L_C^{slab}$')
+        ax1.grid()
+
+        #fname_fig = self.dir_fig+'/'+self.fname_inp[:-3]+'.png'
+        print self.dir_src
+        fname_fig = self.dir_fig+'/'+self.olabel+'_parall.png'
+        print " --> saving: "+fname_fig 
+        fig1.savefig(fname_fig, format='png', dpi=135, bbox_inches='tight')
+        close(fig1)
+
+
+
 def value(fname, value_name):
     cc = read_contents(fname)
     n = len(cc)
@@ -39,7 +235,7 @@ def count_lines_in_file(fname):
 
     return n
 
-def make_fit_kxx(data, sems):
+def make_fit_lxx(data, sems):
     x       = data[0]
     y       = data[1]
     # create a set of Parameters
@@ -82,9 +278,9 @@ def make_fit_kxx(data, sems):
     #par[0]  = result.values['b']
     #par[1]  = result.values['m']
     #par[2]  = result.values['xo']
-    par[0]  = result.params['b']
-    par[1]  = result.params['m']
-    par[2]  = result.params['xo']
+    par[0]  = result.params['b'].value
+    par[1]  = result.params['m'].value
+    par[2]  = result.params['xo'].value
     return par
 
 def model(N, K, L, t):
