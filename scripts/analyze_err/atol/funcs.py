@@ -9,6 +9,8 @@ from numpy import (
     nanmean, nanmedian
 )
 from os.path import isfile, isdir
+import os
+from matplotlib.backends.backend_pdf import PdfPages
 #
 
 class mfp_mgr(object):
@@ -17,14 +19,25 @@ class mfp_mgr(object):
     - append calculated parameters into the file
     - generate figures of mfp(t)
     """
-    def __init__(self, dir_fig, dir_src, fname_inp, olabel):
-        self.olabel  = olabel
-        self.dir_fig = dir_fig
-        self.dir_src = dir_src
-        self.fname_inp = dir_src+'/'+fname_inp
-        assert isfile(self.fname_inp), \
-            ' ---> doesn\'t exist: '+self.fname_inp+\
-            '\n Aborting...'
+    def __init__(self, dir_fig, fname_inp, prefix='h', myid=1):
+        #self.olabel  = olabel
+        self.prefix  = prefix
+        self.myid    = myid
+        #--- directory for figures
+        if dir_fig=='None':
+            self.dir_fig = os.environ['PLAS']+'/plots'
+        else:
+            self.dir_fig = dir_fig
+
+        #--- fullpath of input file
+        if fname_inp=='None':
+            self.fname_inp = os.environ['PLAS']+'/out/'+prefix+'%03d'%myid+'/post.h5'
+        else:
+            self.fname_inp = fname_inp
+
+        assert isfile(self.fname_inp),\
+        ' ---> doesn\'t exist: '+self.fname_inp+\
+        '\n Aborting...'
         self.f = h5(self.fname_inp,'r')
         self.psim = {} # dict of sim-parameters
         for nm, v in self.f['psim'].iteritems():
@@ -33,6 +46,29 @@ class mfp_mgr(object):
         self.t  = self.f['time'][...]
         self.nB = self.f['nB'].value
         self.nP = self.f['npla'].value
+
+    def fits_and_plots(self, t_decr, b_pe, m_pe, b_pa, m_pa):
+        prefix, myid = self.prefix, self.myid
+        fname_out_pdf = self.dir_fig+'/'+prefix+'%03d'%myid+'.pdf'
+        pdf_pages = PdfPages(fname_out_pdf)
+        #--- 1st page
+        self.fit_perp(t_decr, b_pe, m_pe)
+        fig, ax = self.plot_perp()
+        ax.set_ymargin(1.)
+        pdf_pages.savefig(fig, bbox_inches='tight')
+        close(fig)
+
+        #--- 2nd page
+        self.fit_parall(t_decr, b_pa, m_pa)
+        fig, ax = self.plot_parall()
+        ax.set_ymargin(1.)
+        pdf_pages.savefig(fig, bbox_inches='tight')
+        close(fig)
+
+        #--- Write the PDF document to the disk
+        pdf_pages.close()
+        print " ---> we generated: " + fname_out_pdf 
+
 
     def fit_perp(self, t_decr, seed_b, seed_m):
         t   = self.t
@@ -81,6 +117,7 @@ class mfp_mgr(object):
         # build fitted curves
         fitted_lxx = fun_hyperbola(l['lxx_fit'], l['lxx_fit_p1'], l['lxx_fit_p2'], t[cc])
         fitted_lyy = fun_hyperbola(l['lyy_fit'], l['lyy_fit_p1'], l['lyy_fit_p2'], t[cc])
+
         fig1 = figure(1, figsize=(6, 4))
         ax1  = fig1.add_subplot(111)
         # plot *all* simulation data
@@ -123,12 +160,7 @@ class mfp_mgr(object):
         ax1.set_ylabel('$\lambda_{{perp}}/L_C^{slab}$')
         ax1.grid()
 
-        #fname_fig = self.dir_fig+'/'+self.fname_inp[:-3]+'.png'
-        print self.dir_src
-        fname_fig = self.dir_fig+'/'+self.olabel+'_perp.png'
-        print " --> saving: "+fname_fig 
-        fig1.savefig(fname_fig, format='png', dpi=135, bbox_inches='tight')
-        close(fig1)
+        return fig1, ax1
 
 
     def fit_parall(self, t_decr, seed_b, seed_m):
@@ -158,9 +190,10 @@ class mfp_mgr(object):
         cc   = t>self.t_decr_kparall
 
         lzz  = self.f['lzz'][...]
-        lzz_std = self.f['lzz_std']
+        lzz_std = self.f['lzz_std'][...]
         l    = self.l
         nB   = self.nB
+
         # build fitted curves
         fitted_lzz = fun_hyperbola(l['lzz_fit'], l['lzz_fit_p1'], l['lzz_fit_p2'], t[cc])
 
@@ -177,7 +210,6 @@ class mfp_mgr(object):
         inf = lzz - lzz_std/np.sqrt(nB)
         sup = lzz + lzz_std/np.sqrt(nB)
         ax1.fill_between(t[cc], inf[cc], sup[cc], facecolor='gray', alpha=0.5)
-
         # legend
         ax1.legend()
 
@@ -196,12 +228,7 @@ class mfp_mgr(object):
         ax1.set_ylabel('$\lambda_{{\parallel}}/L_C^{slab}$')
         ax1.grid()
 
-        #fname_fig = self.dir_fig+'/'+self.fname_inp[:-3]+'.png'
-        print self.dir_src
-        fname_fig = self.dir_fig+'/'+self.olabel+'_parall.png'
-        print " --> saving: "+fname_fig 
-        fig1.savefig(fname_fig, format='png', dpi=135, bbox_inches='tight')
-        close(fig1)
+        return fig1, ax1
 
 
 
