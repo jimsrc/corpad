@@ -65,10 +65,37 @@ class mfp_mgr(object):
         pdf_pages.savefig(fig, bbox_inches='tight')
         close(fig)
 
+        #--- 3rd page
+        fig, ax = self.plot_TauHist()
+        ax.set_ymargin(1.)
+        pdf_pages.savefig(fig, bbox_inches='tight')
+        close(fig)
+
+        #--- 4th page
+        fig, ax = self.plot_TauHist(scale='lmin')
+        ax.set_ymargin(1.)
+        pdf_pages.savefig(fig, bbox_inches='tight')
+        close(fig)
+
         #--- Write the PDF document to the disk
         pdf_pages.close()
         print " ---> we generated: " + fname_out_pdf 
 
+    def plot_TauHist(self, scale='omega'):
+        hx, hc = self.f['hist_tau'][...]
+        fig = figure(1, figsize=(6, 4))
+        ax  = fig.add_subplot(111)
+        if scale=='omega':
+            hx_ = np.power(10.,hx - np.log10(2.*np.pi))
+        elif scale=='lmin':
+            hx_ = np.power(10.,hx-np.log10(self.f['psim/lmin_s'].value))
+        ax.plot(hx_, hc, 'k-o', ms=4)
+        ax.set_xscale('log')
+        ax.set_yscale('log')
+        ax.set_xlabel('tau')
+        ax.set_ylabel('#')
+        ax.grid(True)
+        return fig, ax
 
     def fit_perp(self, t_decr, seed_b, seed_m):
         t   = self.t
