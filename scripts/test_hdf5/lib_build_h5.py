@@ -6,6 +6,7 @@ import os
 from os.path import isfile, isdir
 from subprocess import check_output
 from glob import glob
+from pylab import find
 
 def read_params(fname):
     """ done for first header.
@@ -247,27 +248,30 @@ class build_hdf5(object):
 
     def get_one_TauHist(self, fname_traj):
         block = self.extract_block(fname_traj, 'TAU_COLL')
-        #--- extra filter
-        nini = find(block=='#begin_hist')[0]
-        nend = find(block=='#end_hist')[0]
-        block = block[nini:nend+1]
         #--- read misc parameters
         for line in block:
+            if len(line.split())<2: continue
             if line.split()[1]=='trun_minutes':
                 trun = float(line.split()[3])
             if line.split()[1]=='steps_total':
-                nstep = int(line.split().[3])
+                nstep = int(line.split()[3])
+        #--- extra filter
+        #print block[:10]; exit(0)
+        nini = find(block=='#begin_hist\n')[0]
+        nend = find(block=='#end_hist\n')[0]
+        block = block[nini:nend+1]
         #--- read tau-histogram
         i=0; num_trj=[];
         for line in block:
+            if len(line.split())<2: continue
             if line.split()[1]=='n_backsctt':
                 nback = int(line.split()[3])
             if line.split()[1]=='avr_tau':
                 avr_tau = float(line.split()[3])
             if not line.startswith('#'):
                 num_trj += [ map(float,line.split(' ')) ]
-        trj = np.array(num_trj)
-        return trj, nback, trun, nstep, avr_tau
+        hst = np.array(num_trj)
+        return hst, nback, trun, nstep, avr_tau
 
     def get_TauHistos(self):
         nB = len(glob(self.dir_src+'/B*_pla000.dat'))
@@ -275,7 +279,7 @@ class build_hdf5(object):
         assert nB*nP>0, "\n ---> NO .dat FILES!!\n"#small check
         flist = glob(self.dir_src+'/B*_pla*.dat')
 
-        nbin = self.get_one_TauHist(self.dir_src+'/B00_pla000.dat')[0].size(axis=0)
+        nbin = self.get_one_TauHist(self.dir_src+'/B00_pla000.dat')[0][:,0].size
         fo = self.fo
         for iB in range(nB):
             print " ---> B%02d"%iB
@@ -283,7 +287,7 @@ class build_hdf5(object):
             nback, trun, nstep, avr_tau = nans((4,nP))
             for iP in range(nP):
                 fname_pla = self.dir_src+'/B%02d_pla%03d.dat'%(iB,iP)
-                h[iP,:,:], nback[iP], trun[iP], nstep[iP],\    
+                h[iP,:,:], nback[iP], trun[iP], nstep[iP],\
                 avr_tau[iP] = self.get_one_TauHist(fname_pla)
             path = 'B%02d/stats_tau' % iB
             fo[path+'/hist'] = h
@@ -292,7 +296,7 @@ class build_hdf5(object):
             fo[path+'/nstep'] = nstep
             fo[path+'/avr_tau'] = avr_tau
         
-        fo['nbins_tau'] = h.size(axis=1)
+        fo['nbins_tau'] = nbin
         print " We grabbed all tau-histograms!"
 
 
@@ -318,7 +322,7 @@ class build_hdf5(object):
         #   realizaciones B.
 
         #nt=self.get_one_traj(self.dir_src+'/B00_pla000.dat').T[0].size
-        nt=self.get_one_traj(self.dir_src+'/B00_pla000.dat').size(axis=0)
+        nt=self.get_one_traj(self.dir_src+'/B00_pla000.dat')[:,0].size
         fo = self.fo
         for iB in range(nB):
             print " --> B%02d"%iB
