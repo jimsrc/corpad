@@ -42,6 +42,7 @@ assert isdir(dir_src) and isdir(dir_out), \
 
 mt = mfp_vs_t(dir_src)
 mt.calc_mfp_profile(moreinfo=True)
+mt.build_TauHist()
 mt.save2file(dir_out, pa.label)
 
 #EOF

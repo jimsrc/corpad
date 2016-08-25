@@ -167,6 +167,30 @@ class mfp_vs_t(object):
             'z2': SQR['z2'],
             })
 
+    def build_TauHist(s):
+        fi = h5(s.fname_inp,'r')
+        #---find min/max
+        hmin, hmax = 1e31, -1e31
+        for iB in range(s.par['nB']):
+            hx_iB = fi['B%02d/stats_tau/hist'%iB][:,:,0]
+            for hx in hx_iB: # iterate over plas
+                hmax = np.max([hmax, np.max(hx)])
+                hmin = np.min([hmin, np.min(hx)])
+        nbin = hx.size
+        dbin = (hmax-hmin)/(1.0*nbin) # resolution
+        htau = np.zeros((2,nbin))
+        htau[0,:] = np.linspace(hmin+.5*dbin, hmax-.5*dbin, nbin)
+        #--- build sum of all histograms
+        for iB in range(s.par['nB']):
+            hiB = fi['B%02d/stats_tau/hist'%iB][:,:,:]
+            for hiP in hiB: # iterate over plas
+                hx,hc = hiP.T
+                bins = map(int, (hx-hmin)/dbin-1e-9)
+                htau[1][bins] += hc
+        
+        s.htau = htau
+        return htau[0], htau[1]
+
     def save2file(s, dir_out, label):
         fname_out = dir_out+'/'+label+'.h5'
         print " ---> saving: "+fname_out+'\n'
@@ -174,6 +198,8 @@ class mfp_vs_t(object):
         #--- time profiles
         for name in s.profile.keys():
             fo[name] = s.profile[name]
+        #--- tau histogram
+        fo['hist_tau'] = s.htau
         #--- simulation parameters
         for pname, pval in s.par.iteritems():
             fo['psim/'+pname] = pval
