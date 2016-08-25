@@ -219,6 +219,19 @@ class build_hdf5(object):
         print " --> we have %d trajectories."%len(flist)
         self.psim = {}
 
+    def grab_all(self):
+        fname_out = self.dir_dst+'/'+self.fname_out_base
+        self.fo = h5(fname_out,'w')
+        self.get_trajs()
+        self.get_TauHistos()
+        #self.get_ThetaHistos()
+
+        print " ---> generated: " + self.fo.filename
+        self.fo.close() 
+        print "\n dir_src: " + self.dir_src
+        print " dir_dst: " + self.dir_dst + '\n'
+
+
     def extract_block(self, fname_traj, block_name='TRAJECTORY'):
         lines = []
         Read  = False
@@ -229,15 +242,66 @@ class build_hdf5(object):
                 Read = False; continue
             if Read:
                 lines += [line]
+        lines = np.array(lines)
         return lines
+
+    def get_one_TauHist(self, fname_traj):
+        block = self.extract_block(fname_traj, 'TAU_COLL')
+        #--- extra filter
+        nini = find(block=='#begin_hist')[0]
+        nend = find(block=='#end_hist')[0]
+        block = block[nini:nend+1]
+        #--- read misc parameters
+        for line in block:
+            if line.split()[1]=='trun_minutes':
+                trun = float(line.split()[3])
+            if line.split()[1]=='steps_total':
+                nstep = int(line.split().[3])
+        #--- read tau-histogram
+        i=0; num_trj=[];
+        for line in block:
+            if line.split()[1]=='n_backsctt':
+                nback = int(line.split()[3])
+            if line.split()[1]=='avr_tau':
+                avr_tau = float(line.split()[3])
+            if not line.startswith('#'):
+                num_trj += [ map(float,line.split(' ')) ]
+        trj = np.array(num_trj)
+        return trj, nback, trun, nstep, avr_tau
+
+    def get_TauHistos(self):
+        nB = len(glob(self.dir_src+'/B*_pla000.dat'))
+        nP = len(glob(self.dir_src+'/B00_pla*.dat'))
+        assert nB*nP>0, "\n ---> NO .dat FILES!!\n"#small check
+        flist = glob(self.dir_src+'/B*_pla*.dat')
+
+        nbin = self.get_one_TauHist(self.dir_src+'/B00_pla000.dat')[0].size(axis=0)
+        fo = self.fo
+        for iB in range(nB):
+            print " ---> B%02d"%iB
+            h = nans((nP,nbin,2))
+            nback, trun, nstep, avr_tau = nans((4,nP))
+            for iP in range(nP):
+                fname_pla = self.dir_src+'/B%02d_pla%03d.dat'%(iB,iP)
+                h[iP,:,:], nback[iP], trun[iP], nstep[iP],\    
+                avr_tau[iP] = self.get_one_TauHist(fname_pla)
+            path = 'B%02d/stats_tau' % iB
+            fo[path+'/hist'] = h
+            fo[path+'/nback'] = nback
+            fo[path+'/trun'] = trun
+            fo[path+'/nstep'] = nstep
+            fo[path+'/avr_tau'] = avr_tau
+        
+        fo['nbins_tau'] = h.size(axis=1)
+        print " We grabbed all tau-histograms!"
+
 
     def get_one_traj(self, fname_traj):
         block = self.extract_block(fname_traj, 'TRAJECTORY')
-        #--- read trajectory
+        #--- read tau-histogram
         i=0; num_trj=[];
         for line in block:
             if not line.startswith('#'):
-                #t[i],x[i],y[i],z[i],mu[i],err[i]=map(float,line.split(' '))
                 num_trj += [ map(float,line.split(' ')) ]
         trj = np.array(num_trj)
         return trj
@@ -253,9 +317,9 @@ class build_hdf5(object):
         # - para cada ID de pla, haya la misma cantidad de 
         #   realizaciones B.
 
-        nt=self.get_one_traj(self.dir_src+'/B00_pla000.dat').T[0].size
-        fname_out = self.dir_dst+'/'+self.fname_out_base
-        fo = h5(fname_out,'w')
+        #nt=self.get_one_traj(self.dir_src+'/B00_pla000.dat').T[0].size
+        nt=self.get_one_traj(self.dir_src+'/B00_pla000.dat').size(axis=0)
+        fo = self.fo
         for iB in range(nB):
             print " --> B%02d"%iB
             t,x,y,z,mu,err=nans((6,nt,nP))
@@ -275,8 +339,5 @@ class build_hdf5(object):
         fo['ntot_pla'] = nP # total nmbr of plas
         fo['ntimes'] = nt
         #fo['ntau'] = ntau
-        print " ---> generated: " + fo.filename
-        fo.close() 
-        print "\n dir_src: " + self.dir_src
-        print " dir_dst: " + self.dir_dst + '\n'
+        print " --> We grabbed all trajectories!"
 #EOF

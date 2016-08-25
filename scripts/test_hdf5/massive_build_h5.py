@@ -24,5 +24,6 @@ if raw_input('proceed? ([y]/n): ')=='n': raise SystemExit
 
 #fname_out, nok, nbad = build_h5_ii(ntot_B, ntot_pla, dir_src, dir_dst, fname_out_base)
 bh5 = build_hdf5(dir_src, dir_dst, fname_out_base)
-bh5.get_trajs() # converts all .dat to a single .h5
+#bh5.get_trajs() # converts all .dat to a single .h5
+bh5.grab_all() # grabs trajectories coordinates, tau-histos && theta-histos, and convert to .h5
 #EOF
