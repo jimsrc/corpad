@@ -6,11 +6,12 @@ from h5py import File as h5
 from numpy import (
     zeros, empty, ones, nan, 
     savetxt, loadtxt, mean, median, std,
-    nanmean, nanmedian
+    nanmean, nanmedian, log10
 )
 from os.path import isfile, isdir
 import os
 from matplotlib.backends.backend_pdf import PdfPages
+M_PI = np.pi
 #
 
 class mfp_mgr(object):
@@ -76,6 +77,12 @@ class mfp_mgr(object):
         ax.set_ymargin(1.)
         pdf_pages.savefig(fig, bbox_inches='tight')
         close(fig)
+        
+        #--- 4th page
+        fig, ax = self.plot_TauHist(scale='lmax')
+        ax.set_ymargin(1.)
+        pdf_pages.savefig(fig, bbox_inches='tight')
+        close(fig)
 
         #--- Write the PDF document to the disk
         pdf_pages.close()
@@ -86,13 +93,20 @@ class mfp_mgr(object):
         fig = figure(1, figsize=(6, 4))
         ax  = fig.add_subplot(111)
         if scale=='omega':
-            hx_ = np.power(10.,hx - np.log10(2.*np.pi))
+            hx_ = np.power(10.,hx-log10(2.*M_PI))
         elif scale=='lmin':
-            hx_ = np.power(10.,hx-np.log10(self.f['psim/lmin_s'].value))
+            hx_ = np.power(10.,hx-log10(self.f['psim/lmin_s'].value))
+        elif scale=='lmax':
+            hx_ = np.power(10.,hx-log10(self.f['psim/lmax_s'].value))
         ax.plot(hx_, hc, 'k-o', ms=4)
         ax.set_xscale('log')
         ax.set_yscale('log')
-        ax.set_xlabel('tau')
+        if scale=='omega':
+            ax.set_xlabel('$log_{10}(\Omega \\tau_{back}/2\pi)$')
+        elif scale=='lmin':
+            ax.set_xlabel('$log_{10}(v \\tau_{back}/\lambda_{min})$')
+        elif scale=='lmax':
+            ax.set_xlabel('$log_{10}(v \\tau_{back}/\lambda_{max})$')
         ax.set_ylabel('#')
         ax.grid(True)
         return fig, ax
