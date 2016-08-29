@@ -45,8 +45,6 @@ class mfp_mgr(object):
         self.nP = self.f['npla'].value
 
     def fits_and_plots(self, t_decr, b_pe, m_pe, b_pa, m_pa):
-        #prefix, myid = self.prefix, self.myid
-        #fname_out_pdf = self.dir_fig+'/'+prefix+'%03d'%myid+'.pdf'
         basename = self.fname_inp.split('/')[-1].replace('.h5','.pdf')
         # .pdf adopts the name of fname_inp's last inner subdir
         fname_out_pdf = self.dir_fig+'/'+basename
@@ -83,12 +81,17 @@ class mfp_mgr(object):
         pdf_pages.savefig(fig, bbox_inches='tight')
         close(fig)
 
+        #--- 6th page
+        fig, ax = self.plot_ThetaHist()
+        pdf_pages.savefig(fig, bbox_inches='tight')
+        close(fig)
+
         #--- Write the PDF document to the disk
         pdf_pages.close()
         print " ---> we generated: " + fname_out_pdf 
 
     def plot_TauHist(self, scale='omega'):
-        hx, hc = self.f['hist_tau'][...]
+        hx, hc = self.f['hist_tau'][...] # global version
         fig = figure(1, figsize=(6, 4))
         ax  = fig.add_subplot(111)
         if scale=='omega':
@@ -104,6 +107,16 @@ class mfp_mgr(object):
         ax.plot(hx_, hc, 'k-o', ms=4)
         ax.set_xscale('log')
         ax.set_yscale('log')
+        ax.set_ylabel('#')
+        ax.grid(True)
+        return fig, ax
+
+    def plot_ThetaHist(self):
+        hx, hc = self.f['hist_theta'][...] # global version
+        fig = figure(1,figsize=(6,4))
+        ax  = fig.add_subplot(111)
+        ax.plot(hx, hc, 'k-o', ms=4)
+        ax.set_xlabel('$\\theta_{back}$ [deg]')
         ax.set_ylabel('#')
         ax.grid(True)
         return fig, ax

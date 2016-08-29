@@ -78,11 +78,14 @@ if not(isdir(dir_out)):
 assert isdir(dir_src) and isdir(dir_out), \
     " NO EXISTEN??: \n"+ dir_src + '\n' + dir_out
 
+#--- build 'post.h5'
 mt = mfp_vs_t(dir_src)
 # build mean-free-path time profile
 mt.calc_mfp_profile(moreinfo=True)
-# build total-histogram of backscattering times
+# build global-histogram of backscattering times
 mt.build_TauHist()
+# build global-histogram of backscattering orientations
+mt.build_ThetaHist()
 # save all to .h5
 mt.save2file(dir_out)
 
@@ -91,8 +94,6 @@ mfp = funcs.mfp_mgr(
     dir_fig=pa.dir_fig, 
     fname_inp=mt.fname_out
 )
-#print mfp.psim
-
 mfp.fits_and_plots(pa.t_decr, pa.seed_b_perp, pa.seed_m_perp, pa.seed_m_para, pa.seed_m_para)
 
 #EOF

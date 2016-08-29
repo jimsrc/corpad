@@ -189,12 +189,35 @@ class mfp_vs_t(object):
         for iB in range(s.par['nB']):
             hiB = fi['B%02d/stats_tau/hist'%iB][:,:,:]
             for hiP in hiB: # iterate over plas
-                hx,hc = hiP.T
+                hx,hc = hiP[:,0], hiP[:,1]
                 bins = map(int, (hx-hmin)/dbin-1e-9)
                 htau[1][bins] += hc
         
         s.htau = htau
-        return htau[0], htau[1]
+        return htau[0,:], htau[1,:]
+
+    def build_ThetaHist(s):
+        fi = h5(s.fname_inp,'r')
+        #---find min/max
+        hmin, hmax = 1e31, -1e31
+        for iB in range(s.par['nB']):
+            hx_iB = fi['B%02d/stats_theta/hist'%iB][:,:,0]
+            for hx in hx_iB: # iterate over plas
+                hmax = np.max([hmax, hx.max()])
+                hmin = np.min([hmin, hx.min()])
+        nbin = hx.size
+        dbin = (hmax-hmin)/(1.0*nbin) # resolution
+        hth = np.zeros((2,nbin))
+        hth[0,:] = np.linspace(hmin+.5*dbin, hmax-.5*dbin, nbin)
+        #--- build sum of all histograms
+        for iB in range(s.par['nB']):
+            hiB = fi['B%02d/stats_theta/hist'%iB][:,:,:]
+            for hiP in hiB: # iterate over plas
+                hx, hc = hiP[:,0], hiP[:,1]
+                bins = map(int, (hx-hmin)/dbin-1e-9)
+                hth[1][bins] += hc
+        s.hth = hth
+        return hth[0,:], hth[1,:]
 
     def save2file(s, dir_out):
         subdir = s.dir_src.split('/')[-1]
@@ -205,8 +228,10 @@ class mfp_vs_t(object):
         #--- time profiles
         for name in s.profile.keys():
             fo[name] = s.profile[name]
-        #--- tau histogram
+        #--- tau histogram (global)
         fo['hist_tau'] = s.htau
+        #--- theta histogram (global)
+        fo['hist_theta'] = s.hth
         #--- simulation parameters
         for pname, pval in s.par.iteritems():
             fo['psim/'+pname] = pval
