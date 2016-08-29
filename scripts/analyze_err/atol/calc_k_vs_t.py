@@ -1,5 +1,10 @@
 #!/usr/bin/env ipython
 # -*- coding: utf-8 -*-
+
+# globals
+SOFT_VERSION = '1.0'
+
+# libs
 from funcs import *
 from funcs import (
     value, count_lines_in_file, 
@@ -191,10 +196,12 @@ class mfp_vs_t(object):
         s.htau = htau
         return htau[0], htau[1]
 
-    def save2file(s, dir_out, label):
-        fname_out = dir_out+'/'+label+'.h5'
+    def save2file(s, dir_out):
+        subdir = s.dir_src.split('/')[-1]
+        fname_out = dir_out+'/'+subdir+'.h5'
         print " ---> saving: "+fname_out+'\n'
         fo = h5(fname_out, 'w')
+        s.fname_out = fo.filename
         #--- time profiles
         for name in s.profile.keys():
             fo[name] = s.profile[name]
@@ -203,6 +210,7 @@ class mfp_vs_t(object):
         #--- simulation parameters
         for pname, pval in s.par.iteritems():
             fo['psim/'+pname] = pval
+        fo['version'] = SOFT_VERSION
         fo.close()
 
         print " > placing a link to output-file in: "+s.dir_src

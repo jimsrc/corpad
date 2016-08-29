@@ -20,21 +20,17 @@ class mfp_mgr(object):
     - append calculated parameters into the file
     - generate figures of mfp(t)
     """
-    def __init__(self, dir_fig, fname_inp, prefix='h', myid=1):
-        #self.olabel  = olabel
-        self.prefix  = prefix
-        self.myid    = myid
+    def __init__(self, dir_fig='plots', fname_inp='None'):
+        """
+        fname_inp: full path of the post.h5 file
+        dir_fig: full path to directory for the .pdf output
+        """
+        #self.prefix  = prefix
+        #self.myid    = myid
         #--- directory for figures
-        if dir_fig=='None':
-            self.dir_fig = os.environ['PLAS']+'/plots'
-        else:
-            self.dir_fig = dir_fig
-
+        self.dir_fig = os.environ['PLAS']+'/'+dir_fig
         #--- fullpath of input file
-        if fname_inp=='None':
-            self.fname_inp = os.environ['PLAS']+'/out/'+prefix+'%03d'%myid+'/post.h5'
-        else:
-            self.fname_inp = fname_inp
+        self.fname_inp = fname_inp
 
         assert isfile(self.fname_inp),\
         ' ---> doesn\'t exist: '+self.fname_inp+\
@@ -49,8 +45,11 @@ class mfp_mgr(object):
         self.nP = self.f['npla'].value
 
     def fits_and_plots(self, t_decr, b_pe, m_pe, b_pa, m_pa):
-        prefix, myid = self.prefix, self.myid
-        fname_out_pdf = self.dir_fig+'/'+prefix+'%03d'%myid+'.pdf'
+        #prefix, myid = self.prefix, self.myid
+        #fname_out_pdf = self.dir_fig+'/'+prefix+'%03d'%myid+'.pdf'
+        basename = self.fname_inp.split('/')[-1].replace('.h5','.pdf')
+        # .pdf adopts the name of fname_inp's last inner subdir
+        fname_out_pdf = self.dir_fig+'/'+basename
         pdf_pages = PdfPages(fname_out_pdf)
         #--- 1st page
         self.fit_perp(t_decr, b_pe, m_pe)
@@ -78,7 +77,7 @@ class mfp_mgr(object):
         pdf_pages.savefig(fig, bbox_inches='tight')
         close(fig)
         
-        #--- 4th page
+        #--- 5th page
         fig, ax = self.plot_TauHist(scale='lmax')
         ax.set_ymargin(1.)
         pdf_pages.savefig(fig, bbox_inches='tight')
@@ -94,19 +93,17 @@ class mfp_mgr(object):
         ax  = fig.add_subplot(111)
         if scale=='omega':
             hx_ = np.power(10.,hx-log10(2.*M_PI))
+            ax.set_xlabel('$log_{10}(\Omega \\tau_{back}/2\pi)$')
         elif scale=='lmin':
             hx_ = np.power(10.,hx-log10(self.f['psim/lmin_s'].value))
+            ax.set_xlabel('$log_{10}(v \\tau_{back}/\lambda_{min})$')
         elif scale=='lmax':
             hx_ = np.power(10.,hx-log10(self.f['psim/lmax_s'].value))
+            ax.set_xlabel('$log_{10}(v \\tau_{back}/\lambda_{max})$')
+
         ax.plot(hx_, hc, 'k-o', ms=4)
         ax.set_xscale('log')
         ax.set_yscale('log')
-        if scale=='omega':
-            ax.set_xlabel('$log_{10}(\Omega \\tau_{back}/2\pi)$')
-        elif scale=='lmin':
-            ax.set_xlabel('$log_{10}(v \\tau_{back}/\lambda_{min})$')
-        elif scale=='lmax':
-            ax.set_xlabel('$log_{10}(v \\tau_{back}/\lambda_{max})$')
         ax.set_ylabel('#')
         ax.grid(True)
         return fig, ax
@@ -209,10 +206,7 @@ class mfp_mgr(object):
         lzz = self.f['lzz'][...]
         # select data for fitting
         cc = t>t_decr
-
         #----------------------------------- fit k_parall
-        #cc = t>5000
-        cc  = t>t_decr
         seed_xo  = 0.0
         pz  = make_fit_lxx([t[cc], lzz[cc]], [seed_b, seed_m, seed_xo])
 
@@ -333,9 +327,8 @@ def make_fit_lxx(data, sems):
 
     METHOD  = "leastsq"#"leastsq"#"lbfgsb"
     result = minimize(residuals_kxx, params, args=(x, y), method=METHOD)
-    #print dict(result)
-    print " ----> now dir "
-    print dir(result)
+    #print " ----> now dir "
+    #print dir(result)
 
     # write error report
     print " --------> METODO_FITEO: %s" % METHOD
@@ -428,7 +421,7 @@ def residuals(params, x, y_data):
     K       = params['K'].value
     L       = params['L'].value
     diff    = (model_shifted(N, A, yo, K, L, x)  - y_data)**2.
-    print " diff---> %f" % mean(diff)
+    #print " diff---> %f" % mean(diff)
 
     return diff
 
@@ -443,7 +436,7 @@ def residuals_kxx(params, x, y_data):
     m   = params['m'].value
     xo  = params['xo'].value
     diff    = (fun_hyperbola(b, m, xo, x)  - y_data)**2.
-    print " diff---> %f" % mean(diff)
+    #print " diff---> %f" % mean(diff)
 
     return diff
 

@@ -3,12 +3,11 @@
 To run, go as:
 
 ```
-./massive.k.vs.t.py -- -i out/r.0.20_ok -l h.001 -o post/vs_r
+./massive.k.vs.t.py -- --dir_src out/h.001 --dir_dst post/vs_r --dir_fig plots
 ```
 
-Then,
-
+Other optional command-line parameters (seeds for fits and threshold `t_decr` to filter fitting-data), see:
 ```
-./massive_mfp.py -- -p h. -id 1 -sm_pe 190. -sb_pe 0.1 -sm_pa -16000 -sb_pa 30. -td 1000.
+./massive.k.vs.t.py -- -h
 ```
 
