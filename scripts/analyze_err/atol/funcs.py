@@ -52,37 +52,37 @@ class mfp_mgr(object):
         #--- 1st page
         self.fit_perp(t_decr, b_pe, m_pe)
         fig, ax = self.plot_perp()
-        ax.set_ymargin(1.)
         pdf_pages.savefig(fig, bbox_inches='tight')
         close(fig)
 
         #--- 2nd page
         self.fit_parall(t_decr, b_pa, m_pa)
         fig, ax = self.plot_parall()
-        ax.set_ymargin(1.)
         pdf_pages.savefig(fig, bbox_inches='tight')
         close(fig)
 
         #--- 3rd page
         fig, ax = self.plot_TauHist()
-        ax.set_ymargin(1.)
         pdf_pages.savefig(fig, bbox_inches='tight')
         close(fig)
 
         #--- 4th page
         fig, ax = self.plot_TauHist(scale='lmin')
-        ax.set_ymargin(1.)
         pdf_pages.savefig(fig, bbox_inches='tight')
         close(fig)
         
         #--- 5th page
         fig, ax = self.plot_TauHist(scale='lmax')
-        ax.set_ymargin(1.)
         pdf_pages.savefig(fig, bbox_inches='tight')
         close(fig)
 
         #--- 6th page
         fig, ax = self.plot_ThetaHist()
+        pdf_pages.savefig(fig, bbox_inches='tight')
+        close(fig)
+
+        #--- 7th page
+        fig, ax = self.plot_RuntimeHist()
         pdf_pages.savefig(fig, bbox_inches='tight')
         close(fig)
 
@@ -119,6 +119,25 @@ class mfp_mgr(object):
         ax.set_xlabel('$\\theta_{back}$ [deg]')
         ax.set_ylabel('#')
         ax.grid(True)
+        return fig, ax
+
+    def plot_RuntimeHist(self):
+        """
+        histogram of all the runtimes of all particles
+        associated to all the B-realizations
+        """
+        hx, hc = self.f['hist_runtime'][...] 
+        total_trun = (hx*hc).sum()/(60.*24.) # [days]
+        label='total/days:%2.1f'%total_trun
+        dx = hx[1]-hx[0]
+        fig = figure(1,figsize=(6,4))
+        ax  = fig.add_subplot(111)
+        ax.bar(hx, hc, width=dx, align='center', label=label)
+        ax.set_xlabel('runtime [min]')
+        ax.set_ylabel('#')
+        ax.set_yscale('log')
+        ax.grid(True)
+        ax.legend(loc='best')
         return fig, ax
 
     def fit_perp(self, t_decr, seed_b, seed_m):

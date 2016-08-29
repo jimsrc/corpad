@@ -69,25 +69,18 @@ parser.add_argument(
 )
 pa = parser.parse_args()
 
-PLAS    = os.environ['PLAS']
-dir_src = PLAS+'/'+pa.dir_src #'%s/out/r.0.30_NmS.128_Nm2d.256' % PLAS
-dir_out = PLAS+'/'+pa.dir_dst #'%s/post/vs_r' % PLAS
-if not(isdir(dir_out)):
-    os.mkdir(dir_out)
-
-assert isdir(dir_src) and isdir(dir_out), \
-    " NO EXISTEN??: \n"+ dir_src + '\n' + dir_out
-
 #--- build 'post.h5'
-mt = mfp_vs_t(dir_src)
+mt = mfp_vs_t(pa.dir_src)
 # build mean-free-path time profile
 mt.calc_mfp_profile(moreinfo=True)
 # build global-histogram of backscattering times
 mt.build_TauHist()
 # build global-histogram of backscattering orientations
 mt.build_ThetaHist()
+# histos for runtimes
+mt.build_RuntimeHist(nbin=100)
 # save all to .h5
-mt.save2file(dir_out)
+mt.save2file(pa.dir_dst)
 
 #--- fits && plots
 mfp = funcs.mfp_mgr(

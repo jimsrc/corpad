@@ -90,8 +90,8 @@ def sqr_dsplmts(DATA, time):
 
 class mfp_vs_t(object):
     def __init__(s, dir_src):
-        s.dir_src   = dir_src
-        dir_info    = '%s/info' % dir_src
+        s.dir_src  = os.environ['PLAS']+'/'+dir_src
+        dir_info   = '%s/info' % s.dir_src
         s.fname_orient = '%s/orientations.in' % dir_info
         s.fname_plas  = '%s/plas.in' % dir_info
         s.fname_turb  = '%s/turb.in' % dir_info
@@ -219,9 +219,36 @@ class mfp_vs_t(object):
         s.hth = hth
         return hth[0,:], hth[1,:]
 
+    def build_RuntimeHist(s, nbin=100):
+        mu, trun = s._mu_and_runtime()
+        hc, hx_ = np.histogram(trun.reshape(trun.size), bins=nbin)
+        dx = hx_[1]-hx_[0]
+        hx = 0.5*(hx_[:-1]+hx_[1:])
+        #fig = figure(1,figsize=(6,4))
+        #ax  = fig.add_subplot(111)
+        #ax.bar(hx, hc, width=dx,align='center')
+        #ax.set_xlabel('runtime [min]')
+        #ax.set_ylabel('#')
+        #ax.grid(True)
+        #return fig, ax
+        s.hrun = np.array([hx,hc])
+        return hx, hc
+
+    def _mu_and_runtime(s):
+        """
+        NOTE: 'mu' is calculated with respect to the local B-field.
+        """
+        fname_inp = s.dir_src+'/out.h5'
+        fi = h5(fname_inp,'r')
+        mu, trun = nans((2, s.par['nB'], s.par['nplas']))
+        for iB in range(s.par['nB']):
+            mu[iB,:]   = fi['B%02d/mu'%iB][0,:] # initial mu's
+            trun[iB,:] = fi['B%02d/stats_tau/trun'%iB][...] # trun's
+        return mu, trun
+
     def save2file(s, dir_out):
         subdir = s.dir_src.split('/')[-1]
-        fname_out = dir_out+'/'+subdir+'.h5'
+        fname_out = os.environ['PLAS']+'/'+dir_out+'/'+subdir+'.h5'
         print " ---> saving: "+fname_out+'\n'
         fo = h5(fname_out, 'w')
         s.fname_out = fo.filename
@@ -232,6 +259,8 @@ class mfp_vs_t(object):
         fo['hist_tau'] = s.htau
         #--- theta histogram (global)
         fo['hist_theta'] = s.hth
+        #--- runtimes
+        fo['hist_runtime'] = s.hrun
         #--- simulation parameters
         for pname, pval in s.par.iteritems():
             fo['psim/'+pname] = pval
