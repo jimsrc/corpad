@@ -337,7 +337,7 @@ class build_hdf5(object):
             avr_thcoll = nans(nP)
             for iP in range(nP):
                 fname_pla = self.dir_src+'/B%02d_pla%03d.dat'%(iB,iP)
-                h[iP,:,:], avr_tau[iP] = self._one_ThetaHist(fname_pla)
+                h[iP,:,:], avr_thcoll[iP] = self._one_ThetaHist(fname_pla)
             path = 'B%02d/stats_theta' % iB
             fo[path+'/hist'] = h
             fo[path+'/avr_thback'] = avr_thcoll
