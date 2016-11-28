@@ -113,10 +113,7 @@ class mfp_mgr(object):
         ax.grid(True)
         return fig, ax
 
-    def plot_TauHist_ii(self,):
-        hx, hc = self.f['hist_tau'][...] # global version
-        fig = figure(1, figsize=(6, 4))
-        ax  = fig.add_subplot(111)
+    def _return_twiny(self, ax, func12, func21, xlabel, offset=-0.2):
         ax2 = ax.twiny()
         #---------------------
         # Move twinned axis ticks and label from top to bottom
@@ -124,7 +121,7 @@ class mfp_mgr(object):
         ax2.xaxis.set_label_position("bottom")
 
         # Offset the twin axis below the host
-        ax2.spines["bottom"].set_position(("axes", -0.20))
+        ax2.spines["bottom"].set_position(("axes", offset))
 
         # Turn on the frame for the twin axis, but then hide all 
         # but the bottom spine
@@ -134,26 +131,11 @@ class mfp_mgr(object):
             sp.set_visible(False)
         ax2.spines["bottom"].set_visible(True)
         #---------------------
-
-        hx_ = np.power(10.,hx-log10(2.*M_PI))
-        ax.set_xlabel('$log_{10}(\Omega \\tau_{back}/2\pi)$')
-
-        hx_ii = np.power(10.,hx-log10(self.f['psim/lmin_s'].value))
-        ax2.set_xlabel('$v \\tau_{back}/\lambda_{min}$')
-
-        ax.plot(hx_, hc, 'k-o', ms=4)
-        ax.set_xscale('log')
-        ax.set_yscale('log')
-        ax.set_ylabel('#')
-        ax.set_ylim(1.,)
-        ax.grid(True)
-
+        ax2.set_xlabel(xlabel)
         #---------------------
         xmin, xmax = ax.get_xlim()
         xticks = ax.get_xticks()
 
-        func21 = lambda x: (2.*M_PI/self.f['psim/lmin_s'].value)*x
-        func12 = lambda x: (self.f['psim/lmin_s'].value/(2.*M_PI))*x
         x2min, x2max = func21(xmin), func21(xmax)
 
         new_tick_labels = pow(10., np.arange(
@@ -161,13 +143,12 @@ class mfp_mgr(object):
             stop  = np.ceil(log10(x2max)),
             step  = 1.,
         ))
-        #ax2.set_xlim(xmin, xmax)
         ax2.set_xscale('log')
         new_tick_locations = func12(new_tick_labels)
         ax2.set_xticks(new_tick_locations[1:])
         flog = lambda x: '$10^{%d}$'% log10(x)
         ax2.set_xticklabels([flog(t) for t in new_tick_labels[1:]])
-        # remove minor x-ticks
+        # remove minor x-ticks [inherited from the host]
         ax2.xaxis.set_minor_locator(ticker.NullLocator())
         #ax2.xaxis.set_minor_locator(ticker.LogLocator())
         #-- we'll manually set the minor ticks
@@ -179,6 +160,40 @@ class mfp_mgr(object):
         minor = True,
         )
         ax2.set_xlim(xmin, xmax)
+        return ax2
+
+    def plot_TauHist_ii(self,):
+        hx, hc = self.f['hist_tau'][...] # global version
+        fig = figure(1, figsize=(6, 4))
+        ax  = fig.add_subplot(111)
+
+        hx_ = np.power(10.,hx-log10(2.*M_PI))
+        ax.set_xlabel('$\Omega \\tau_{back}/2\pi$')
+
+        ax.plot(hx_, hc, 'k-o', ms=4)
+        ax.set_xscale('log')
+        ax.set_yscale('log')
+        ax.set_ylabel('#')
+        ax.set_ylim(1.,)
+        ax.grid(True)
+
+        #-- units of \lambda_min
+        func21 = lambda x: (2.*M_PI/self.f['psim/lmin_s'].value)*x
+        func12 = lambda x: (self.f['psim/lmin_s'].value/(2.*M_PI))*x
+        ax2 = self._return_twiny(
+            ax, func12, func21, 
+            xlabel = '$v \\tau_{back}/\lambda_{min}$',
+            offset = -0.2
+        )
+
+        #--- units of \lambda_max
+        func21 = lambda x: (2.*M_PI/self.f['psim/lmax_s'].value)*x
+        func12 = lambda x: (self.f['psim/lmax_s'].value/(2.*M_PI))*x
+        ax3 = self._return_twiny(
+            ax, func12, func21, 
+            xlabel = '$v \\tau_{back}/\lambda_{max}$',
+            offset = -0.4,
+        )
 
         return fig, ax
 
