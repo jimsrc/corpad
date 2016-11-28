@@ -114,6 +114,13 @@ class mfp_mgr(object):
         return fig, ax
 
     def _return_twiny(self, ax, func12, func21, xlabel, offset=-0.2):
+        """
+        Make a twiny() x-axis, so that we can put it BELOW the
+        host x-axis `ax`.
+        For the conversion of units, we use `func12` and `func21`.
+        The position offset of the twin x-axis is `offset`.
+        This is for self.plot_TauHist_ii().
+        """
         ax2 = ax.twiny()
         #---------------------
         # Move twinned axis ticks and label from top to bottom
@@ -194,6 +201,17 @@ class mfp_mgr(object):
             xlabel = '$v \\tau_{back}/\lambda_{max}$',
             offset = -0.4,
         )
+
+        #--- units of parallel mean-free-path
+        RloLc = 1./self.psim['Lc_slab']
+        func21 = lambda x: RloLc*(2.*M_PI*x)/(self.lparall)
+        func12 = lambda x: self.lparall*x/(RloLc*2.*M_PI)
+        ax4 = self._return_twiny(
+            ax, func12, func21,
+            xlabel = '$v \\tau_{back}/\lambda_{\parallel}$',
+            offset = -0.6,
+        )
+
 
         return fig, ax
 
