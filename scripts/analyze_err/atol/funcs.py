@@ -47,18 +47,23 @@ class mfp_mgr(object):
         self.nP = self.f['npla'].value
 
     def fits_and_plots(self, t_decr, b_pe, m_pe, b_pa, m_pa):
+        """
+        fits and plots
+        """
+        # first, perform the fits
+        self.fit_perp(t_decr, b_pe, m_pe)
+        self.fit_parall(t_decr, b_pa, m_pa)
+
         basename = self.fname_inp.split('/')[-1].replace('.h5','.pdf')
         # .pdf adopts the name of fname_inp's last inner subdir
         fname_out_pdf = self.dir_fig+'/'+basename
         pdf_pages = PdfPages(fname_out_pdf)
         #--- 1st page
-        self.fit_perp(t_decr, b_pe, m_pe)
         fig, ax = self.plot_perp()
         pdf_pages.savefig(fig, bbox_inches='tight')
         close(fig)
 
         #--- 2nd page
-        self.fit_parall(t_decr, b_pa, m_pa)
         fig, ax = self.plot_parall()
         pdf_pages.savefig(fig, bbox_inches='tight')
         close(fig)
@@ -113,7 +118,7 @@ class mfp_mgr(object):
         ax.grid(True)
         return fig, ax
 
-    def _return_twiny(self, ax, func12, func21, xlabel, offset=-0.2):
+    def _return_twiny(self, ax, func12, func21, xlabel, offset=-0.2, scale='log'):
         """
         Make a twiny() x-axis, so that we can put it BELOW the
         host x-axis `ax`.
@@ -145,27 +150,40 @@ class mfp_mgr(object):
 
         x2min, x2max = func21(xmin), func21(xmax)
 
-        new_tick_labels = pow(10., np.arange(
-            start = np.floor(log10(x2min)), 
-            stop  = np.ceil(log10(x2max)),
-            step  = 1.,
-        ))
-        ax2.set_xscale('log')
+        if scale=='log':
+            new_tick_labels = pow(10., np.arange(
+                start = np.floor(log10(x2min)), 
+                stop  = np.ceil(log10(x2max)),
+                step  = 1.,
+            ))
+            ax2.set_xscale('log')
+        else:
+            new_tick_labels = func21(xticks)
+
+        # in case of linear scale, this'll be the same as `xticks`
         new_tick_locations = func12(new_tick_labels)
-        ax2.set_xticks(new_tick_locations[1:])
-        flog = lambda x: '$10^{%d}$'% log10(x)
-        ax2.set_xticklabels([flog(t) for t in new_tick_labels[1:]])
+        
+
+        if scale=='log':
+            ax2.set_xticks(new_tick_locations[1:])
+            flog = lambda x: '$10^{%d}$'% log10(x)
+            ax2.set_xticklabels([flog(t) for t in new_tick_labels[1:]])
+            #-- we'll manually set the minor ticks
+            mt = []
+            for ti, te in zip(new_tick_labels[:-1], new_tick_labels[1:]):
+                mt += list(np.linspace(ti, te, 10)) 
+            ax2.xaxis.set_ticks(
+            ticks = [func12(_mt) for _mt in mt], 
+            minor = True,
+            )
+        else:
+            ax2.set_xticks(new_tick_locations)
+            flog = lambda x: '$%2.1f$'% x
+            ax2.set_xticklabels([flog(t) for t in new_tick_labels])
+
         # remove minor x-ticks [inherited from the host]
         ax2.xaxis.set_minor_locator(ticker.NullLocator())
         #ax2.xaxis.set_minor_locator(ticker.LogLocator())
-        #-- we'll manually set the minor ticks
-        mt = []
-        for ti, te in zip(new_tick_labels[:-1], new_tick_labels[1:]):
-            mt += list(np.linspace(ti, te, 10)) 
-        ax2.xaxis.set_ticks(
-        ticks = [func12(_mt) for _mt in mt], 
-        minor = True,
-        )
         ax2.set_xlim(xmin, xmax)
         return ax2
 
@@ -331,8 +349,19 @@ class mfp_mgr(object):
 
         ax1.set_title(TITLE)
         ax1.set_xlabel('$\Omega t$')
-        ax1.set_ylabel('$\lambda_{{perp}}/L_C^{slab}$')
+        ax1.set_ylabel('$\lambda_{\perp}(t)/L_C^{slab}$')
         ax1.grid()
+
+        #--- another x-axis, in units of \lambda_parallel
+        RloLc = 1./self.psim['Lc_slab']
+        func21 = lambda x: RloLc*(x)/(self.lparall)
+        func12 = lambda x: self.lparall*x/(RloLc)
+        ax2 = self._return_twiny(
+            ax1, func12, func21,
+            xlabel = '$v t/\lambda_{\parallel}$',
+            offset = -0.2,
+            scale='linear',
+        )
 
         return fig1, ax1
 
@@ -396,8 +425,19 @@ class mfp_mgr(object):
 
         ax1.set_title(TITLE)
         ax1.set_xlabel('$\Omega t$')
-        ax1.set_ylabel('$\lambda_{{\parallel}}/L_C^{slab}$')
+        ax1.set_ylabel('$\lambda_{{\parallel}}(t)/L_C^{slab}$')
         ax1.grid()
+
+        #--- another x-axis, in units of \lambda_parallel
+        RloLc = 1./self.psim['Lc_slab']
+        func21 = lambda x: RloLc*(x)/(self.lparall)
+        func12 = lambda x: self.lparall*x/(RloLc)
+        ax2 = self._return_twiny(
+            ax1, func12, func21,
+            xlabel = '$v t/\lambda_{\parallel}$',
+            offset = -0.2,
+            scale='linear',
+        )
 
         return fig1, ax1
 
