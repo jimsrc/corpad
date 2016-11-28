@@ -118,7 +118,6 @@ class mfp_mgr(object):
         fig = figure(1, figsize=(6, 4))
         ax  = fig.add_subplot(111)
         ax2 = ax.twiny()
-        ax3 = ax.twiny()
         #---------------------
         # Move twinned axis ticks and label from top to bottom
         ax2.xaxis.set_ticks_position("bottom")
@@ -154,6 +153,7 @@ class mfp_mgr(object):
         xticks = ax.get_xticks()
 
         func21 = lambda x: (2.*M_PI/self.f['psim/lmin_s'].value)*x
+        func12 = lambda x: (self.f['psim/lmin_s'].value/(2.*M_PI))*x
         x2min, x2max = func21(xmin), func21(xmax)
 
         new_tick_labels = pow(10., np.arange(
@@ -161,14 +161,24 @@ class mfp_mgr(object):
             stop  = np.ceil(log10(x2max)),
             step  = 1.,
         ))
-        ax2.set_xlim(xmin, xmax)
+        #ax2.set_xlim(xmin, xmax)
         ax2.set_xscale('log')
-        new_tick_locations = new_tick_labels*self.f['psim/lmin_s'].value/(2.*M_PI)
+        new_tick_locations = func12(new_tick_labels)
         ax2.set_xticks(new_tick_locations[1:])
         flog = lambda x: '$10^{%d}$'% log10(x)
         ax2.set_xticklabels([flog(t) for t in new_tick_labels[1:]])
-        #import pdb; pdb.set_trace()
-        #ax2.get_xaxis().set_major_formatter(ticker.ScalarFormatter())
+        # remove minor x-ticks
+        ax2.xaxis.set_minor_locator(ticker.NullLocator())
+        #ax2.xaxis.set_minor_locator(ticker.LogLocator())
+        #-- we'll manually set the minor ticks
+        mt = []
+        for ti, te in zip(new_tick_labels[:-1], new_tick_labels[1:]):
+            mt += list(np.linspace(ti, te, 10)) 
+        ax2.xaxis.set_ticks(
+        ticks = [func12(_mt) for _mt in mt], 
+        minor = True,
+        )
+        ax2.set_xlim(xmin, xmax)
 
         return fig, ax
 
