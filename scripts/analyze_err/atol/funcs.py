@@ -11,6 +11,8 @@ from numpy import (
 from os.path import isfile, isdir
 import os
 from matplotlib.backends.backend_pdf import PdfPages
+from matplotlib import ticker # handles ticks
+from numpy import power as pow
 M_PI = np.pi
 #
 
@@ -28,7 +30,7 @@ class mfp_mgr(object):
         #self.prefix  = prefix
         #self.myid    = myid
         #--- directory for figures
-        self.dir_fig = os.environ['PLAS']+'/'+dir_fig
+        self.dir_fig = dir_fig
         #--- fullpath of input file
         self.fname_inp = fname_inp
 
@@ -62,10 +64,10 @@ class mfp_mgr(object):
         close(fig)
 
         #--- 3rd page
-        fig, ax = self.plot_TauHist()
+        fig, ax = self.plot_TauHist_ii()
         pdf_pages.savefig(fig, bbox_inches='tight')
         close(fig)
-
+        """
         #--- 4th page
         fig, ax = self.plot_TauHist(scale='lmin')
         pdf_pages.savefig(fig, bbox_inches='tight')
@@ -75,7 +77,7 @@ class mfp_mgr(object):
         fig, ax = self.plot_TauHist(scale='lmax')
         pdf_pages.savefig(fig, bbox_inches='tight')
         close(fig)
-
+        """
         #--- 6th page
         fig, ax = self.plot_ThetaHist()
         pdf_pages.savefig(fig, bbox_inches='tight')
@@ -109,6 +111,65 @@ class mfp_mgr(object):
         ax.set_yscale('log')
         ax.set_ylabel('#')
         ax.grid(True)
+        return fig, ax
+
+    def plot_TauHist_ii(self,):
+        hx, hc = self.f['hist_tau'][...] # global version
+        fig = figure(1, figsize=(6, 4))
+        ax  = fig.add_subplot(111)
+        ax2 = ax.twiny()
+        ax3 = ax.twiny()
+        #---------------------
+        # Move twinned axis ticks and label from top to bottom
+        ax2.xaxis.set_ticks_position("bottom")
+        ax2.xaxis.set_label_position("bottom")
+
+        # Offset the twin axis below the host
+        ax2.spines["bottom"].set_position(("axes", -0.20))
+
+        # Turn on the frame for the twin axis, but then hide all 
+        # but the bottom spine
+        ax2.set_frame_on(True)
+        ax2.patch.set_visible(False)
+        for sp in ax2.spines.itervalues():
+            sp.set_visible(False)
+        ax2.spines["bottom"].set_visible(True)
+        #---------------------
+
+        hx_ = np.power(10.,hx-log10(2.*M_PI))
+        ax.set_xlabel('$log_{10}(\Omega \\tau_{back}/2\pi)$')
+
+        hx_ii = np.power(10.,hx-log10(self.f['psim/lmin_s'].value))
+        ax2.set_xlabel('$v \\tau_{back}/\lambda_{min}$')
+
+        ax.plot(hx_, hc, 'k-o', ms=4)
+        ax.set_xscale('log')
+        ax.set_yscale('log')
+        ax.set_ylabel('#')
+        ax.set_ylim(1.,)
+        ax.grid(True)
+
+        #---------------------
+        xmin, xmax = ax.get_xlim()
+        xticks = ax.get_xticks()
+
+        func21 = lambda x: (2.*M_PI/self.f['psim/lmin_s'].value)*x
+        x2min, x2max = func21(xmin), func21(xmax)
+
+        new_tick_labels = pow(10., np.arange(
+            start = np.floor(log10(x2min)), 
+            stop  = np.ceil(log10(x2max)),
+            step  = 1.,
+        ))
+        ax2.set_xlim(xmin, xmax)
+        ax2.set_xscale('log')
+        new_tick_locations = new_tick_labels*self.f['psim/lmin_s'].value/(2.*M_PI)
+        ax2.set_xticks(new_tick_locations[1:])
+        flog = lambda x: '$10^{%d}$'% log10(x)
+        ax2.set_xticklabels([flog(t) for t in new_tick_labels[1:]])
+        #import pdb; pdb.set_trace()
+        #ax2.get_xaxis().set_major_formatter(ticker.ScalarFormatter())
+
         return fig, ax
 
     def plot_ThetaHist(self):

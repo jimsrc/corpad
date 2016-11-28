@@ -90,7 +90,7 @@ def sqr_dsplmts(DATA, time):
 
 class mfp_vs_t(object):
     def __init__(s, dir_src):
-        s.dir_src  = os.environ['PLAS']+'/'+dir_src
+        s.dir_src  = dir_src
         dir_info   = '%s/info' % s.dir_src
         s.fname_orient = '%s/orientations.in' % dir_info
         s.fname_plas  = '%s/plas.in' % dir_info
@@ -247,8 +247,13 @@ class mfp_vs_t(object):
         return mu, trun
 
     def save2file(s, dir_out):
+        """
+        Take the name of the last inner subdir of the input directory
+        path (e.g. say `inner_dir`) as the name for the output 
+        filename `fname_out`.
+        """
         subdir = s.dir_src.split('/')[-1]
-        fname_out = os.environ['PLAS']+'/'+dir_out+'/'+subdir+'.h5'
+        fname_out = dir_out+'/'+subdir+'.h5'
         print " ---> saving: "+fname_out+'\n'
         fo = h5(fname_out, 'w')
         s.fname_out = fo.filename
@@ -268,10 +273,18 @@ class mfp_vs_t(object):
         fo.close()
 
         print " > placing a link to output-file in: "+s.dir_src
-        os.system('ln -sf {fname_out} {symlink}'.format(
-            fname_out=fname_out,
-            symlink=s.dir_src+'/post.h5')
-        )
+        # make a backup of the [possibly] existing symlink, just
+        # to keep track of previous paths of post-processing analysis
+        symlink = s.dir_src+'/post.h5'
+        # check if the existing symlink already points to it
+        if isfile(symlink) and os.path.realpath(fname_out)==os.path.realpath(symlink):
+            pass # nothing to do
+        else:
+            os.system('ln -sf --backup=numbered {fname_out} {symlink}'.format(
+                fname_out = os.path.realpath(fname_out),
+                symlink   = symlink
+                )
+            )
 
 #++++++++++++++++++++++++++++++++++++++++++++++++++
 """
