@@ -118,13 +118,14 @@ class mfp_mgr(object):
         ax.grid(True)
         return fig, ax
 
-    def _return_twiny(self, ax, func12, func21, xlabel, offset=-0.2, scale='log'):
+    def _return_twiny(self, ax, func12, func21, xlabel, offset=-0.2, scale='log', vline=None):
         """
         Make a twiny() x-axis, so that we can put it BELOW the
         host x-axis `ax`.
         For the conversion of units, we use `func12` and `func21`.
         The position offset of the twin x-axis is `offset`.
         This is for self.plot_TauHist_ii().
+        If `vline` is not None, is a dict of arguments for `axvline()`
         """
         ax2 = ax.twiny()
         #---------------------
@@ -145,8 +146,8 @@ class mfp_mgr(object):
         #---------------------
         ax2.set_xlabel(xlabel)
         #---------------------
-        xmin, xmax = ax.get_xlim()
-        xticks = ax.get_xticks()
+        xmin, xmax  = ax.get_xlim()
+        xticks      = ax.get_xticks()
 
         x2min, x2max = func21(xmin), func21(xmax)
 
@@ -162,7 +163,6 @@ class mfp_mgr(object):
 
         # in case of linear scale, this'll be the same as `xticks`
         new_tick_locations = func12(new_tick_labels)
-        
 
         if scale=='log':
             ax2.set_xticks(new_tick_locations[1:])
@@ -185,6 +185,11 @@ class mfp_mgr(object):
         ax2.xaxis.set_minor_locator(ticker.NullLocator())
         #ax2.xaxis.set_minor_locator(ticker.LogLocator())
         ax2.set_xlim(xmin, xmax)
+
+        # add a vertical line
+        if vline is not None:
+            ax2.axvline(x=func12(1.), **vline)
+
         return ax2
 
     def plot_TauHist_ii(self,):
@@ -208,7 +213,12 @@ class mfp_mgr(object):
         ax2 = self._return_twiny(
             ax, func12, func21, 
             xlabel = '$v \\tau_{back}/\lambda_{min}$',
-            offset = -0.2
+            offset = -0.2,
+            vline  = {
+            'ls'    : '--', 'lw': 2,
+            'c'    : 'red', 'alpha': .5,
+            'label' : '$\lambda_{min}/v$',
+            }
         )
 
         #--- units of \lambda_max
@@ -218,6 +228,11 @@ class mfp_mgr(object):
             ax, func12, func21, 
             xlabel = '$v \\tau_{back}/\lambda_{max}$',
             offset = -0.4,
+            vline  = {
+            'ls'    : '--', 'lw': 2,
+            'c'    : 'blue', 'alpha': .5,
+            'label' : '$\lambda_{max}/v$',
+            }
         )
 
         #--- units of parallel mean-free-path
@@ -228,8 +243,21 @@ class mfp_mgr(object):
             ax, func12, func21,
             xlabel = '$v \\tau_{back}/\lambda_{\parallel}$',
             offset = -0.6,
+            vline  = {
+            'ls'    : '--', 'lw': 2,
+            'c'    : 'black', 'alpha': .5,
+            'label' : '$\lambda_{\parallel}/v$',
+            }
         )
 
+        # the last axis takes care of setting
+        # all the previous labels in the legend
+        ax4.legend(
+        handles=ax2.get_legend_handles_labels()[0] + \
+                ax3.get_legend_handles_labels()[0] + \
+                ax4.get_legend_handles_labels()[0],
+        loc='lower center'
+        )
 
         return fig, ax
 
