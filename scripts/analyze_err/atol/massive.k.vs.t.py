@@ -82,11 +82,14 @@ mt.build_RuntimeHist(nbin=100)
 # save all to .h5
 mt.save2file(pa.dir_dst)
 
-#--- fits && plots
+
+#--- fits && plots && append to .h5
 mfp = funcs.mfp_mgr(
     dir_fig=pa.dir_fig, 
     fname_inp=mt.fname_out
 )
 mfp.fits_and_plots(pa.t_decr, pa.seed_b_perp, pa.seed_m_perp, pa.seed_m_para, pa.seed_m_para)
+# append fit results to .h5 file
+mfp.save2file(fname_out=mt.fname_out)
 
 #EOF

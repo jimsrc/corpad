@@ -3,6 +3,7 @@ from pylab import *
 from numpy import *
 from lmfit import minimize, Parameters, Parameter, report_errors
 from h5py import File as h5
+import h5py
 from numpy import (
     zeros, empty, ones, nan, 
     savetxt, loadtxt, mean, median, std,
@@ -96,6 +97,25 @@ class mfp_mgr(object):
         #--- Write the PDF document to the disk
         pdf_pages.close()
         print " ---> we generated: " + fname_out_pdf 
+
+    def save2file(self, fname_out=None):
+        """
+        append fit results into .h5 input filename
+        """
+        try:
+            self.f.close()
+        except:
+            pass
+
+        fo = h5py.File(fname_out, 'r+') # append mode
+        fo['pfit/lparall'] = self.lparall  # [1] lambda/Lc_slab
+        fo['pfit/lperp']   = self.lperp    # [1] lambda/Lc_slab
+        fo['pfit/lperp_x'] = self.l['lxx_fit'] # [1] idem
+        fo['pfit/lperp_y'] = self.l['lyy_fit'] # [1] idem
+        # lambda_parallel in units of gyrocycles
+        fo['pfit/lparall_ngyro'] = self.lparall_ngyro # [1] number of gyrocycles
+        fo.close()
+
 
     def plot_TauHist(self, scale='omega'):
         hx, hc = self.f['hist_tau'][...] # global version
@@ -249,6 +269,11 @@ class mfp_mgr(object):
             'label' : '$\lambda_{\parallel}/v$',
             }
         )
+
+        # using the last `func12` of "\lambda_parallel", save
+        # the value of lambda_parallel in units of 
+        # gyrocycles.
+        self.lparall_ngyro = func12(1.)
 
         # the last axis takes care of setting
         # all the previous labels in the legend
