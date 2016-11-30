@@ -6,6 +6,7 @@ import h5py
 import funcs as ff
 #from src_Bmodel import Bmodel # turb model
 from shared.funcs import calc_Rlarmor, Bo_parker, Lc_memilia
+from pylab import figure, show, close
 
 # retrieve args
 parser = argparse.ArgumentParser(
@@ -59,16 +60,34 @@ print " Bo: %e" % Bo
 print " Lc: %e" % Lc_slab 
 print " -------------------- "
 
+Ek, lparall, lperp = [], [], []
+RloLc = []
 for fname_inp in pa.fnames:
     #fname_inp = '../out/h.004/post.h5'
     f = h5py.File(fname_inp, 'r')
     # `psim/Lc_slab` is in units of Larmor radii
-    RloLc = 1./f['psim/Lc_slab'].value # [1]
-    o = ff.get_phys(RloLc=RloLc, Lc_slab=Lc_slab, Bo=Bo)
+    _RloLc = 1./f['psim/Lc_slab'].value # [1]
+    o = ff.get_phys(RloLc=_RloLc, Lc_slab=Lc_slab, Bo=Bo)
     print fname_inp, o['Rl']/AUincm, '%e'%o['Ek']
     #--- set B-turbulence model
     #Rl = o['Rl']/AUincm  # [AU]
-    
+    RloLc   += [ _RloLc ]
+    Ek      += [ o['Ek'] ]
+    lparall += [ f['pfit/lparall'].value ]
+    lperp   += [ f['pfit/lperp'].value ]
 
+#import pdb; pdb.set_trace()
+fig = figure(1, figsize=(6,4))
+ax  = fig.add_subplot(111)
+ax2 = ax.twinx()
+ax.plot(Ek, lparall, '-ob', label='parall')
+ax2.plot(Ek, lperp, '-or', label='perp')
+ax.set_yscale('log')
+ax2.set_yscale('log')
+ax.set_xscale('log')
+ax.grid()
+ax.legend(handles=ax.get_legend_handles_labels()[0], loc='best')
+fig.savefig('./test.png', dpi=138, bbox_inches='tight')
+close(fig)
 
 #EOF
