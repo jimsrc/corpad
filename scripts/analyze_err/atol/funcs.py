@@ -230,7 +230,7 @@ class mfp_mgr(object):
             offset = -0.4,
             vline  = {
             'ls'    : '--', 'lw': 2,
-            'c'    : 'blue', 'alpha': .5,
+            'c'     : 'blue', 'alpha': .5,
             'label' : '$\lambda_{max}/v$',
             }
         )
@@ -245,7 +245,7 @@ class mfp_mgr(object):
             offset = -0.6,
             vline  = {
             'ls'    : '--', 'lw': 2,
-            'c'    : 'black', 'alpha': .5,
+            'c'     : 'black', 'alpha': .5,
             'label' : '$\lambda_{\parallel}/v$',
             }
         )

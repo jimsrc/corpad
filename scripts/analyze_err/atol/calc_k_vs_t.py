@@ -98,23 +98,23 @@ class mfp_vs_t(object):
         s.NPLAS       = count_lines_in_file(s.fname_orient)
         #--- simulation parameters
         s.par = {
-        'nplas'  : s.NPLAS,
-        'nB'     : int(value(s.fname_plas, 'nB')),
-        'Nm_s'   : int(value(s.fname_turb, 'Nm_slab')),
-        'Nm_2d'  : int(value(s.fname_turb, 'Nm_2d')),
-        'sig'    : value(s.fname_turb, 'sigma_Bo_ratio'),
-        #'perc_2d': value(s.fname_turb, 'percent_2d'),
+        # numerical
+        'nplas'    : s.NPLAS,
+        'nB'       : int(value(s.fname_plas, 'nB')),
+        'rtol'     : value(s.fname_plas, 'rtol'),
+        'atol'     : value(s.fname_plas, 'atol'),
+        'Nm_s'     : int(value(s.fname_turb, 'Nm_slab')),
+        'Nm_2d'    : int(value(s.fname_turb, 'Nm_2d')),
+        # physical
+        'sig'      : value(s.fname_turb, 'sigma_Bo_ratio'),
         'perc_slab': value(s.fname_turb, 'ratio_slab'),
-        'Lc_slab': value(s.fname_turb, 'Lc_slab'),
-        'xi'     : value(s.fname_turb, 'xi'),
-        'lmin_s' : value(s.fname_turb, 'lmin_s'),
-        'lmin_2d': value(s.fname_turb, 'lmin_2d'),
-        'lmax_s' : value(s.fname_turb, 'lmax_s'),
-        'lmax_2d': value(s.fname_turb, 'lmax_2d'),
+        'Lc_slab'  : value(s.fname_turb, 'Lc_slab'),
+        'xi'       : value(s.fname_turb, 'xi'),
+        'lmin_s'   : value(s.fname_turb, 'lmin_s'),
+        'lmin_2d'  : value(s.fname_turb, 'lmin_2d'),
+        'lmax_s'   : value(s.fname_turb, 'lmax_s'),
+        'lmax_2d'  : value(s.fname_turb, 'lmax_2d'),
         }
-        #s.par.update({
-        #'Lc_2d' : s.par['Lc_slab']*s.par['xi'],
-        #})
 
     def calc_mfp_profile(s, moreinfo=False):
         """
