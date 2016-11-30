@@ -3,6 +3,9 @@
 import numpy as np
 import os, argparse
 import h5py
+import funcs as ff
+#from src_Bmodel import Bmodel # turb model
+from shared.funcs import calc_Rlarmor, Bo_parker, Lc_memilia
 
 # retrieve args
 parser = argparse.ArgumentParser(
@@ -44,39 +47,28 @@ AUincm  = 1.5e13         # [cm] 1AU
 mo  = (1.6726*1e-24)    # [gr] proton mass
 #-----------------------
 
-def get_phys(RloLc, Lc_slab, Bo):
-    #---- calculo de la energia
-    Rl  = AUincm*Lc_slab*RloLc # [cm]
-    """
-     note that:
-     p*c = Rl*q*Bo
-     but,
-     p   = gamma*v*mo
-     p*c = gamma*beta * mo*c^2
-     then,
-     gamma*beta = (p*c)/(mo*c^2)
-    """
-    gb = (Rl*q*Bo)/(mo*c**2)  # [1] gamma*beta
-    pc = gb*Eo   # [eV] rest mass of proton
-    E  = np.sqrt(Eo**2 + pc**2)  # [eV]
-    gamma = E/Eo       # [1]
-    Ek = Eo*(gamma-1.)  # [eV]
-
-    out = {
-    'Rl'    : Rl, 
-    'Ek'    : Ek,
-    'gamma' : gamma,
-    }
-    return out
+ro      = 1.0  # [AU]
+Bo      = Bo_parker(r=ro)  # [G]
+Lc_slab = Lc_memilia(r=ro) # [AU]
+#Rl = calc_Rlarmor(
+#    rigidity=1e9,       # [V] rigidity
+#    Bo=Bo,              # [G] Bo-field
+#    )/AUincm            # [AU]
+print " ro: %e" % ro 
+print " Bo: %e" % Bo
+print " Lc: %e" % Lc_slab 
+print " -------------------- "
 
 for fname_inp in pa.fnames:
     #fname_inp = '../out/h.004/post.h5'
     f = h5py.File(fname_inp, 'r')
     # `psim/Lc_slab` is in units of Larmor radii
     RloLc = 1./f['psim/Lc_slab'].value # [1]
-    o = get_phys(RloLc=RloLc, Lc_slab=pa.LcSlab, Bo=pa.Bo)
+    o = ff.get_phys(RloLc=RloLc, Lc_slab=Lc_slab, Bo=Bo)
     print fname_inp, o['Rl']/AUincm, '%e'%o['Ek']
-
+    #--- set B-turbulence model
+    #Rl = o['Rl']/AUincm  # [AU]
+    
 
 
 #EOF
