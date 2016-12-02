@@ -188,6 +188,8 @@ class mfp_mgr(object):
             ax2.set_xticks(new_tick_locations[1:])
             flog = lambda x: '$10^{%d}$'% log10(x)
             ax2.set_xticklabels([flog(t) for t in new_tick_labels[1:]])
+            # remove minor x-ticks [inherited from the host]
+            ax2.xaxis.set_minor_locator(ticker.NullLocator())
             #-- we'll manually set the minor ticks
             mt = []
             for ti, te in zip(new_tick_labels[:-1], new_tick_labels[1:]):
@@ -200,9 +202,9 @@ class mfp_mgr(object):
             ax2.set_xticks(new_tick_locations)
             flog = lambda x: '$%2.1f$'% x
             ax2.set_xticklabels([flog(t) for t in new_tick_labels])
+            # remove minor x-ticks [inherited from the host]
+            ax2.xaxis.set_minor_locator(ticker.NullLocator())
 
-        # remove minor x-ticks [inherited from the host]
-        ax2.xaxis.set_minor_locator(ticker.NullLocator())
         #ax2.xaxis.set_minor_locator(ticker.LogLocator())
         ax2.set_xlim(xmin, xmax)
 
