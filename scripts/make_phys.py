@@ -35,6 +35,12 @@ list of heliodistances r (in AU), corresponding \
 with the input filenames.
 """
 )
+parser.add_argument(
+'-fig', '--figname', 
+type=str, 
+default='./test.png',  # [1]
+help='output figure filename',
+)
 pa = parser.parse_args()
 
 #--- universal constants
@@ -99,7 +105,16 @@ ax.legend(
             ax2.get_legend_handles_labels()[0],
     loc='best'
 )
-fig.savefig('./test.png', dpi=138, bbox_inches='tight')
+fig.savefig(pa.figname, dpi=138, bbox_inches='tight')
+print " --> we generated: "+pa.figname
 close(fig)
+
+#--- generate ASCII
+# list of Lc's
+lc = [Lc_memilia(r=ro) for ro in r] # [AU]
+rl = [calc_Rlarmor(rigidity=1.69604E+09, Bo=Bo_parker(ro))/AUincm for ro in r] # [AU]
+data_o = np.array([r, lparall['phys'], lperp['phys'], lc, rl]).T
+fname_out = pa.figname.replace('png','txt')
+np.savetxt(fname_out, data_o)
 
 #EOF
