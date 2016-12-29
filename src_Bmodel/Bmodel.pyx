@@ -1,53 +1,35 @@
 # distutils: language = c++
-# Author: Jimmy J. Masias-Meza
+# Author: Jimmy J.
+#from libcpp.string cimport string
+
+# Declare the prototype of the C function we are interested in calling
+
 from libc.stdlib cimport free, malloc, calloc
 from cpython cimport PyObject, Py_INCREF#, PyMem_Malloc, PyMem_Free
 from cpython.mem cimport PyMem_Malloc, PyMem_Free
 #from cython.Utility.MemoryView import PyMem_New, PyMeM_Del # why doesn't work??
 from cython.operator cimport dereference as deref
-from libc.math cimport sqrt, sin, cos, M_PI, pow
+from libc.math cimport sqrt, sin, cos
 
 # agregamos la clase wrapper
 include "array_wrapper.pyx"
 
-#--------------------------------------------
+
 cdef class Bmodel(object):
     cdef PARAMS_TURB            *pt
-    #cdef PARAMS                 *par
     cdef MODEL_TURB             *mt
-    #cdef Odeint[StepperBS[rhs]] *bsode
-    #cdef rhs                    *d
-    #cdef Output[StepperBS[rhs]] *outbs
-    cdef Doub tmax # t maximo absouto
-    pdict = {}
 
     def __cinit__(self):
-        self.mt = new MODEL_TURB()
-        if self.mt is NULL:
-            raise MemoryError()
-        self.pt = new PARAMS_TURB()
-        if self.pt is NULL:
-            raise MemoryError()
-        #self.outbs = new Output[StepperBS[rhs]]()
-        #self.par = <PARAMS*> PyMem_Malloc(sizeof(PARAMS))
+        pass
 
-    def set_Bmodel(self, pdict, nB=0):
-        """ inputs:
-        - pdict   : diccionario de parametros de turbulencia
-        - nB      : nro de B-realization
-        """
-        for nm in pdict.keys():
-            self.pdict[nm] = pdict[nm]
-        self._build_pturb() # objeto PARAMS_TURB
-        self._build_par(nB=nB) # objeto MODEL_TURB
-        #self.outbs.set_Bmodel(self.par)
+    def _build_pturb(s, dict pd=None):
+        """ build PARAMS_TURB object 'self.pt' from
+        dictionary input 'self.pdict' """
+        s.pt = new PARAMS_TURB()
+        if s.pt is NULL:
+            raise MemoryError()
 
-    def _build_pturb(s):
-        """
-        build PARAMS_TURB object 'self.pt' from
-        dictionary input 'self.pdict'
-        """
-        pd = s.pdict
+        #pd = s.pdict
         # parametros fisicos
         s.pt.Nm_slab = pd['Nm_slab']
         s.pt.Nm_2d   = pd['Nm_2d']
@@ -59,7 +41,8 @@ cdef class Bmodel(object):
         s.pt.Lc_2d   = pd['xi']*pd['Lc_slab']
         s.pt.sigma_Bo_ratio = pd['sigma_Bo_ratio']
         s.pt.percent_slab = pd['ratio_slab']
-        s.pt.percent_2d   = 1.0-pd['ratio_slab']
+        s.pt.percent_2d   = 1.0-pd['ratio_slab'] #pd['percent_2d']
+        #s.pt.Bo      = pd['Bo']
         # semillas
         s.pt.sem.slab[0] = pd['sem_slab0']
         s.pt.sem.slab[1] = pd['sem_slab1']
@@ -67,15 +50,19 @@ cdef class Bmodel(object):
         s.pt.sem.two[0]  = pd['sem_two0']
         s.pt.sem.two[1]  = pd['sem_two1']
 
-    def _build_par(s, nB=0):
-        """ objeto PARAMS (todo):
+    def _build_par(s, int nB=0):
+        """ objeto MODEL_TURB (todo):
         - aloco memoria para dB, B, etc..
         - defino modelo B con 'self.pt'
         - build dB spectra
         - fix B realization
         """
-        ndim = 3
-        #s.par.B       = PyMem_New(double, 3)
+        s.mt        = new MODEL_TURB()
+        if s.mt is NULL:
+            raise MemoryError()
+
+        ndim        = 3
+        #s.mt.B       = PyMem_New(double, 3)
         # use 'PyMem_Malloc' instead of 'malloc'
         # src: https://docs.python.org/2/c-api/memory.html
         s.mt.B       = <Doub*> calloc(ndim, sizeof(Doub))
@@ -88,21 +75,54 @@ cdef class Bmodel(object):
         s.mt.p_turb.build_spectra()
         s.mt.fix_B_realization(nB=nB)
 
+    def read_param(self, name):
+        """
+        read parameters from the built B-turbulence-model (see
+        _build_pturb && _build_par methods).
+        """
+        cdef double *ptr
+        cdef np.ndarray ndarray
+
+        if name=='Bk_SLAB':
+            n = self.mt.p_turb.Nm_slab  # size of array
+            ptr = &(self.mt.p_turb.Bk_SLAB[0]) # set the pointer
+        elif name=='Bk_2D':
+            n = self.mt.p_turb.Nm_2d
+            ptr = &(self.mt.p_turb.Bk_2D[0])
+        elif name=='k_s':
+            n = self.mt.p_turb.Nm_slab  # size of array
+            ptr = &(self.mt.p_turb.k_s[0]) # set the pointer
+        elif name=='k_2d':
+            n = self.mt.p_turb.Nm_2d  # size of array
+            ptr = &(self.mt.p_turb.k_2d[0]) # set the pointer
+        elif name=='dk_s':
+            n = self.mt.p_turb.Nm_slab  # size of array
+            ptr = &(self.mt.p_turb.dk_s[0]) # set the pointer
+        elif name=='dk_2d':
+            n = self.mt.p_turb.Nm_2d  # size of array
+            ptr = &(self.mt.p_turb.dk_2d[0]) # set the pointer
+        elif name=='Lc_slab':
+            return self.mt.p_turb.Lc_slab
+        elif name=='Lc_2d':
+            return self.mt.p_turb.Lc_2d
+        else:
+            return None
+    
+        #--- wrap the C++ array
+        arrw = ArrayWrapper()   # numpy-array wrapper
+        arrw.set_data(n, <void*> ptr, survive=True)
+        ndarray = np.array(arrw, copy=False)
+        ndarray.base = <PyObject*> arrw
+        Py_INCREF(arrw)
+        return ndarray
+
+
     def __dealloc__(self):
-        """
-        NOTE: cython will ignore
-              a 'del self.pdict' because
-              will consider it a read-only
-        """
-        if self.pt is not NULL:
-            del self.pt
-        if self.mt is not NULL:
-            free(self.mt.B)
-            free(self.mt.dB)
-            free(self.mt.dB_SLAB)
-            free(self.mt.dB_2D)
-            del self.mt
-            """PyMem_Free(self.mt)"""
+        free(self.mt.B)
+        free(self.mt.dB)
+        free(self.mt.dB_SLAB)
+        free(self.mt.dB_2D)
+        del self.pt
 
     def Bxyz(self, xyz):
         cdef double pos[3]
@@ -111,24 +131,5 @@ cdef class Bmodel(object):
         B = np.zeros(3)
         B[0]=self.mt.B[0]; B[1]=self.mt.B[1]; B[2]=self.mt.B[2]
         return B
-#--------------------------------------------
-#cpdef return_B(np.ndarray[np.float32_t, ndim=1, mode='c'] xyz):
-#    """
-#    input: position in spherical coords --> r [AU], th [deg], ph [deg]
-#           as a numpy array.
-#    output: 
-#           tuple of Br, Bth, Bph # [Gauss]
-#    """
-#    AUincm = 1.5e13
-#    cdef:
-#        double pos[3], B[3]
-#
-#    pos[0] = xyz[0]*AUincm  # [cm] r, helioradius
-#    pos[1] = xyz[1]*M_PI/180.  # [rad] th, co-latitude
-#    #pos[2] = xyz[2]*AUincm  # [] phi --> B tiene simetria azimutal
-#    calc_B(pos, B)
-#    print B[0], B[1], B[2] # Bx, By, Bz [Gauss]
-#    return B[0], B[1], B[2]
-
 
 #EOF
