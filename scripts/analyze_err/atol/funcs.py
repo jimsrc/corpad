@@ -14,6 +14,7 @@ import os
 from matplotlib.backends.backend_pdf import PdfPages
 from matplotlib import ticker # handles ticks
 from numpy import power as pow
+import src_Bmodel.Bmodel as bmt # turbulence B-model
 M_PI = np.pi
 #
 
@@ -91,6 +92,11 @@ class mfp_mgr(object):
 
         #--- 7th page
         fig, ax = self.plot_RuntimeHist()
+        pdf_pages.savefig(fig, bbox_inches='tight')
+        close(fig)
+
+        #--- 8th page
+        fig, ax = self.plot_Bspecra()
         pdf_pages.savefig(fig, bbox_inches='tight')
         close(fig)
 
@@ -496,6 +502,97 @@ class mfp_mgr(object):
 
         return fig1, ax1
 
+    def plot_Bspecra(self,):
+        """
+        plot of B-turbulence spectra to check the scales
+        of interactions relative to the Larmor radii.
+        """
+        #--- read parameters into pd={}
+        pd = {
+        'Nm_slab'   : self.psim['Nm_s'],
+        'Nm_2d'     : self.psim['Nm_2d'],
+        'lmin_s'    : self.psim['lmin_s'],
+        'lmax_s'    : self.psim['lmax_s'],
+        'lmin_2d'   : self.psim['lmin_2d'],
+        'lmax_2d'   : self.psim['lmax_2d'],
+        'Lc_slab'   : self.psim['Lc_slab'],
+        'xi'        : self.psim['xi'],
+        'sigma_Bo_ratio' : self.psim['sig'],
+        'ratio_slab': self.psim['perc_slab'],
+        #TODO: the seeds are not in this .h5 :(
+        'sem_slab0' : 17,
+        'sem_slab1' : 101,
+        'sem_slab2' : 33,
+        'sem_two0'  : 14,
+        'sem_two1'  : 79,
+        }
+
+        #--- load it into the B-model module
+        Bm = bmt.Bmodel()
+        Bm._build_pturb(pd=pd)
+        Bm._build_par(nB=0)
+
+        #--- read the generated spectra (Bk_SLAB, Bk_2D) && plot
+        pnms = ['k_s', 'k_2d', 'Bk_SLAB', 'Bk_2D', 'dk_s', 'dk_2d', 'Lc_slab', 'Lc_2d']
+        p = {}
+        for nm in pnms:
+            p[nm] = Bm.read_param(nm)
+
+        #--- figure
+        fig = figure(1, figsize=(6,4))
+        ax  = fig.add_subplot(111)
+    
+        # plot spectra
+        opt = {
+        'ms' : 3.,
+        'alpha' : .5,
+        }
+        ax.loglog(p['k_s']*p['Lc_slab'], p['Bk_SLAB']**2, '-o', label='slab', **opt)
+        ax.loglog(p['k_2d']*p['Lc_slab'], p['Bk_2D']**2, '-o', label='2d', **opt)
+
+        ax.set_xlabel('$k Lc$ ($k=2 \pi /\lambda$)')
+        ax.set_ylabel('$\delta B_k^2$')
+        ax.grid(True)
+
+        #--- units of Larmor
+        func21 = lambda x: x/p['Lc_slab']
+        func12 = lambda x: x*p['Lc_slab']
+        ax2 = self._return_twiny(
+            ax, func12, func21, 
+            xlabel = '$k Rl$',
+            offset = -0.2,
+            vline  = {
+            'ls'    : '--', 'lw': 2,
+            'c'    : 'black', 'alpha': .5,
+            'label' : '$k = 1/Rl$',
+            }
+        )
+
+        #--- units of parallel mean-free-path
+        RloLc = 1./p['Lc_slab']
+        func21 = lambda x: x*(self.lparall)/(2.*M_PI)
+        func12 = lambda x: x/(self.lparall/(2.*M_PI))
+        ax3 = self._return_twiny(
+            ax, func12, func21,
+            xlabel = '$k \lambda_{\parallel} / 2 \pi$',
+            offset = -0.4,
+            vline  = {
+            'ls'    : '--', 'lw': 2,
+            'c'     : 'blue', 'alpha': .5,
+            'label' : '$k=2 \pi / \lambda_{\parallel}$',
+            }
+        )
+
+        ax2.legend(
+        handles= ax.get_legend_handles_labels()[0] + \
+                ax2.get_legend_handles_labels()[0] + \
+                ax3.get_legend_handles_labels()[0],
+                #ax4.get_legend_handles_labels()[0],
+        loc='best',
+        fontsize=9,
+        )
+
+        return fig, ax
 
 
 def value(fname, value_name):

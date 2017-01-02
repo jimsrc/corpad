@@ -1,0 +1,7 @@
+# output figures
+*.pdf
+*.png
+*.eps
+
+*.tar
+*.gz
