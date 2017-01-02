@@ -122,7 +122,6 @@ class mfp_mgr(object):
         fo['pfit/lparall_ngyro'] = self.lparall_ngyro # [1] number of gyrocycles
         fo.close()
 
-
     def plot_TauHist(self, scale='omega'):
         hx, hc = self.f['hist_tau'][...] # global version
         fig = figure(1, figsize=(6, 4))
@@ -499,7 +498,6 @@ class mfp_mgr(object):
             offset = -0.2,
             scale='linear',
         )
-
         return fig1, ax1
 
     def plot_Bspecra(self,):
@@ -541,6 +539,7 @@ class mfp_mgr(object):
         #--- figure
         fig = figure(1, figsize=(6,4))
         ax  = fig.add_subplot(111)
+        TITLE = ''
     
         # plot spectra
         opt = {
@@ -553,6 +552,13 @@ class mfp_mgr(object):
         ax.set_xlabel('$k Lc$ ($k=2 \pi /\lambda$)')
         ax.set_ylabel('$\delta B_k^2$')
         ax.grid(True)
+
+        #--- info on step-error
+        TITLE += '$\epsilon_o = %2.2g$' % (self.psim['atol']/self.psim['lmin_s']) 
+
+        #--- Lc_slab/Sdisp = (Lc_slab/Rl)/tmax (using normalized units)
+        Lc_o_Sdisp = p['Lc_slab']/(self.t[-1]) # [1]
+        ax.axvline(x=Lc_o_Sdisp, lw=1, ls='--', c='red', label='$k=1/(vt_{max})$')
 
         #--- units of Larmor
         func21 = lambda x: x/p['Lc_slab']
@@ -583,14 +589,18 @@ class mfp_mgr(object):
             }
         )
 
-        ax2.legend(
+        ax.set_title(TITLE, fontsize=13)
+
+        leg = ax2.legend(
         handles= ax.get_legend_handles_labels()[0] + \
                 ax2.get_legend_handles_labels()[0] + \
                 ax3.get_legend_handles_labels()[0],
                 #ax4.get_legend_handles_labels()[0],
         loc='best',
-        fontsize=9,
+        fontsize=8,
         )
+        # make the legend box transparent
+        leg.get_frame().set_alpha(0.8)
 
         return fig, ax
 
