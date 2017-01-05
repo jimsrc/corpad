@@ -43,7 +43,6 @@ cdef extern from "defs_turb.h":
         Doub Lc_slab, Lc_2d
         Doub sigma_Bo_ratio;
         Doub percent_slab, percent_2d;
-        Doub gS, g2D # potencia espectral slab/2D
         Doub Bo    # campo uniforme
         Doub sigma_S    # intensidad slab
         Doub sigma_2D   # intensidad 2D
@@ -51,7 +50,6 @@ cdef extern from "defs_turb.h":
         Doub *Bk_SLAB, *Bk_2D   # fourier intensities
         Doub *k_s, *k_2d        # fourier modes
         Doub *dk_s, *dk_2d;
-        Doub gS, g2D            # spectral indexes
 
     cpdef cppclass MODEL_TURB:
         MODEL_TURB()

@@ -103,8 +103,8 @@ void PARAMS_TURB::report(void){
     cerr << " sigma_Bo_ratio [1] : " << sigma_Bo_ratio << endl;
     cerr << " percent_slab [%]   : " << 100.*percent_slab << endl;
     cerr << " percent_2d [%]     : " << 100.*percent_2d << endl;
-    cerr << " gS [1]  : " << gS << endl;
-    cerr << " g2D [1] : " << g2D << endl;
+    //cerr << " gS [1]  : " << gS << endl;
+    //cerr << " g2D [1] : " << g2D << endl;
     cerr << " -----------------------------------------------" << endl;
 }
 
@@ -207,11 +207,11 @@ void PARAMS_TURB::build_k_and_dk(){
 void PARAMS_TURB::build_Bk_SLAB(){
     Doub DENOMINADOR=0.0, FACTOR;
     for(int i=0; i<Nm_slab; i++){
-        DENOMINADOR += dk_s[i] / (1. + pow(k_s[i]*Lc_slab, gS));
+        DENOMINADOR += dk_s[i] * SPECTRA_SLAB(k_s[i]*Lc_slab);
     }
     for(int i=0; i<Nm_slab; i++){
-        FACTOR = dk_s[i] / (1. + pow(k_s[i]*Lc_slab, gS)) / DENOMINADOR;
-        Bk_SLAB[i] = sigma_S * pow(FACTOR, 0.5);            // [G]
+        FACTOR = dk_s[i] * SPECTRA_SLAB(k_s[i]*Lc_slab) / DENOMINADOR;
+        Bk_SLAB[i] = sigma_S * sqrt(FACTOR);            // [G]
     }
 }
 
@@ -220,12 +220,12 @@ void PARAMS_TURB::build_Bk_2D(){
     Doub DENOMINADOR=0.0, FACTOR, dV;
     for(int i=0; i<Nm_2d; i++){
         dV = 2.*M_PI*k_2d[i]*dk_2d[i];
-        DENOMINADOR += dV / (1. + pow(k_2d[i]*Lc_2d, g2D));
+        DENOMINADOR += dV * SPECTRA_2D(k_2d[i]*Lc_2d);
     }
     for(int i=0; i<Nm_2d; i++){
         dV = 2.*M_PI*k_2d[i]*dk_2d[i];
-        FACTOR = dV / (1. + pow(k_2d[i]*Lc_2d, g2D)) / DENOMINADOR;
-        Bk_2D[i] = sigma_2D * pow(FACTOR, 0.5);             // [G]
+        FACTOR = dV * SPECTRA_2D(k_2d[i]*Lc_2d) / DENOMINADOR;
+        Bk_2D[i] = sigma_2D * sqrt(FACTOR);             // [G]
     }
 }
 

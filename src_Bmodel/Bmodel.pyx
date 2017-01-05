@@ -61,7 +61,7 @@ cdef class Bmodel(object):
         if s.mt is NULL:
             raise MemoryError()
 
-        ndim        = 3
+        ndim         = 3
         #s.mt.B       = PyMem_New(double, 3)
         # use 'PyMem_Malloc' instead of 'malloc'
         # src: https://docs.python.org/2/c-api/memory.html
