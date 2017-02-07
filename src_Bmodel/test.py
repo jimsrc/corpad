@@ -35,7 +35,9 @@ pd.update({
 'sigma_Bo_ratio': 0.3, # [1] fluctuation energy
 'ratio_slab'    : 0.2, # [1] (energy_slab)/(energy_total)
 })
-m.set_Bmodel(pdict=pd, nB=nB)
+#m.set_Bmodel(pdict=pd, nB=nB)
+m._build_pturb(pd=pd)
+m._build_par(nB=nB)
 print m.Bxyz(xyz)
 
 
