@@ -17,7 +17,8 @@ def Lc_memilia(r=1.0):
     """ 
     formula from Maria Emilia's thesis (Sec 4.4, p.88).
     """
-    Lc = 0.89*(r**(0.43))*1e6/(1e8) # [AU]
+    #Lc = 0.89*(r**(0.43))*1e6/(1e8) # [AU]
+    Lc = 0.0059*(r**(0.43)) # [AU]
     return Lc
 
 
