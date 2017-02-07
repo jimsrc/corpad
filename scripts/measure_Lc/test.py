@@ -29,7 +29,10 @@ pd = {
 }
 
 import funcs 
-fl = funcs.LcMeasure(pd, nB=0)
+fl = funcs.LcMeasure(pd)
 
-print fl.m.Bxyz(xyz)
+dr   = np.linspace(0., 6.*pd['Lc_slab'], 1000)
+BiBj = fl.one_R_realiz(Nro=20, dr=dr, ij=(0,0), pd=pd, nB=0)
+
+#print fl.m.Bxyz(xyz)
 #EOF
