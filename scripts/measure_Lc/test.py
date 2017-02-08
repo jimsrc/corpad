@@ -31,8 +31,25 @@ pd = {
 import funcs 
 fl = funcs.LcMeasure(pd)
 
-dr   = np.linspace(0., 6.*pd['Lc_slab'], 1000)
-BiBj = fl.one_R_realiz(Nro=20, dr=dr, ij=(0,0), pd=pd, nB=0)
+dr   = np.linspace(0., 5.*pd['Lc_slab'], 128) # all positions displacements
+nB_total = 256 # number of turbulence realizations
+Rxx, Ryy = np.zeros((2,nB_total,dr.size))
+
+for nB in range(nB_total):
+    #BiBj[nB,:] = fl.one_R_realiz(Nro=20, dr=dr, ij=(0,0), pd=pd, nB=nB)
+    print nB
+    Rxx[nB,:], Ryy[nB,:] = fl.one_R_realiz(Nro=20, dr=dr, nB=nB)
+
+#--- normalize the R-functions
+Rxx /= Rxx[:,0].mean()
+Ryy /= Ryy[:,0].mean()
+
+cc = dr<2.0
+x = dr[cc]
+y = Rxx.mean(axis=0)[cc]
+
+m, b = np.polyfit(x, np.log(y), deg=1, cov=False)
+print m, b
 
 #print fl.m.Bxyz(xyz)
 #EOF
