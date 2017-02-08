@@ -88,24 +88,16 @@ Ryy_para /= Ryy_para[:,0].mean()
 
 fo = h5py.File(pa.out, 'w')
 for nm, var in pd.iteritems():
-    #HEADER += nm+' : '+str(var)+'\n' 
     fo['psim/'+nm] = var
+#--- more parameters
+fo['psim/Nrlz'] = pa.Nrlz
 
+# now the physical results
+fo['dr']       = dr
 fo['Rxx_perp'] = Rxx_perp
 fo['Ryy_perp'] = Ryy_perp
 fo['Rxx_para'] = Rxx_para
 fo['Ryy_para'] = Rxx_para
 fo.close()
 
-
-"""
-cc = dr<2.0
-x = dr[cc]
-Rperp = 
-y = Rxx_perp.mean(axis=0)[cc]
-
-m, b = np.polyfit(x, np.log(y), deg=1, cov=False)
-lc = -1./m
-print lc
-"""
 #EOF
