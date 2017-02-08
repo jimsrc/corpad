@@ -33,20 +33,24 @@ fl = funcs.LcMeasure(pd)
 
 dr   = np.linspace(0., 5.*pd['Lc_slab'], 128) # all positions displacements
 nB_total = 256 # number of turbulence realizations
-Rxx, Ryy = np.zeros((2,nB_total,dr.size))
+Rxx_perp, Ryy_perp = np.zeros((2,nB_total,dr.size))
+Rxx_para, Ryy_para = np.zeros((2,nB_total,dr.size))
 
 for nB in range(nB_total):
-    #BiBj[nB,:] = fl.one_R_realiz(Nro=20, dr=dr, ij=(0,0), pd=pd, nB=nB)
     print nB
-    Rxx[nB,:], Ryy[nB,:] = fl.one_R_realiz(Nro=20, dr=dr, nB=nB)
+    Rxx_perp[nB,:], Ryy_perp[nB,:] = fl.one_R_realiz(Nro=20, dr=dr, nB=nB, direcc='perp')
+    Rxx_para[nB,:], Ryy_para[nB,:] = fl.one_R_realiz(Nro=20, dr=dr, nB=nB, direcc='parall')
 
-#--- normalize the R-functions
-Rxx /= Rxx[:,0].mean()
-Ryy /= Ryy[:,0].mean()
+#--- normalize the perpendicular R-functions (i.e. R(r_perp)
+Rxx_perp /= Rxx_perp[:,0].mean()
+Ryy_perp /= Ryy_perp[:,0].mean()
+#--- normalize the parallel R-functions (i.e. R(r_parallel))
+Rxx_para /= Rxx_para[:,0].mean()
+Ryy_para /= Ryy_para[:,0].mean()
 
 cc = dr<2.0
 x = dr[cc]
-y = Rxx.mean(axis=0)[cc]
+y = Rxx_perp.mean(axis=0)[cc]
 
 m, b = np.polyfit(x, np.log(y), deg=1, cov=False)
 print m, b
