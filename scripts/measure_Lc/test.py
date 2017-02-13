@@ -5,6 +5,7 @@ import numpy as np
 from src_Bmodel import Bmodel
 from shared.funcs import calc_Rlarmor, Bo_parker, Lc_memilia
 import argparse, h5py
+import funcs 
 
 #--- retrieve args
 parser = argparse.ArgumentParser(
@@ -65,7 +66,6 @@ pd = {
 'sem_two1'      : 79,
 }
 
-import funcs 
 fl = funcs.LcMeasure(pd)
 
 dr   = np.linspace(0., 5.*pd['Lc_slab'], 128) # all positions displacements
