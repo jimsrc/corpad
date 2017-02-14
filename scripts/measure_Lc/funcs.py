@@ -66,15 +66,15 @@ class LcMeasure(object):
 
             # loop over the origin-positions
             for xo, i in zip(xo_set, range(Nro)):
-                ith = dth.size/2
-                _dth = dth[ith] # polar angle (in plane z-rho) # TODO: loop
-                _dr[:,0] = dr[:]*cos(_dph)*cos(_dth)
-                _dr[:,1] = dr[:]*sin(_dph)*cos(_dth)
-                _dr[:,2] = dr[:]*sin(_dth)
-                ro       = [0.,0.,xo] # TODO: randomizar direccion del origen 'ro'
-                _rxx, _ryy = self.BiBj_profiles(ro, _dr)
-                Rxx[:,ith] += _rxx
-                Ryy[:,ith] += _ryy
+                for ith in range(dth.size): # loop over theta (polar angle)
+                    _dth = dth[ith] # polar angle (angle respect to z-axis)
+                    _dr[:,0] = dr[:]*cos(_dph)*sin(_dth)
+                    _dr[:,1] = dr[:]*sin(_dph)*sin(_dth)
+                    _dr[:,2] = dr[:]*cos(_dth)
+                    ro       = [xo,0.,0.] # TODO: randomizar direccion del origen 'ro'
+                    _rxx, _ryy = self.BiBj_profiles(ro, _dr)
+                    Rxx[:,ith] += _rxx
+                    Ryy[:,ith] += _ryy
 
             Rxx /= 1.*xo_set.size
             Ryy /= 1.*xo_set.size

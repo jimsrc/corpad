@@ -75,15 +75,15 @@ pd = {
 
 fl = funcs.LcMeasure(pd, pa.bidim)
 
-dr   = np.linspace(0., 5.*pd['Lc_slab'], 128) # all positions displacements
-nB_total = pa.Nrlz # number of turbulence realizations
+dr   = np.linspace(0., 2.5*pd['Lc_slab'], 32) # all positions displacements
+#nB_total = pa.Nrlz # number of turbulence realizations
 
 # intialize R-functions
 if not(pa.bidim):
-    Rxx_perp, Ryy_perp = np.zeros((2,nB_total,dr.size))
-    Rxx_para, Ryy_para = np.zeros((2,nB_total,dr.size))
+    Rxx_perp, Ryy_perp = np.zeros((2,pa.Nrlz,dr.size))
+    Rxx_para, Ryy_para = np.zeros((2,pa.Nrlz,dr.size))
     #--- run
-    for nB in range(nB_total):
+    for nB in range(pa.Nrlz):
         print nB
         Rxx_perp[nB,:], Ryy_perp[nB,:] = fl.one_R_realiz(Nro=20, dr=dr, nB=nB, direcc='perp')
         Rxx_para[nB,:], Ryy_para[nB,:] = fl.one_R_realiz(Nro=20, dr=dr, nB=nB, direcc='parall')
@@ -95,7 +95,7 @@ if not(pa.bidim):
     Rxx_para /= Rxx_para[:,0].mean()
     Ryy_para /= Ryy_para[:,0].mean()
 
-
+    #--- save to file
     fo = h5py.File(pa.out, 'w')
     for nm, var in pd.iteritems():
         fo['psim/'+nm] = var
@@ -111,14 +111,31 @@ if not(pa.bidim):
     fo.close()
 
 else: # pa.bibim==True
-    dth  = np.linspace(0., np.pi/2, 11) # polar angle (respect to z-axis)
-    Rxx, Ryy = np.zeros((2,nB_total,dr.size,dth.size))
+    dth  = np.linspace(0., np.pi/2, 7) # polar angle (respect to z-axis)
+    Rxx, Ryy = np.zeros((2,pa.Nrlz,dr.size,dth.size))
     #--- run
-    for nB in range(nB_total):
+    for nB in range(pa.Nrlz):
         print nB
         Rxx[nB,:,:],Ryy[nB,:,:] = fl.one_R_realiz(Nro=20,dr=dr,dth=dth,nB=nB)
 
-    import pdb; pdb.set_trace()
+    #--- normalize the perpendicular R-functions (i.e. R(r_perp)
+    Rxx /= Rxx[:,0,:].mean()
+    Ryy /= Ryy[:,0,:].mean()
+
+    #--- save to file
+    fo = h5py.File(pa.out, 'w')
+    for nm, var in pd.iteritems():
+        fo['psim/'+nm] = var
+    #--- more parameters
+    fo['psim/Nrlz'] = pa.Nrlz
+
+    # now the physical results
+    fo['dr']        = dr
+    fo['dth']       = dth
+    fo['Rxx']       = Rxx
+    fo['Ryy']       = Ryy
+    fo.close()
+    #import pdb; pdb.set_trace()
 
 
 #EOF
