@@ -8,9 +8,10 @@ from shared.funcs import calc_Rlarmor, Bo_parker, Lc_memilia
 
 
 class LcMeasure(object):
-    def __init__(self, pd):
+    def __init__(self, pd, bidim=False):
         self.m = Bmodel.Bmodel()
         self.m._build_pturb(pd=pd)
+        self.bidim = bidim # True: make bidim plot array of R-funcs
 
     def BiBj_profiles(self, ro, dr):
         """
@@ -40,7 +41,7 @@ class LcMeasure(object):
         _Ryy = np.prod([B1y,B2y], axis=0)
         return _Rxx, _Ryy
 
-    def one_R_realiz(self, Nro=20, dr=None, nB=0, direcc='perp'):
+    def one_R_realiz(self, Nro=20, dr=None, dth=None, nB=0, direcc='perp'):
         """
         Nro : nro of test-values for `ro`
         dr  : r-resolution of profile (r is the radii)
@@ -50,13 +51,38 @@ class LcMeasure(object):
         self.m._build_par(nB=nB)
 
         Lc = self.m.read_param('Lc_slab')
-        Rxx = np.zeros(dr.size, dtype=np.float32)
-        Ryy = np.zeros(dr.size, dtype=np.float32)
 
         # set of "origin points"b
         # NOTE: we move the origin in a scale comparable to `Lc`.
         xo_set = np.arange(0., Nro*Lc, 0.5*Lc) 
 
+        #--- bidimensional calculus for R-funcs
+        if self.bidim:
+            Rxx = np.zeros((dr.size,dth.size), dtype=np.float32)
+            Ryy = np.zeros((dr.size,dth.size), dtype=np.float32)
+
+            _dph = 0.0 # azimuth (in plane x-y) # TODO: loop 
+            _dr = np.empty((dr.size,3), dtype=np.float32)
+
+            # loop over the origin-positions
+            for xo, i in zip(xo_set, range(Nro)):
+                ith = dth.size/2
+                _dth = dth[ith] # polar angle (in plane z-rho) # TODO: loop
+                _dr[:,0] = dr[:]*cos(_dph)*cos(_dth)
+                _dr[:,1] = dr[:]*sin(_dph)*cos(_dth)
+                _dr[:,2] = dr[:]*sin(_dth)
+                ro       = [0.,0.,xo] # TODO: randomizar direccion del origen 'ro'
+                _rxx, _ryy = self.BiBj_profiles(ro, _dr)
+                Rxx[:,ith] += _rxx
+                Ryy[:,ith] += _ryy
+
+            Rxx /= 1.*xo_set.size
+            Ryy /= 1.*xo_set.size
+
+            return Rxx, Ryy
+
+        Rxx = np.zeros(dr.size, dtype=np.float32)
+        Ryy = np.zeros(dr.size, dtype=np.float32)
         # `dr` is assumed in the x-y plane
         if direcc=='perp':
             _dr = np.empty((dr.size,3), dtype=np.float32)

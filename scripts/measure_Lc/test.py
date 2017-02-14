@@ -12,6 +12,13 @@ parser = argparse.ArgumentParser(
 formatter_class=argparse.ArgumentDefaultsHelpFormatter
 )
 parser.add_argument(
+'-bidim', '--bidim',
+action='store_true',
+default=False,
+help='whether to do the bidimensional map of R-function'+\
+' (ignored by default).',
+)
+parser.add_argument(
 '-o', '--out',
 type=str,
 default='./test.h5',
@@ -66,38 +73,52 @@ pd = {
 'sem_two1'      : 79,
 }
 
-fl = funcs.LcMeasure(pd)
+fl = funcs.LcMeasure(pd, pa.bidim)
 
 dr   = np.linspace(0., 5.*pd['Lc_slab'], 128) # all positions displacements
 nB_total = pa.Nrlz # number of turbulence realizations
-Rxx_perp, Ryy_perp = np.zeros((2,nB_total,dr.size))
-Rxx_para, Ryy_para = np.zeros((2,nB_total,dr.size))
 
-for nB in range(nB_total):
-    print nB
-    Rxx_perp[nB,:], Ryy_perp[nB,:] = fl.one_R_realiz(Nro=20, dr=dr, nB=nB, direcc='perp')
-    Rxx_para[nB,:], Ryy_para[nB,:] = fl.one_R_realiz(Nro=20, dr=dr, nB=nB, direcc='parall')
+# intialize R-functions
+if not(pa.bidim):
+    Rxx_perp, Ryy_perp = np.zeros((2,nB_total,dr.size))
+    Rxx_para, Ryy_para = np.zeros((2,nB_total,dr.size))
+    #--- run
+    for nB in range(nB_total):
+        print nB
+        Rxx_perp[nB,:], Ryy_perp[nB,:] = fl.one_R_realiz(Nro=20, dr=dr, nB=nB, direcc='perp')
+        Rxx_para[nB,:], Ryy_para[nB,:] = fl.one_R_realiz(Nro=20, dr=dr, nB=nB, direcc='parall')
 
-#--- normalize the perpendicular R-functions (i.e. R(r_perp)
-Rxx_perp /= Rxx_perp[:,0].mean()
-Ryy_perp /= Ryy_perp[:,0].mean()
-#--- normalize the parallel R-functions (i.e. R(r_parallel))
-Rxx_para /= Rxx_para[:,0].mean()
-Ryy_para /= Ryy_para[:,0].mean()
+    #--- normalize the perpendicular R-functions (i.e. R(r_perp)
+    Rxx_perp /= Rxx_perp[:,0].mean()
+    Ryy_perp /= Ryy_perp[:,0].mean()
+    #--- normalize the parallel R-functions (i.e. R(r_parallel))
+    Rxx_para /= Rxx_para[:,0].mean()
+    Ryy_para /= Ryy_para[:,0].mean()
 
 
-fo = h5py.File(pa.out, 'w')
-for nm, var in pd.iteritems():
-    fo['psim/'+nm] = var
-#--- more parameters
-fo['psim/Nrlz'] = pa.Nrlz
+    fo = h5py.File(pa.out, 'w')
+    for nm, var in pd.iteritems():
+        fo['psim/'+nm] = var
+    #--- more parameters
+    fo['psim/Nrlz'] = pa.Nrlz
 
-# now the physical results
-fo['dr']       = dr
-fo['Rxx_perp'] = Rxx_perp
-fo['Ryy_perp'] = Ryy_perp
-fo['Rxx_para'] = Rxx_para
-fo['Ryy_para'] = Rxx_para
-fo.close()
+    # now the physical results
+    fo['dr']       = dr
+    fo['Rxx_perp'] = Rxx_perp
+    fo['Ryy_perp'] = Ryy_perp
+    fo['Rxx_para'] = Rxx_para
+    fo['Ryy_para'] = Rxx_para
+    fo.close()
+
+else: # pa.bibim==True
+    dth  = np.linspace(0., np.pi/2, 11) # polar angle (respect to z-axis)
+    Rxx, Ryy = np.zeros((2,nB_total,dr.size,dth.size))
+    #--- run
+    for nB in range(nB_total):
+        print nB
+        Rxx[nB,:,:],Ryy[nB,:,:] = fl.one_R_realiz(Nro=20,dr=dr,dth=dth,nB=nB)
+
+    import pdb; pdb.set_trace()
+
 
 #EOF

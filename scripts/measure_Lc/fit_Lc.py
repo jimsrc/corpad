@@ -59,7 +59,7 @@ ax.set_xlabel('$r_\parallel$')
 ax.set_ylabel('$R_\perp(r_\parallel$)')
 ax.legend(loc='best')
 ax.grid(True)
-ax.set_yscale('log')
+#ax.set_yscale('log')
 
 
 #--- fit perp
@@ -81,7 +81,7 @@ ax.set_xlabel('$r_\perp$')
 ax.set_ylabel('$R_\perp(r_\perp$)')
 ax.legend(loc='best')
 ax.grid(True)
-ax.set_yscale('log')
+#ax.set_yscale('log')
 
 fig.tight_layout(w_pad=1.)
 fig.savefig(pa.figname, dpi=135, bbox_inches='tight')
