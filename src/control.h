@@ -32,17 +32,15 @@
 // Shalchi (Nonlinear CR Diffusion Theories)
 #define SPECTRA_SHALCHI_2D(x)   pow(1. + x,(-5./6.))/x
 #define SPECTRA_SHALCHI_SLAB(x) pow(1. + x,(-5./6.)) 
+// Giacalone & Jokipii (1999)
+#define SPECTRA_GJ99_2D(x)   1./(1. + pow(x,(8./3.)))
+#define SPECTRA_GJ99_SLAB(x) 1./(1. + pow(x,(5./3.)))
 
-
-#define SPECTRA_GJ99_2D(x)   1./(1. + pow(x,(8./3.)))  // Giacalone & Jokipii (1999)
-#define SPECTRA_GJ99_SLAB(x) 1./(1. + pow(x,(5./3.)))  // Giacalone & Jokipii (1999)
-
-
-//--- choose spectra shape
-//#define SPECTRA_2D(x)       SPECTRA_GJ99_2D(x)
-//#define SPECTRA_SLAB(x)     SPECTRA_GJ99_SLAB(x)
-#define SPECTRA_2D(x)       SPECTRA_SHALCHI_2D(x)
-#define SPECTRA_SLAB(x)     SPECTRA_SHALCHI_SLAB(x)
+//--- choose spectra shape (from above options)
+#define SPECTRA_2D(x)       SPECTRA_GJ99_2D(x)
+#define SPECTRA_SLAB(x)     SPECTRA_GJ99_SLAB(x)
+//#define SPECTRA_2D(x)       SPECTRA_SHALCHI_2D(x)
+//#define SPECTRA_SLAB(x)     SPECTRA_SHALCHI_SLAB(x)
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 

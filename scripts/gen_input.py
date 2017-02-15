@@ -1,6 +1,7 @@
 #!/usr/bin/env ipython
 # -*- coding: utf-8 -*-
 import numpy as np
+from numpy import log10, pow
 #import src.cython_wrapper as cw
 import shared.funcs as sf
 from pylab import pause
@@ -58,8 +59,21 @@ r[AU]    B[nT]       Rl[AU]         Lc[AU]      Rl/Lc   Rl/(5e-5AU)
 2.0      1.99653571  1.891657E-02   0.0119904   1.58    378.33
 """
 ro = 0.5 # (0.2, 0.3, 0.5, 0.7, 0.9)
-lc = sf.Lc_memilia(r=ro)   # [AU]
-Lc_slab = lc
+lc = sf.Lc_memilia(r=ro)   # [AU], this gives the correlation-LENGTH
+"""
+from result in '4e97146' commit, we have the relation:
+    y = m*x + b
+    where,
+    x = log10(lambda_c)  # REAL correlation length
+    y = log10(Lc)        # correlation scale
+Then:
+    lambda_c = 10.**(m*log10(Lc) + b)
+    with:
+    m = 1.035
+    b = -0.4266
+NOTE: this is valid in the range Lc:[0.01, 3.0]
+"""
+Lc_slab = pow(10., 1.035*log10(lc)-0.4266) # from the above comments
 Rl = calc_Rlarmor(
     rigidity=1.69604E+09,    # [V]
     Bo=sf.Bo_parker(r=ro)    # [Gauss]
