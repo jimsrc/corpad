@@ -33,6 +33,7 @@ class fwrapper(object):
         self.f.write(ostr)
 
     def __del__(self):
+        print " we wrote: "+self.f.name
         self.f.close()
 
 
@@ -56,20 +57,21 @@ r[AU]    B[nT]       Rl[AU]         Lc[AU]      Rl/Lc   Rl/(5e-5AU)
 1.0      5.0         7.553521E-03   0.0089      0.85    151.07
 2.0      1.99653571  1.891657E-02   0.0119904   1.58    378.33
 """
-ro = 1.0
-Lc_slab = 0.01 #sf.Lc_memilia(r=ro)   # [AU]
+ro = 0.5 # (0.2, 0.3, 0.5, 0.7, 0.9)
+lc = sf.Lc_memilia(r=ro)   # [AU]
+Lc_slab = lc
 Rl = calc_Rlarmor(
-    rigidity=4.33306E+07, #1.69604E+09,    # [V]
+    rigidity=1.69604E+09,    # [V]
     Bo=sf.Bo_parker(r=ro)    # [Gauss]
     )/AUincm                 # [AU] Larmor radii
 #--- set B-turbulence model
 pturb = {
 'Nm_slab'       : 128,
-'Nm_2d'         : 128,
+'Nm_2d'         : 256,
 'lmin_s'        : 5e-5/Rl, #[lmin_s/Rl] 
-'lmax_s'        : 1.0/Rl,  #[lmax_s/Rl] 
+'lmax_s'        : ro/Rl,  #[lmax_s/Rl] 
 'lmin_2d'       : 5e-5/Rl, #[lmin_2d/Rl] 
-'lmax_2d'       : 1.0/Rl,  #[lmax_2d/Rl] 
+'lmax_2d'       : ro/Rl,  #[lmax_2d/Rl] 
 'Lc_slab'       : Lc_slab/Rl,  # in units of Larmor-radii
 'xi'            : 1.0, # [1] xi=Lc_2d/Lc_slab 
 'sigma_Bo_ratio': 0.3, # [1] fluctuation energy
@@ -82,11 +84,11 @@ pturb = {
 'sem.two1'      : 79,
 }
 #--- corregimos input
-eps_o = 1.0e-05 #3.33e-6 #3.33e-5 #1.0e-4 #3.3e-6 #4e-5 # ratio: (error-step)/(lambda_min)
+eps_o = 1e-4 #3.33e-6 #3.33e-5 #1.0e-4 #3.3e-6 #4e-5 # ratio: (error-step)/(lambda_min)
 lmin = np.min([pturb['lmin_s'], pturb['lmin_2d']]) # [1] smallest turb scale
 ppla = {
 'frac_gyroperiod'   : 5e-2,
-'tmax'              : 1e4,
+'tmax'              : 4e4,
 'npoints'           : 20,
 'atol'              : lmin*eps_o,  # [1]
 'rtol'              : 0.0, #1e-6
@@ -113,7 +115,7 @@ ft.write('sem.slab0')
 ft.write('sem.slab1')
 ft.write('sem.slab2')
 ft.write('sem.two0')
-ft.write('sem.two0')
+ft.write('sem.two1')
 del ft # close
 
 fp = fwrapper('../inputs/plas.in', 'w', ppla)
