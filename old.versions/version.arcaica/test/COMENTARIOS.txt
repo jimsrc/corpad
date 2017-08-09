@@ -1,5 +1,0 @@
-##
-#
-- "main.c" y "funcs.c" representan la version 'fragmentada' del codigo fuente "composite_turb_ensambles.c" en la carpeta superior.
-#
-##

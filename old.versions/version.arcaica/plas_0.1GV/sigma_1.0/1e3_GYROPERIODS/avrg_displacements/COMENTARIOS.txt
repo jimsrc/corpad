@@ -1,2 +1,0 @@
-para correr en bckgrnd:
-matlab -nodesktop -nodisplay < avrg_displac.m 1> dum1.log 2> dum2.log &
