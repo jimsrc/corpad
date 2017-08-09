@@ -1,4 +1,4 @@
-# scripts
+# Scripts for post-processing
 
 To run, go as:
 

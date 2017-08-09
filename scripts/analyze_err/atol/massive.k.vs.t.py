@@ -4,11 +4,9 @@
 - genera ASCII .dat de los perfiles de k(t)
 - *no* genera figuras
 """
-from calc_k_vs_t import mfp_vs_t
 import os
 from os.path import isdir, isfile
 import argparse
-import funcs 
 
 # retrieve args
 parser = argparse.ArgumentParser()
@@ -68,6 +66,12 @@ parser.add_argument(
          'the low threshols value, from which the data is fitted.',
 )
 pa = parser.parse_args()
+
+
+# NOTE: import this after the argparse, so we don't need to compile the Cython
+# modules before check the help of this script.
+from calc_k_vs_t import mfp_vs_t
+import funcs 
 
 #--- build 'post.h5'
 mt = mfp_vs_t(pa.dir_src)

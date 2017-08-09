@@ -7,7 +7,7 @@ The collective behaviour of these test particles allow us to determine values of
 
 
 ---
-### Code compilations
+### Particle code
 
 For the code that performs the collective propagation of charged particles:
 ```bash
@@ -25,6 +25,8 @@ In order to run a simulation, you must prepare input files `inp_turb`, `inp_ori`
 For a test run suite, check [this](scripts/test.sh) bash script, and the input files referenced therein.
 
 
+---
+### Evaluation of the turbulent model
 We can also evaluate the magnetic turbulence model (isolated), which uses the same source files as the particle code above.
 To compile, just:
 ```bash
@@ -38,6 +40,18 @@ import src_Bmodel.Bmodel
 ```
 For a functional test, see this [test.py](src_Bmodel/test.py) script.
 
+
+---
+## Post-processing
+
+The simulation runs produce raw data of the individual behaviour of the particles.
+In order to obtain the diffusion coefficients of the collective behaviour of the particles, you can use the Python scripts in [this](scripts/analyze_err/atol) directory; also the check the other [README](scripts/analyze_err/atol/README.md).
+Usually, you'll mostly use [massive.k.vs.t.py](scripts/analyze_err/atol/massive.k.vs.t.py), which determines the mean free paths (parallel and perpendicular to **Bo**) as a function of time.
+
+Check all the options with:
+```bash
+./calc_k_vs_t.py -- --help
+```
 
 
 
