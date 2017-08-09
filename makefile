@@ -20,13 +20,13 @@ default:
 	g++ -c $^ -o $@
 
 
-
 beta:
 	${MPICXX} ${DIR_BETA}/main_mpi.cc -o ./beta.x
 
 
 w_mpi:
-	${MPICXX} ${DIR_SRC}/main_mpi.cc ${OPTIM} -o ${EXE_WMPI} && ls -lhtr ${EXE_WMPI}
+	${MPICXX} ${DIR_SRC}/main_mpi.cc ${OPTIM} -o ${EXE_WMPI} \
+		&& ls -lhtr ${EXE_WMPI}
 
 
 mpi-w-gprof:
