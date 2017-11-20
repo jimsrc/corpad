@@ -85,8 +85,13 @@ class Output {
         #ifdef MONIT_STEP
         MatDoub HistStep;
         MatDoub HistSeq;
+        #if __cplusplus <= 199711L
         static const Doub MaxStep=1.0;
         static const Int NStep=500;
+        #else
+        static constexpr Doub MaxStep=1.0f;
+        static constexpr Int NStep=500;
+        #endif //__cplusplus
         Doub dstep, dstep_part;
         //void monit_step(const Doub hdid);
         void monit_step(const Stepper s);
