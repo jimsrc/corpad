@@ -2,8 +2,6 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 #from numpy.linalg import norm
-from src_Bmodel import Bmodel
-from shared.funcs import calc_Rlarmor, Bo_parker, Lc_memilia
 import argparse, h5py
 import funcs 
 
@@ -49,6 +47,12 @@ default=0.2,
 help='slab energy; i.e. (dB_slab/dB)^2.',
 )
 pa = parser.parse_args()
+
+# compiled Cython libraries
+# NOTE: these must be compiled by hand (make clean && make) in 
+# their respective directories.
+from src_Bmodel import Bmodel
+from shared.funcs import calc_Rlarmor, Bo_parker, Lc_memilia
 
 #AUincm = 1.5e13     # [cm]
 xyz = np.zeros(3, dtype=np.float32)
@@ -137,5 +141,6 @@ else: # pa.bibim==True
     fo.close()
     #import pdb; pdb.set_trace()
 
+print('\n [+] we generated: %s\n' % pa.out)
 
 #EOF
