@@ -29,6 +29,30 @@ default=256,
 help='number of turbulence realizations.',
 )
 parser.add_argument(
+'-nth', '--nth',
+type=int,
+default=7,
+help='number theta values (angle w/ respect to z) for R(r,th).',
+)
+parser.add_argument(
+'-ndr', '--ndr',
+type=int,
+default=32,
+help='number dr values (distance from origin ro) for R(ro,ro+dr). The more values, the more resolution for a fixed maximum max(dr); see also option --ndrLc.',
+)
+parser.add_argument(
+'-nLc', '--nLc',
+type=int,
+default=20,
+help='th "origin" position xo will go until max(xo)=nLc*Lc.',
+)
+parser.add_argument(
+'-ndrLc', '--ndrLc',
+type=int,
+default=2.5,
+help='the displacements dr of R(ro,ro+dr) will go until max(dr)=ndrLc*Lc_slab. For more resolution, see option --ndr.',
+)
+parser.add_argument(
 '-Lc', '--Lc',
 type=float,
 default=1.0,
@@ -79,7 +103,7 @@ pd = {
 
 fl = funcs.LcMeasure(pd, pa.bidim)
 
-dr   = np.linspace(0., 2.5*pd['Lc_slab'], 32) # all positions displacements
+dr   = np.linspace(0., pa.ndrLc*pd['Lc_slab'], pa.ndr) # all positions displacements
 #nB_total = pa.Nrlz # number of turbulence realizations
 
 # intialize R-functions
@@ -115,16 +139,16 @@ if not(pa.bidim):
     fo.close()
 
 else: # pa.bibim==True
-    dth  = np.linspace(0., np.pi/2, 7) # polar angle (respect to z-axis)
-    Rxx, Ryy = np.zeros((2,pa.Nrlz,dr.size,dth.size))
+    dth  = np.linspace(0., np.pi/2, pa.nth) # polar angle (respect to z-axis)
+    _Rxx, _Ryy = np.zeros((2,pa.Nrlz,dr.size,dth.size))
     #--- run
     for nB in range(pa.Nrlz):
         print nB
-        Rxx[nB,:,:],Ryy[nB,:,:] = fl.one_R_realiz(Nro=20,dr=dr,dth=dth,nB=nB)
+        _Rxx[nB,:,:], _Ryy[nB,:,:] = fl.one_R_realiz(Nro=pa.nLc,dr=dr,dth=dth,nB=nB)
 
     #--- normalize the perpendicular R-functions (i.e. R(r_perp)
-    Rxx /= Rxx[:,0,:].mean()
-    Ryy /= Ryy[:,0,:].mean()
+    Rxx = _Rxx/_Rxx[:,0,:].mean()
+    Ryy = _Ryy/_Ryy[:,0,:].mean()
 
     #--- save to file
     fo = h5py.File(pa.out, 'w')

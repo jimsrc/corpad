@@ -32,8 +32,8 @@ ax.plot(x, m*x+b, '--', c='red', label='$y = %2.4g x + %2.4g$'%(m,b))
 
 ax.legend(loc='best')
 ax.grid(True)
-ax.set_xlabel('$log_{10}(\lambda_c)$')
-ax.set_ylabel('$log_{10}(L_c)$')
+ax.set_xlabel('$log_{10}(\lambda_c)$')      # correlation length (fitted)
+ax.set_ylabel('$log_{10}(L_c)$')            # correlation scale
 
 fnmfig = './linfit.png'
 fig.savefig(fnmfig, dpi=135, bbox_inches='tight')

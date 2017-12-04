@@ -16,6 +16,12 @@ default='./test.h5',
 help='HDF5 input for R-function profiles',
 )
 parser.add_argument(
+'-nlevels', '--nlevels',
+type=int,
+default=8,
+help='number of levels for the contour plot of R(r,th).',
+)
+parser.add_argument(
 '-fig', '--figname',
 type=str,
 default='./test.png',
@@ -47,7 +53,9 @@ r_para = np.outer(dr, np.cos(dth)).T
 r_perp = np.outer(dr, np.sin(dth)).T
 
 print(' [*] plotting R vs (r,th)\n')
-fig, ax = fhist.contour_2d(fig, ax, r_perp, r_para, Ravr.T, hscale='linear', cb_label='Rfunc', vmin=None, vmax=None)
+fig, ax = fhist.contour_2d(fig, ax, r_perp, r_para, Ravr.T, hscale='linear', 
+        cb_label='Rfunc', vmin=None, vmax=1.0,
+        nlevels=pa.nlevels)
 
 ax.set_title("$Nrlz = %d$" % fi['psim/Nrlz'].value)
 ax.set_xlabel('$r_\perp / L_c$')
@@ -71,7 +79,7 @@ ax.fill_between(dr, inf, sup, facecolor='gray', alpha=0.5)
 
 #--- fit 
 print(' [*] performing exponential fit...\n')
-cc = dr<5. # select interval for the fit
+cc = (dr<0.75) & (Ravr_r > 0.0) # select interval for the fit
 x = dr[cc]
 y = np.log(Ravr_r[cc])
 err = Rstd_r/np.sqrt(Nrlz) # error
