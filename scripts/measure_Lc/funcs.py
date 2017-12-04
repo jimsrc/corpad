@@ -37,8 +37,8 @@ class LcMeasure(object):
         # point 2. Actually `B1x*B2x` is an array as a function of an
         # array of difference-distances, using several points 2 and only
         # one point 1.
-        _Rxx = np.prod([B1x,B2x], axis=0)
-        _Ryy = np.prod([B1y,B2y], axis=0)
+        _Rxx = np.prod([B1x,B2x-B2x.mean()], axis=0)
+        _Ryy = np.prod([B1y,B2y-B2y.mean()], axis=0)
         return _Rxx, _Ryy
 
     def one_R_realiz(self, Nro=20, dr=None, dth=None, nB=0, direcc='perp'):
