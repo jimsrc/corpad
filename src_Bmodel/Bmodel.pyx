@@ -73,6 +73,9 @@ cdef class Bmodel(object):
         #NOTE: al 's.pt' lo construi en 'self._build_pturb()'
         s.mt.p_turb  = s.pt[0] #le paso todos los parametros! (MAGIA!!??!?)
         s.mt.p_turb.build_spectra()
+
+        # fix the realization by setting the id number 'nB'
+        # NOTE: this resets the phases and polarizations of the 'dB' model
         s.mt.fix_B_realization(nB=nB)
 
     def read_param(self, name):
