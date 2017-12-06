@@ -1,8 +1,28 @@
-# calc the relation between the `Lc` (correlation scale of the model) and `lambda_c` (correlation length by definition):
+# calc the relation between the `Lc` (correlation scale of the model) and `lambda_c` (fitted correlation length using its definition):
 we calculate `lambda_c` by fitting an isotropic (averaged on `theta`, where `theta` is the angle of the displacement `$r$` from the z-axis) correlation function `$R(r)$` as a function of the displacements `$r$`.
 
 Finally, we make a plot between the `Lc` parameters of these correlation functions, and the `lambda_c` fitted values (see file `./linfit.png`):
 ![-->](./linfit.png)
+
+
+--- 
+## run all with a script!
+See below for examples on how to run the individual Python scripts.
+Run:
+```bash
+# to generate/build the correlation functions R(r,th):
+./make_Rcorr_analysis.sh -odir <outpur-dir> -run
+
+# to fit the correlation length (lambda_c) && plot using the above runs:
+./make_Rcorr_analysis.sh -odir <outpur-dir> -fit
+
+# to generate the R(r,th) functions && fit lambda_c && plot:
+./make_Rcorr_analysis.sh -odir <outpur-dir> -run -fit
+
+# to fit the relation between the correlation length (lambda_c) and
+# correlations scale (lc):
+./linear_fit.py --pdb -- -fpattern '<output-dir>/Rbidim_Lc.*.h5'
+```
 
 
 ---
@@ -51,4 +71,4 @@ Generate the correlation functions:
 
 
 
-<!--- EOF -->º
+<!--- EOF -->

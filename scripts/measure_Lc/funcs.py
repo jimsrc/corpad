@@ -48,6 +48,7 @@ class LcMeasure(object):
         nB  : nro of turbulence-realization
         direcc: in which direction we build the correlation-function profile
         """
+        # fix dB realization with its id number 'nB'
         self.m._build_par(nB=nB)
 
         Lc = self.m.read_param('Lc_slab')

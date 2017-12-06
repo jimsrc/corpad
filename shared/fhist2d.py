@@ -37,13 +37,19 @@ def LinearFit_Hist2D(x, y, H2D):
 def contour_2d(fig, ax, x, y, mat, hscale='log', **kargs):
     cb_label = kargs.get('cb_label', 'points per bin square')
     cb_fontsize = kargs.get('cb_fontsize', 15)
+
+    # max/min values of the colorbar
     cbmin, cbmax = kargs.get('vmin',1), kargs.get('vmax',1e3)
+    if cbmin is None: cbmin = np.nanmin(mat)
+    if cbmax is None: cbmax = np.nanmax(mat)
+
     opt = {
     'linewidth': 0,
     'cmap': cm.gray_r,                # gray-scale
     'vmin': cbmin, #kargs.get('cbmin',1),
     'vmax': cbmax, #kargs.get('cbmax',1000),
     'alpha': kargs.get('alpha',0.9),
+    'levels': np.arange(cbmin, cbmax, (cbmax-cbmin)/kargs.get('nlevels',10))
     }
     if hscale=='log':
         opt.update({'norm': LogNorm(),})

@@ -60,8 +60,6 @@ fig, ax = fhist.contour_2d(fig, ax, r_perp, r_para, Ravr.T, hscale='linear',
 ax.set_title("$Nrlz = %d$" % fi['psim/Nrlz'].value)
 ax.set_xlabel('$r_\perp / L_c$')
 ax.set_ylabel('$r_\parallel / L_c$')
-#fig.savefig(pa.figname, dpi=135, bbox_inches='tight')
-#close(fig)
 
 #--- figure R vs r
 fig = figure(1, figsize=(6,4))
@@ -72,6 +70,7 @@ Ravr_r = (R.mean(axis=2)).mean(axis=0)
 Rstd_r = (R.mean(axis=2)).std(axis=0)
 err = Rstd_r/np.sqrt(Nrlz) # error
 
+# plot isotropized R(r) and error bands
 print(' [*] plotting R vs r (with error bands) ...\n')
 ax.plot(dr, Ravr_r, '-ok', ms=3, label='avrg over $\\theta$')
 inf, sup = Ravr_r-err, Ravr_r+err
@@ -79,7 +78,7 @@ ax.fill_between(dr, inf, sup, facecolor='gray', alpha=0.5)
 
 #--- fit 
 print(' [*] performing exponential fit...\n')
-cc = (dr<0.75) & (Ravr_r > 0.0) # select interval for the fit
+cc = (dr<0.7*Lc) & (Ravr_r > 0.0) # select interval for the fit
 x = dr[cc]
 y = np.log(Ravr_r[cc])
 err = Rstd_r/np.sqrt(Nrlz) # error
@@ -90,6 +89,7 @@ ax.plot(x, np.exp(m*x+b), '-r', lw=3, label='$\lambda_c=%1.3g$'%lcorr, alpha=.6)
 ax.set_xlabel('$r/L_c$')
 ax.set_ylabel('$\langle R \\rangle_\\theta$')
 ax.set_yscale('log')
+ax.set_ylim(5e-3, 1.2)
 ax.legend(loc='best')
 ax.grid(True)
 TITLE = '$L_c = %g$;   $\\xi=L_c^{2d}/L_c^{slab} = $%g' % (Lc,xi)

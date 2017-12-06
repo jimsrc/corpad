@@ -48,7 +48,7 @@ help='th "origin" position xo will go until max(xo)=nLc*Lc.',
 )
 parser.add_argument(
 '-ndrLc', '--ndrLc',
-type=int,
+type=float,
 default=2.5,
 help='the displacements dr of R(ro,ro+dr) will go until max(dr)=ndrLc*Lc_slab. For more resolution, see option --ndr.',
 )
@@ -59,7 +59,7 @@ default=1.0,
 help='correlation lenght (the same for slab & 2D models)',
 )
 parser.add_argument(
-'-sig', '--sigma',
+'-sigma', '--sigma',
 type=float,
 default=0.3,
 help='turbulence energy; i.e. (dB/Bo)^2.',
@@ -85,10 +85,10 @@ xyz = np.zeros(3, dtype=np.float32)
 pd = {
 'Nm_slab'       : 128,
 'Nm_2d'         : 128,
-'lmin_s'        : 5e-3*pa.Lc, #[lmin_s/Rl] 
-'lmax_s'        : 1e+2*pa.Lc,  #[lmax_s/Rl] 
-'lmin_2d'       : 5e-3*pa.Lc, #[lmin_2d/Rl] 
-'lmax_2d'       : 1e+2*pa.Lc,  #[lmax_2d/Rl] 
+'lmin_s'        : 5e-5, #[lmin_s/Rl] 
+'lmax_s'        : 1.0,  #[lmax_s/Rl] 
+'lmin_2d'       : 5e-5, #[lmin_2d/Rl] 
+'lmax_2d'       : 1.0,  #[lmax_2d/Rl] 
 'Lc_slab'       : pa.Lc,  # in units of Larmor-radii
 'xi'            : 1.0, # [1] xi=Lc_2d/Lc_slab 
 'sigma_Bo_ratio': pa.sigma, # [1] fluctuation energy
