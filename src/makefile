@@ -8,7 +8,7 @@ OBJECTS_C_GPROF = $(patsubst %.cc, %_gp.o, $(SOURCE_C))
 OBJECTS_C_DEBUG = $(patsubst %.cc, %_bg.o, $(SOURCE_C))
 CFLAGS = -O3 -Wlogical-op #-fprofile-use #-fprofile-generate
 CFLAGS_DEBUG = -O0 -g
-CXX = /usr/local/bin/mpic++
+CXX="${CXX:-/usr/local/bin/mpic++}"
 #EXE = ../CRs.diff.x
 EXE = ./main.x
 # gprof stuff
@@ -37,7 +37,7 @@ gprof_exe: $(OBJECTS_C_GPROF)
 	${CXX} ${OPT_GP} $^ -o $(EXE_WPROF)
 
 clean:
-	rm *.[xo] #*.gcda
+	-rm *.[xo] #*.gcda
 
 # INFO ON MORE CFLAGS:
 #-Wlogical-op
