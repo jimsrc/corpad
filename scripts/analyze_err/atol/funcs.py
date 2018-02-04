@@ -14,7 +14,6 @@ import os
 from matplotlib.backends.backend_pdf import PdfPages
 from matplotlib import ticker # handles ticks
 from numpy import power as pow
-import src_Bmodel.Bmodel as bmt # turbulence B-model
 M_PI = np.pi
 #
 
@@ -505,6 +504,7 @@ class mfp_mgr(object):
         plot of B-turbulence spectra to check the scales
         of interactions relative to the Larmor radii.
         """
+        import src_Bmodel.Bmodel as bmt # turbulence B-model
         #--- read parameters into pd={}
         pd = {
         'Nm_slab'   : self.psim['Nm_s'],
